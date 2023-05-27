@@ -200,8 +200,8 @@ Vue.use(Rbj); // Install the rain-interface-tools plugin on Vue
 ## Detailed configuration instructions
 
 ```js
-1. Interface configuration object
-(1) Modular interface configuration object
+// --- <1> ---. Interface configuration object
+// (1) Modular interface configuration object
 const userConfigs = {
     moduleName: "User user module", // (optional) only used for console error prompts
     moduleUrl: "/user", // (optional) is empty by default, that is, to set the module path of the current interface object, which will be automatically added after the request server address reqAddress and in front of each interface url, only for the current module object The interfaces in the interfaceList interface list take effect
@@ -257,7 +257,7 @@ const userConfigs = {
     }
 }
 
-(2) Non-modular interface configuration objects, just do not use moduleUrl and interfaceList directly
+// (2) Non-modular interface configuration objects, just do not use moduleUrl and interfaceList directly
 const userConfigs = {
     // Docking object one, this attribute name is customized
     one: {
@@ -310,7 +310,7 @@ const userConfigs = {
 }
 
 
-2. Import (Rbj || UniRbjTwo || UniRbjThere) plug-in object, use the importsConfigObj function to integrate all (interface configuration objects) in the specified directory and all global component objects in the specified directory (uniapp does not recommend using this method to register global components, It is recommended to use uniapp's built-in way to register global components)
+// --- < 2 > ---. Import (Rbj || UniRbjTwo || UniRbjThere) plug-in object, use the importsConfigObj function to integrate all (interface configuration objects) in the specified directory and all global component objects in the specified directory (uniapp does not recommend using this method to register global components, It is recommended to use uniapp's built-in way to register global components)
 import { Rbj, UniRbjTwo, UniRbjThere, importsConfigObj, logObj } from 'rain-interface-tools';
 // Note: In addition to the Rbj basic core object, there are also UniRbjTwo (that is, for uniapp Vue2 version) and UniRbjThere (that is, for uniapp Vue3 version) rbj objects that are compatible with uniapp. It is recommended to use UniRbjTwo when developing uniapp projects Or UniRbjThere object to develop uniapp project, the core rbj object can be used on web or H5 project
 // Note: Since log objects are generally automatically mounted on Vue global properties, log objects cannot be used in non-Vue components. We can directly import them through import { logObj } from 'rain-interface-tools'; way to use the rbj log object
@@ -349,7 +349,7 @@ const globalComponentObj = import.meta.glob("components/*.vue"); // Use the impo
 const configObj = importsConfigObj(userConfigs); // You can directly pass a single modular interface configuration object into the importsConfigObj function, and the importsConfigObj function will directly process the modular interface configuration object
 
 
-3. Use the (Rbj || UniRbjTwo || UniRbjThere) plug-in object to install the plug-in on Vue, import the fused interface configuration object, and import the fused global component object (uniapp does not recommend using this method to register global components, it is recommended to use uniapp's built-in easycom method to register global components)
+// --- < 3 > ---. Use the (Rbj || UniRbjTwo || UniRbjThere) plug-in object to install the plug-in on Vue, import the fused interface configuration object, and import the fused global component object (uniapp does not recommend using this method to register global components, it is recommended to use uniapp's built-in easycom method to register global components)
 Vue.use(
     new Rbj({ // In addition to the core Rbj plug-in object, you can also use UniRbjTwo (that is, for uniapp Vue2 version) and UniRbjThere (that is, for uniapp Vue3 version) rbj plug-in objects that are compatible with uniapp , it is recommended to use UniRbjTwo or UniRbjThere objects to develop uniapp projects when developing uniapp projects, and the core Rbj objects can be used on web or H5 projects
         // Requested host address, default value: "localhost:8080", when you need to use https, you can directly add https://localhost:8080 in front of the request address
@@ -539,27 +539,27 @@ export default {
     methods: {
         init_data_rbjData() {
             /**
-* @param interfaceDefinedName | String (required), (the attribute name of each interface configuration in the non-modular interface configuration object) or (the interfaceList in the modular interface configuration object, the attribute name of each interface configuration in the interface list attribute name)
-* @param paramsObj | Object (required, but you can not pass any data if it is not required, but you must set a null), request parameter object, can be null
-* @param dataName | String (required), which property in the object to assemble the data on, that is, the name of the variable to be operated, Note: This parameter is a string type
-* @param currentObj | Object (required), the object to assemble data, generally in the component is the this object of the current component
-*
-* @param options | Object Optional parameter description: ---
-* Parameter 1: pathParams (optional, but can be null), the path parameters of the get request
-* Parameter 2: callbackFunc (optional), auto The callback function for automatic docking, this callback function has the same function as the interfaceData() function in the user's request configuration, the difference is that this callback function uses the interfaceData() function already Filter the returned data, which can then be filtered again
-* Parameter 3: isAppendData (optional), whether to let the server response data be assigned to the specified variable in the form of appending. Note: Arrays will append elements, and objects will append attributes and attribute values. Of course, appending must be specified Variable, must be an array or an object by default, and the data responded by the server, the filtered data must also be an array or an object, and the array can only add elements to the array, and the object can only add attributes to the object
-* Parameter 4: isUrlEncode (optional) | boolean, whether to send data whose content type is application/x-www-form-urlencoded when post request
-* Parameter 5: tempUseFetch (optional) | boolean Description: Whether to temporarily use the fetch request object, generally used when you use other request objects except fetch, note: this option is not available when in the uniapp project
-* Parameter 6: frontORback (optional) | boolean Description: It needs to be used in conjunction with the isAppendData attribute parameter. When in the append mode, confirm whether to append data forward or backward. Default value: false Append data backward. Note: only This property only takes effect when the append target is an array
-*
-* @return function return value type description: Object, including refRefreshFlag(), refRefreshGroup() reference refresh flag method
-* refRefreshFlag() parameter description: freshTagName refresh tag name
-* refRefreshFlag method description: mark the current interface, and then use $rbj.refreshFlagInterface("tag name") to call this interface again in other places
-* Usage scenario: reference refresh, that is, after receiving the notification from the background, automatically refresh the data of the current page (that is, re-call the interface of the current page), this method can avoid reloading the webpage
-* refRefreshGroup() parameter description: groupName (refresh group name), uniqueTagName (unique tag that does not repeat)
-* refRefreshGroup method description: mark the current interface into the specified group, and then use $rbj.refreshGroupInterface("tag name") to call all the interfaces in the group again in other places to perform batch interface refresh
-* Usage scenario: reference refresh, that is, after receiving the notification from the background, automatically refresh the data of the current page in batches (that is, re-call the interface of the current page), this method can avoid reloading the web page
-*/
+            * @param interfaceDefinedName | String (required), (the attribute name of each interface configuration in the non-modular interface configuration object) or (the interfaceList in the modular interface configuration object, the attribute name of each interface configuration in the interface list attribute name)
+            * @param paramsObj | Object (required, but you can not pass any data if it is not required, but you must set a null), request parameter object, can be null
+            * @param dataName | String (required), which property in the object to assemble the data on, that is, the name of the variable to be operated, Note: This parameter is a string type
+            * @param currentObj | Object (required), the object to assemble data, generally in the component is the this object of the current component
+            *
+            * @param options | Object Optional parameter description: ---
+            * Parameter 1: pathParams (optional, but can be null), the path parameters of the get request
+            * Parameter 2: callbackFunc (optional), auto The callback function for automatic docking, this callback function has the same function as the interfaceData() function in the user's request configuration, the difference is that this callback function uses the interfaceData() function already Filter the returned data, which can then be filtered again
+            * Parameter 3: isAppendData (optional), whether to let the server response data be assigned to the specified variable in the form of appending. Note: Arrays will append elements, and objects will append attributes and attribute values. Of course, appending must be specified Variable, must be an array or an object by default, and the data responded by the server, the filtered data must also be an array or an object, and the array can only add elements to the array, and the object can only add attributes to the object
+            * Parameter 4: isUrlEncode (optional) | boolean, whether to send data whose content type is application/x-www-form-urlencoded when post request
+            * Parameter 5: tempUseFetch (optional) | boolean Description: Whether to temporarily use the fetch request object, generally used when you use other request objects except fetch, note: this option is not available when in the uniapp project
+            * Parameter 6: frontORback (optional) | boolean Description: It needs to be used in conjunction with the isAppendData attribute parameter. When in the append mode, confirm whether to append data forward or backward. Default value: false Append data backward. Note: only This property only takes effect when the append target is an array
+            *
+            * @return function return value type description: Object, including refRefreshFlag(), refRefreshGroup() reference refresh flag method
+            * refRefreshFlag() parameter description: freshTagName refresh tag name
+            * refRefreshFlag method description: mark the current interface, and then use $rbj.refreshFlagInterface("tag name") to call this interface again in other places
+            * Usage scenario: reference refresh, that is, after receiving the notification from the background, automatically refresh the data of the current page (that is, re-call the interface of the current page), this method can avoid reloading the webpage
+            * refRefreshGroup() parameter description: groupName (refresh group name), uniqueTagName (unique tag that does not repeat)
+            * refRefreshGroup method description: mark the current interface into the specified group, and then use $rbj.refreshGroupInterface("tag name") to call all the interfaces in the group again in other places to perform batch interface refresh
+            * Usage scenario: reference refresh, that is, after receiving the notification from the background, automatically refresh the data of the current page in batches (that is, re-call the interface of the current page), this method can avoid reloading the web page
+            */
 
             /* Parameters: interfaceDefinedName(required), paramsObj(optional, may be null), dataName(required), currentObj(required), pathParams(optional, may be null), callbackFunc(optional, this callback function It has the same function as the interfaceData() function in the request configuration, the difference is that this callback function uses the data returned by the function that has been filtered, and then it can be filtered again), isAppendData (optional), isUrlEncode (optional), tempUseFetch (optional, note: this option is not available when in uniapp project) */
             let refRefreshObj = this. $rbj.utoButtJoint("one", { age: 18 }, "listName", this, { // Automatic connection method, function: pass in parameters, send a request according to user configuration, and automatically assemble the response data to the specified object
@@ -571,30 +571,30 @@ export default {
                 frontORback: false, // default value: false to append data backwards, note: it needs to be used in conjunction with isAppendData
                 globalFilterInterCept: { // Global filter, if intercepted, the callback function executed by default (note: only valid for the current interface)
                     /**
-* Global request filter, after interception, the callback function executed by default (note: only valid for the request of the current interface)
-* Parameter 1: reqParams The parameters of the current request
-* Parameter 2: pathParams path parameters
-* Parameter 3: rbjObj The instance of the current rbj object
-* Parameter 4: currentUserConfigObjData The configuration data object of the current user
-* Parameter 5: operandObj The operation object to assemble data during automatic docking, this value is null when it is not automatic docking
-*/
+                    * Global request filter, after interception, the callback function executed by default (note: only valid for the request of the current interface)
+                    * Parameter 1: reqParams The parameters of the current request
+                    * Parameter 2: pathParams path parameters
+                    * Parameter 3: rbjObj The instance of the current rbj object
+                    * Parameter 4: currentUserConfigObjData The configuration data object of the current user
+                    * Parameter 5: operandObj The operation object to assemble data during automatic docking, this value is null when it is not automatic docking
+                    */
                     requestCallback(reqParams, pathParams, rbjObj, currentUserConfigObjData, operandObj) {
                         // callback function content...
                     },
                     /**
-* Global response filter, after interception, the callback function executed by default (note: only valid for the response of the current interface)
-* Parameter 1: respData The response data of the current request
-* Parameter 2: rbjObj The instance of the current rbj object
-* Parameter 3: currentUserConfigObjData The configuration data object of the current user
-* Parameter 4: operandObj The operation object to assemble data during automatic docking, this value is null when it is not automatic docking
-*/
+                    * Global response filter, after interception, the callback function executed by default (note: only valid for the response of the current interface)
+                    * Parameter 1: respData The response data of the current request
+                    * Parameter 2: rbjObj The instance of the current rbj object
+                    * Parameter 3: currentUserConfigObjData The configuration data object of the current user
+                    * Parameter 4: operandObj The operation object to assemble data during automatic docking, this value is null when it is not automatic docking
+                    */
                     responseCallback(respData, rbjObj, currentUserConfigObjData, operandObj) {
                         // callback function content...
                     }
                 },
                 /**
-* Whether to allow the current request to add token in the request header, default value: true to allow
-*/
+                * Whether to allow the current request to add token in the request header, default value: true to allow
+                */
                 isUseToken: true,
             });
 
@@ -606,73 +606,73 @@ export default {
                 isFileUpload: false, // You can also enable this method for manual file upload, default value: false
                 globalFilterInterCept: { // Global filter, if intercepted, the callback function executed by default (note: only valid for the current interface)
                     /**
-* Global request filter, after interception, the callback function executed by default (note: only valid for the request of the current interface)
-* Parameter 1: reqParams The parameters of the current request
-* Parameter 2: pathParams path parameters
-* Parameter 3: rbjObj The instance of the current rbj object
-* Parameter 4: currentUserConfigObjData The configuration data object of the current user
-* Parameter 5: operandObj The operation object to assemble data during automatic docking, this value is null when it is not automatic docking
-*/
+                    * Global request filter, after interception, the callback function executed by default (note: only valid for the request of the current interface)
+                    * Parameter 1: reqParams The parameters of the current request
+                    * Parameter 2: pathParams path parameters
+                    * Parameter 3: rbjObj The instance of the current rbj object
+                    * Parameter 4: currentUserConfigObjData The configuration data object of the current user
+                    * Parameter 5: operandObj The operation object to assemble data during automatic docking, this value is null when it is not automatic docking
+                    */
                     requestCallback(reqParams, pathParams, rbjObj, currentUserConfigObjData, operandObj) {
                         // callback function content...
                     },
                     /**
-* Global response filter, after interception, the callback function executed by default (note: only valid for the response of the current interface)
-* Parameter 1: respData The response data of the current request
-* Parameter 2: rbjObj The instance of the current rbj object
-* Parameter 3: currentUserConfigObjData The configuration data object of the current user
-* Parameter 4: operandObj The operation object to assemble data during automatic docking, this value is null when it is not automatic docking
-*/
+                    * Global response filter, after interception, the callback function executed by default (note: only valid for the response of the current interface)
+                    * Parameter 1: respData The response data of the current request
+                    * Parameter 2: rbjObj The instance of the current rbj object
+                    * Parameter 3: currentUserConfigObjData The configuration data object of the current user
+                    * Parameter 4: operandObj The operation object to assemble data during automatic docking, this value is null when it is not automatic docking
+                    */
                     responseCallback(respData, rbjObj, currentUserConfigObjData, operandObj) {
                         // callback function content...
                     }
                 },
                 /**
-* Whether to allow the current request to add token in the request header, default value: true to allow
-*/
+                * Whether to allow the current request to add token in the request header, default value: true to allow
+                */
                 isUseToken: true,
             }).then((data)=>{}).catch((err)=>{}); // Note: If it is intercepted by a global filter or interceptor and is not released, the catch function will run, and The parameter error of err will become an 'ISNULL' string
 
             /**
-* @description file upload
-* @param interfaceDefinedName | String (requested interface configuration object name)
-* @param Files (file temporary path array | file object array | single file object can also be passed in directly), note: this parameter in uniapp can only upload a single file, does not support uploading multiple files, and isFilePathUpload must be set to true
-* @param options parameter object description
-* paramsObj (parameters attached to file upload)
-* reqPropertyName (property name of the file when the file is uploaded), default value: file
-* isFilePathUpload (whether to use filePath (that is, a single temporary path) for file upload, this option is only for uniapp) Note: This parameter must be set to true in uniapp to upload files successfully
-* Note: When you are in the fetch request mode and uploading a file, the request header you set will be invalid. Explanation: Because if the request header is set when the fetch request is uploading the file, the upload file will fail, that is, if If you use fetch to upload files, you cannot bring token or other parameters in the request header
-*/
+            * @description file upload
+            * @param interfaceDefinedName | String (requested interface configuration object name)
+            * @param Files (file temporary path array | file object array | single file object can also be passed in directly), note: this parameter in uniapp can only upload a single file, does not support uploading multiple files, and isFilePathUpload must be set to true
+            * @param options parameter object description
+            * paramsObj (parameters attached to file upload)
+            * reqPropertyName (property name of the file when the file is uploaded), default value: file
+            * isFilePathUpload (whether to use filePath (that is, a single temporary path) for file upload, this option is only for uniapp) Note: This parameter must be set to true in uniapp to upload files successfully
+            * Note: When you are in the fetch request mode and uploading a file, the request header you set will be invalid. Explanation: Because if the request header is set when the fetch request is uploading the file, the upload file will fail, that is, if If you use fetch to upload files, you cannot bring token or other parameters in the request header
+            */
             this. $rbj.pload("one", new File(), { // file upload function
                 paramsObj: { age: 18 }, // The parameters carried when uploading files
                 reqPropertyName: "file", // The attribute name of the file when the file is uploaded
                 isFilePathUpload: true, // Will automatically make a default judgment of whether it is a uniapp project. If it is a uniapp project, this configuration defaults to true, otherwise this configuration defaults to false
                 globalFilterInterCept: { // Global filter, if intercepted, the callback function executed by default (note: only valid for the current interface)
                     /**
-* Global request filter, after interception, the callback function executed by default (note: only valid for the request of the current interface)
-* Parameter 1: reqParams The parameters of the current request
-* Parameter 2: pathParams path parameters
-* Parameter 3: rbjObj The instance of the current rbj object
-* Parameter 4: currentUserConfigObjData The configuration data object of the current user
-* Parameter 5: operandObj The operation object to assemble data during automatic docking, this value is null when it is not automatic docking
-*/
+                    * Global request filter, after interception, the callback function executed by default (note: only valid for the request of the current interface)
+                    * Parameter 1: reqParams The parameters of the current request
+                    * Parameter 2: pathParams path parameters
+                    * Parameter 3: rbjObj The instance of the current rbj object
+                    * Parameter 4: currentUserConfigObjData The configuration data object of the current user
+                    * Parameter 5: operandObj The operation object to assemble data during automatic docking, this value is null when it is not automatic docking
+                    */
                     requestCallback(reqParams, pathParams, rbjObj, currentUserConfigObjData, operandObj) {
                         // callback function content...
                     },
                     /**
-* Global response filter, after interception, the callback function executed by default (note: only valid for the response of the current interface)
-* Parameter 1: respData The response data of the current request
-* Parameter 2: rbjObj The instance of the current rbj object
-* Parameter 3: currentUserConfigObjData The configuration data object of the current user
-* Parameter 4: operandObj The operation object to assemble data during automatic docking, this value is null when it is not automatic docking
-*/
+                    * Global response filter, after interception, the callback function executed by default (note: only valid for the response of the current interface)
+                    * Parameter 1: respData The response data of the current request
+                    * Parameter 2: rbjObj The instance of the current rbj object
+                    * Parameter 3: currentUserConfigObjData The configuration data object of the current user
+                    * Parameter 4: operandObj The operation object to assemble data during automatic docking, this value is null when it is not automatic docking
+                    */
                     responseCallback(respData, rbjObj, currentUserConfigObjData, operandObj) {
                         // callback function content...
                     }
                 },
                 /**
-* Whether to allow the current request to add token in the request header, default value: true to allow
-*/
+                * Whether to allow the current request to add token in the request header, default value: true to allow
+                */
                 isUseToken: true,
             }).then((resData)=>{}).catch((err)=>{}); // Note: If it is intercepted by a global filter or interceptor and is not released, the parameter error of the catch function will be becomes an 'ISNULL' string
 
@@ -732,77 +732,77 @@ export default {
         this.init_data_rbjData(); // ------ Initialize page data object ------
 
         /**
-* @description Set the token string, to the local storage, the token will be automatically brought when the request is made, the default token storage method uses localStorage local storage
-* @param {string} tokenStr token string
-*/
+        * @description Set the token string, to the local storage, the token will be automatically brought when the request is made, the default token storage method uses localStorage local storage
+        * @param {string} tokenStr token string
+        */
         this.$rbj.setToken(tokenStr);
 
         /**
-* @description get token
-* @return {string} token string
-*/
+        * @description get token
+        * @return {string} token string
+        */
         this. $rbj. getToken();
 
         /**
-* @description remove token
-*/
+        * @description remove token
+        */
         this.$rbj.removeToken();
 
         /**
-* Dynamically obtain the global request header object
-*/
+        * Dynamically obtain the global request header object
+        */
         this.$rbj.getDynamicGlobalHeader();
 
         /**
-* @description Dynamically append and set the attributes of the global request header (note: after appending, all interface requests of the current project will automatically take effect)
-* @param {string} attributeName attribute name
-* @param {string} attributeVal attribute value
-*/
+        * @description Dynamically append and set the attributes of the global request header (note: after appending, all interface requests of the current project will automatically take effect)
+        * @param {string} attributeName attribute name
+        * @param {string} attributeVal attribute value
+        */
         this.$rbj.dynamicAddSetGlobalHeader(attributeName, attributeVal);
 
         /**
-* @param {string} attributeName attribute name
-* @description Delete the specified attribute of the global request header
-*/
+        * @param {string} attributeName attribute name
+        * @description Delete the specified attribute of the global request header
+        */
         this. $rbj.dynamicDeleteGlobalHeader(attributeName);
 
         /**
-* Dynamically delete all and global request header attributes
-*/
+        * Dynamically delete all and global request header attributes
+        */
         this.$rbj.dynamicClearAllGlobalHeader();
 
         /**
-* Dynamically obtain the request header object of the specified interface (note: the global request header is not included)
-*/
+        * Dynamically obtain the request header object of the specified interface (note: the global request header is not included)
+        */
         this.$rbj.getDynamicInterfaceHeader();
 
         /**
-* @param {string} interfaceDefinedName interface configuration name
-* @param {string} attributeName attribute name
-* @param {string} attributeVal attribute value
-* @description Dynamically add and set the request header attribute of the specified interface (to be run before the specific interface request, after the addition, it will only take effect for the specified interface, and after the addition, when the specified interface is requested in any other place next time, this The dynamically added request header attributes will not disappear automatically, but will also take effect automatically)
-*/
+        * @param {string} interfaceDefinedName interface configuration name
+        * @param {string} attributeName attribute name
+        * @param {string} attributeVal attribute value
+        * @description Dynamically add and set the request header attribute of the specified interface (to be run before the specific interface request, after the addition, it will only take effect for the specified interface, and after the addition, when the specified interface is requested in any other place next time, this The dynamically added request header attributes will not disappear automatically, but will also take effect automatically)
+        */
         this.$rbj.dynamicAddSetInterfaceHeader(interfaceDefinedName, attributeName, attributeVal);
 
         /**
-* @param {string} interfaceDefinedName attribute name
-* @param {string} attributeName attribute value
-* @description Dynamically delete the request header attribute of the specified interface (to be run before the specific interface request)
-*/
+        * @param {string} interfaceDefinedName attribute name
+        * @param {string} attributeName attribute value
+        * @description Dynamically delete the request header attribute of the specified interface (to be run before the specific interface request)
+        */
         this.$rbj.dynamicDeleteInterfaceHeader(interfaceDefinedName, attributeName);
 
         /**
-* @param {string} interfaceDefinedName interface configuration name
-* @description Dynamically delete all request header attributes of the specified interface (to be run before the specific interface request), note: the attributes set by the global request header are not included
-*/
+        * @param {string} interfaceDefinedName interface configuration name
+        * @description Dynamically delete all request header attributes of the specified interface (to be run before the specific interface request), note: the attributes set by the global request header are not included
+        */
         this.$rbj.dynamicClearAllInterfaceHeader(interfaceDefinedName);
 
         /**
-* @description The method of empty data filtering and completion string
-* @param {Array | object} data data to be filtered
-* @param {string} nullStr is used to complete the empty string
-* @return {object} Returns the data object after empty completion
-*/
+        * @description The method of empty data filtering and completion string
+        * @param {Array | object} data data to be filtered
+        * @param {string} nullStr is used to complete the empty string
+        * @return {object} Returns the data object after empty completion
+        */
         this.$rbj.dataFilter(data, nullStr); // You can use this method to filter data null values. The nullStr string set on the function is preferred. If not set, then use Rbj's global setNullString. If the global is not set, Then the default empty value completion string uses "-no data-"
 
         // For the sake of data reusability, a function derived from this cache mode to obtain cached data is launched. Note: the premise is that you must enable the isEnableCache: true mode in the rbj configuration
@@ -820,44 +820,44 @@ export default {
 
         // helper function
         /**
-* @description object or array null value judgment
-* @param verifyObj: Object | Array, Description: The data object to be validated for null values, supports the validation of objects or arrays
-* @param verifySelect: Array, multi-dimensional array, each dimension of the array represents multiple field attribute names to be verified in each layer (optional: not passed or [] means to verify all attributes or elements of the form object, you can Pass null value, note: when verifying multi-level data, if the specified level is [], it means to verify all attributes or elements of the specified level) Explanation: Even if there are objects or arrays in the array, it is also considered as [], because the objects in the array Or the array is the setting for the next level, not the setting for the current level, that is, there must be string elements in the array, so it is not counted as []
-* Example: Verification object field ['phone', 'password', ['phone', 'password'] ...], verification array specified index element ['0', '1', ['0', '1' '] ...], or validate a mix of arrays and objects ['phone', ['0', '2', ['phone']], ['password', ['0']]...
-* In a multi-dimensional array, if you want to set a single object property or array index independently, you can use the object method, for example:
-*[
-* {
-* oneselfField: "userInfo", // The attribute name of the field to set the verification method separately, generally only for fields of object or array type, the basic type does not support, note: regardless of whether the external reverse mode is enabled, "userInfo" This attribute must be in the state of null value verification externally. If "userInfo" is not in the state of null value verification externally, this independent setting object is also invalid, because this independent control is only for the setting of sub-attributes and sub-indexes
-* isReversal: false, // Whether to reverse the operation specified by oneselfField (object or array), the default value is false, note: when verifyArr is not set, or verifyArr is [], all sub-attribute values or sub-attributes will be automatically defaulted The verification of the index value, and the isReversal you set will lose its effect
-* isChildren: true, // For the field attribute data specified by oneselfField, whether to verify the sub-attribute value or sub-index value, Note: If this item is not set in the current object (the setting priority in the current object is the highest), then By default, the reverseVerify in optionsObj shall prevail. If reverseVerify is not defined in optionsObj or the operation of specifying whether to reverse the level is not set in reverseVerify, the default value is true
-* verifyArr: [], // Array, a multi-dimensional array, has the same writing method and effect as verifySelect, the difference is that it is only for the field specified by the current selfField, representing the data object
-* }
-* ]
-* @param optionsObj parameter object attribute description
-* Parameter 1: reverseVerify: boolean | Array | Object, (optional, default value is false) Description: The option in verifySelect and the verifyObj form object to be verified can be reversed, in multi-level objects or multi-level In the array state, you can use the (object or array) method to control the multi-level inversion operation
-* Example function explanation: There are two fields of phone and password in the verified object. When you want to verify verifySelect = ["phone"], after inversion: verifySelect = ["phone"] will become the field to be ignored Array, will automatically validate all fields except the array that needs to be ignored
-* Example of use: 1. Boolean usage method is true, description: If the data to be verified is multi-level, that is, the default setting is multi-level, all are true or both are false, Note: The default method of reversalVerify is Boolean, and the default value is false
-* Expansion of the Boolean method: When reverseVerify uses the Boolean method, although multiple levels are set at the same time, if you do not set multiple levels in verifySelect but only set one or two levels, or set the specified level to [], Those levels that are not set and the empty [] level are still false by default. This explanation: It has been explained in verifySelect: "That is, if you do not pass or [], you can verify all attributes or elements of the form object, and you can pass null values", For details, please refer to the description of verifySelect above.
-* 2. Object usage method {0: true, 1: false, ...}, description: 0 represents the first outermost layer, and so on, if there are four layers of data to be verified, and you only set For the first two layers, the latter two layers are false by default, that is, if not set or set to null, both are false
-* 3. Array usage [true, false, ...], explanation: the first element represents the outermost first layer, and so on, if there are four layers of data to be verified, and you only set the first Two layers, then the last two layers are false by default, that is, if not set or set to null, both are false
-* Parameter 2: isZeroNull: boolean, (optional) Description: Set whether zero is considered a null state, the default value is false, and zero is not considered a null state
-* Parameter 3: isChildren: boolean, (optional) Description: Whether to verify the null value of the child, the default value is true, and verify the child
-* @return type: Object, return {isEmpty: true, fieldName: ""} when there is a null value, return {isEmpty: false, fieldName: "NOT_NULL"} if there is no null value
-* isEmpty // true when the field is empty, false when not empty, fieldName // field name when the field is empty, when all fields are not empty, it will have a default value "NOT_NULL", if passed in The data is empty and will have a "NULL" default value
-*/
+        * @description object or array null value judgment
+        * @param verifyObj: Object | Array, Description: The data object to be validated for null values, supports the validation of objects or arrays
+        * @param verifySelect: Array, multi-dimensional array, each dimension of the array represents multiple field attribute names to be verified in each layer (optional: not passed or [] means to verify all attributes or elements of the form object, you can Pass null value, note: when verifying multi-level data, if the specified level is [], it means to verify all attributes or elements of the specified level) Explanation: Even if there are objects or arrays in the array, it is also considered as [], because the objects in the array Or the array is the setting for the next level, not the setting for the current level, that is, there must be string elements in the array, so it is not counted as []
+        * Example: Verification object field ['phone', 'password', ['phone', 'password'] ...], verification array specified index element ['0', '1', ['0', '1' '] ...], or validate a mix of arrays and objects ['phone', ['0', '2', ['phone']], ['password', ['0']]...
+        * In a multi-dimensional array, if you want to set a single object property or array index independently, you can use the object method, for example:
+        *[
+        * {
+        * oneselfField: "userInfo", // The attribute name of the field to set the verification method separately, generally only for fields of object or array type, the basic type does not support, note: regardless of whether the external reverse mode is enabled, "userInfo" This attribute must be in the state of null value verification externally. If "userInfo" is not in the state of null value verification externally, this independent setting object is also invalid, because this independent control is only for the setting of sub-attributes and sub-indexes
+        * isReversal: false, // Whether to reverse the operation specified by oneselfField (object or array), the default value is false, note: when verifyArr is not set, or verifyArr is [], all sub-attribute values or sub-attributes will be automatically defaulted The verification of the index value, and the isReversal you set will lose its effect
+        * isChildren: true, // For the field attribute data specified by oneselfField, whether to verify the sub-attribute value or sub-index value, Note: If this item is not set in the current object (the setting priority in the current object is the highest), then By default, the reverseVerify in optionsObj shall prevail. If reverseVerify is not defined in optionsObj or the operation of specifying whether to reverse the level is not set in reverseVerify, the default value is true
+        * verifyArr: [], // Array, a multi-dimensional array, has the same writing method and effect as verifySelect, the difference is that it is only for the field specified by the current selfField, representing the data object
+        * }
+        * ]
+        * @param optionsObj parameter object attribute description
+        * Parameter 1: reverseVerify: boolean | Array | Object, (optional, default value is false) Description: The option in verifySelect and the verifyObj form object to be verified can be reversed, in multi-level objects or multi-level In the array state, you can use the (object or array) method to control the multi-level inversion operation
+        * Example function explanation: There are two fields of phone and password in the verified object. When you want to verify verifySelect = ["phone"], after inversion: verifySelect = ["phone"] will become the field to be ignored Array, will automatically validate all fields except the array that needs to be ignored
+        * Example of use: 1. Boolean usage method is true, description: If the data to be verified is multi-level, that is, the default setting is multi-level, all are true or both are false, Note: The default method of reversalVerify is Boolean, and the default value is false
+        * Expansion of the Boolean method: When reverseVerify uses the Boolean method, although multiple levels are set at the same time, if you do not set multiple levels in verifySelect but only set one or two levels, or set the specified level to [], Those levels that are not set and the empty [] level are still false by default. This explanation: It has been explained in verifySelect: "That is, if you do not pass or [], you can verify all attributes or elements of the form object, and you can pass null values", For details, please refer to the description of verifySelect above.
+        * 2. Object usage method {0: true, 1: false, ...}, description: 0 represents the first outermost layer, and so on, if there are four layers of data to be verified, and you only set For the first two layers, the latter two layers are false by default, that is, if not set or set to null, both are false
+        * 3. Array usage [true, false, ...], explanation: the first element represents the outermost first layer, and so on, if there are four layers of data to be verified, and you only set the first Two layers, then the last two layers are false by default, that is, if not set or set to null, both are false
+        * Parameter 2: isZeroNull: boolean, (optional) Description: Set whether zero is considered a null state, the default value is false, and zero is not considered a null state
+        * Parameter 3: isChildren: boolean, (optional) Description: Whether to verify the null value of the child, the default value is true, and verify the child
+        * @return type: Object, return {isEmpty: true, fieldName: ""} when there is a null value, return {isEmpty: false, fieldName: "NOT_NULL"} if there is no null value
+        * isEmpty // true when the field is empty, false when not empty, fieldName // field name when the field is empty, when all fields are not empty, it will have a default value "NOT_NULL", if passed in The data is empty and will have a "NULL" default value
+        */
         this.$rbj.assistFun.emptyVerify(verifyObj, verifySelect, {
             reverseVerify: false, // default value: false
             isZeroNull: false, // Set whether zero is considered a null state, the default value is false, zero is not considered a null state
             isChildren: false, // Whether to verify the null value of the child, the default value is true, and verify the child
         });
         /**
-* @description Explanation of the function of echo data: form data is used for echo, so that the fields in the data object of the background response and the fields in the form object of the page are automatically associated together. Note: the premise is that the field names in the two objects It must be consistent to be associated, in the object (redundant fields are allowed, and will not affect field association)
-* @param echoObj The echo object of the page
-* @param dataObj The data object of the background response
-* @param optionsObj parameter object attribute description
-* - assignNull Description: That is, if there is a null variable in dataObj, whether to perform an assignment operation, the default value is false, Note: The assignment of a null variable is also for two objects, and only when the same attribute name exists in both objects will it be assigned , as long as one of the parties does not exist, the assignment operation will not be performed
-* @return void no return value
-*/
+        * @description Explanation of the function of echo data: form data is used for echo, so that the fields in the data object of the background response and the fields in the form object of the page are automatically associated together. Note: the premise is that the field names in the two objects It must be consistent to be associated, in the object (redundant fields are allowed, and will not affect field association)
+        * @param echoObj The echo object of the page
+        * @param dataObj The data object of the background response
+        * @param optionsObj parameter object attribute description
+        * - assignNull Description: That is, if there is a null variable in dataObj, whether to perform an assignment operation, the default value is false, Note: The assignment of a null variable is also for two objects, and only when the same attribute name exists in both objects will it be assigned , as long as one of the parties does not exist, the assignment operation will not be performed
+        * @return void no return value
+        */
         this. $rbj. assistFun.choFun(echoObj, dataObj, {
             assignNull: false, // Explanation: If there is a null variable in dataObj, whether to perform assignment operation, the default value is false
         }); // Associate the properties of the form object with the same property name in the data object of the background response, so as to realize data echo
