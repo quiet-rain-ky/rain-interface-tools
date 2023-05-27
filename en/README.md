@@ -1,58 +1,58 @@
 # rain-interface-tools
 
-## 介绍
+## introduce
 
-这是一个前端页面接口工具, 简化后台数据接口对接时的步骤, 支持 H5 和 uniapp 的使用
+This is a front-end page interface tool that simplifies the steps of background data interface docking and supports the use of H5 and uniapp
 
-## 安装
+## Install
 
 npm install rain-interface-tools -D
 
-## 简单使用
+## easy to use
 
-### 创建配置目录和文件
+### Create configuration directory and files
 
 ```js
-1. 在 根目录创建 /config/subConfig
-2. 在 /config 目录中创建 index.js 文件
-3. 在 /config/subConfig 目录下创建一些自定义的接口文件
+1. Create /config/subConfig in the root directory
+2. Create index.js file in /config directory
+3. Create some custom interface files in the /config/subConfig directory
 
-注意：目录名可以不一样上方只是示例，但在使用 require.context() 和 import.meta.globEager() 时, 注意要修改扫描的文件路径
+Note: The directory name can be different. The above is just an example, but when using require.context() and import.meta.globEager(), be careful to modify the scanned file path
 ```
 
 ### /config/subConfig/xxx.js
 
 ```js
 /**
- * @description 这是接口配置文件， 接口配置文件可以有多个, 但是最后都要使用 importsConfigObj() 来融合到一起，因为需要融合到一起，所以尽量不要让每个接口的配置名重复
- * @type {import('rain-interface-tools/types/interFaceConfig').default}
- * 说明: @type 用作类型提示使用, 上方的 @type 是非模块化类型提示, 模块化配置可以使用 @type {import('rain-interface-tools/types/interFaceModuleConfig').default} 来进行类型提示
- * 注意: 接口的配置名是自定义的, 所以不会有类型提示
- */
-export default { // 注意: 这里演示, 使用的是非模块化接口配置对象, 你也可以使用 模块化接口配置对象
-    // 定义接口时, 不要出现相同的配置名, 当有相同配置名的接口时, 下方的接口会覆盖上方的接口, 因为最后所有的接口都会融合到一起, 所以就算是不同的接口文件, 也不能有相同的配置名
-    one: {
-        description: "接口描述说明", // (可选) 接口描述说明, 一般用作提示使用
-        url: "/one/one", // 接口的请求路径
-        method: "GET", // 接口的请求方法类型
-        paramsData(data, operandObj) {
-            // data 请求的参数数据
-        },
-        interfaceData(data, operandObj) {
-            // data 响应的参数数据
-        }
-    },
-    upload: { // 定义文件上传接口
-        description: "接口描述说明", // (可选) 接口描述说明, 一般用作提示使用
-        url: "/upload/fileUpload", // 接口的请求路径
-        method: "POST", // 接口的请求方法类型
-        paramsData(data, operandObj) {
-            // data 请求的参数数据
-        },
-        interfaceData(data, operandObj) {
-            // data 响应的参数数据
-        }
-    }
+* @description This is the interface configuration file. There can be multiple interface configuration files, but in the end, importsConfigObj() must be used to merge them together. Because they need to be merged together, try not to repeat the configuration name of each interface
+* @type {import('rain-interface-tools/types/interFaceConfig').default}
+* Note: @type is used as a type hint, the @type above is a non-modular type hint, and the modular configuration can use @type {import('rain-interface-tools/types/interFaceModuleConfig').default} for type hint
+* Note: The configuration name of the interface is custom, so there will be no type hint
+*/
+export default { // Note: This demo uses a non-modular interface configuration object, you can also use a modular interface configuration object
+// When defining an interface, do not have the same configuration name. When there are interfaces with the same configuration name, the lower interface will cover the upper interface, because in the end all interfaces will be merged together, so even if it is a different interface file, cannot have the same configuration name
+one: {
+description: "Interface description", // (optional) Interface description, generally used as a prompt
+url: "/one/one", // request path of the interface
+method: "GET", // request method type of the interface
+paramsData(data, operandObj) {
+// data request parameter data
+},
+interfaceData(data, operandObj) {
+// data response parameter data
+}
+},
+upload: { // Define the file upload interface
+description: "Interface description", // (optional) Interface description, generally used as a prompt
+url: "/upload/fileUpload", // request path of the interface
+method: "POST", // request method type of the interface
+paramsData(data, operandObj) {
+// data request parameter data
+},
+interfaceData(data, operandObj) {
+// data response parameter data
+}
+}
 }
 ```
 
@@ -60,35 +60,35 @@ export default { // 注意: 这里演示, 使用的是非模块化接口配置�
 
 ```js
 /**
- * @type {import('rain-interface-tools/types/interfaceButtJoint').globalFunType} 说明: @type 用作类型提示使用
- */
+* @type {import('rain-interface-tools/types/interfaceButtJoint').globalFunType} Description: @type is used as a type hint
+*/
 export default {
-    // 设置默认值
-    dfVal(data, defaultVal = "暂无数据") {
-        return data ? data : defaultVal;
-    }
+// set default value
+dfVal(data, defaultVal = "No data yet") {
+return data ? data : defaultVal;
+}
 }
 ```
 
 ### /config/index.js
 
 ```js
-import {  Rbj, UniRbjTwo, UniRbjThere, importsConfigObj } from "rain-interface-tools";
+import { Rbj, UniRbjTwo, UniRbjThere, importsConfigObj } from "rain-interface-tools";
 import globalFun from "./globalFun.js";
-// 把 /config/subConfig/ 目录下的所有的接口配置文件都导入进来，注意：目录路径和下方配置的不一致的需要修改要进行扫描的文件路径
-// --- vue2 使用此项 ---
-const configObj = importsConfigObj(require.context("configs/subConfig/", true, /.js$/).keys().map(item => require("configs/subConfig/" + item.substr(2, item.length)))); // require.context() 会扫描指定目录下的所有文件, 仅在 Vue2 使用
-// --- vue3 使用此项 ---
-const configObj = importsConfigObj(import.meta.globEager("configs/subConfig/**.js")); // import.meta.globEager() 会扫描指定目录下的所有文件, 仅在 Vue3 使用
+// Import all the interface configuration files in the /config/subConfig/ directory, note: if the directory path is inconsistent with the configuration below, you need to modify the file path to be scanned
+// --- vue2 uses this ---
+const configObj = importsConfigObj(require.context("configs/subConfig/", true, /.js$/).keys().map(item => require("configs/subConfig/" + item.substr(2, item .length)))); // require.context() will scan all files in the specified directory, only used in Vue2
+// --- vue3 uses this ---
+const configObj = importsConfigObj(import.meta.globEager("configs/subConfig/**.js")); // import.meta.globEager() will scan all files in the specified directory, only used in Vue3
 
 
-// 创建 rbj 插件对象, 注意：uniapp 项目可以使用 UniRbjTwo 或 UniRbjThere 对象来进行创建
-export default new Rbj({ // 导出此插件, 在 main.js 文件中, 安装此插件
-    reqAddress: "https://xxx.xxx.com", // 接口请求的服务器地址
-    userConfig: configObj, // 设置接口配置
-    logs: process.env.NODE_ENV === "development",
-    tokenName: "token", // 自定义 token 在请求头上的名字, 默认名字为: Authorization
-    globalFun: globalFun // 自定义全局函数
+// Create rbj plug-in object, note: uniapp project can use UniRbjTwo or UniRbjThere object to create
+export default new Rbj({ // export this plug-in, install this plug-in in the main.js file
+reqAddress: "https://xxx.xxx.com", // server address requested by the interface
+userConfig: configObj, // set interface configuration
+logs: process.env.NODE_ENV === "development",
+tokenName: "token", // Customize the name of the token on the request header, the default name is: Authorization
+globalFun: globalFun // custom global function
 });
 ```
 
@@ -96,421 +96,421 @@ export default new Rbj({ // 导出此插件, 在 main.js 文件中, 安装此插
 
 ```js
 import Rbj from "configs/index.js";
-Vue.use(Rbj); // 把 rain-interface-tools 插件, 安装到 Vue 上
+Vue.use(Rbj); // Install the rain-interface-tools plugin on Vue
 ```
 
 ### App.vue
 
 ```vue
 <template>
- <div>
-  <text>{{oneData}}</text>
-        <img :src="imgUrl"></img>
-    </div>
+<div>
+<text>{{oneData}}</text>
+<img :src="imgUrl"></img>
+</div>
 </template>
 <script>
-    export default {
-        data() {
-            return {
-                oneData: {},
-                oneParams: {
-                    name: "xxx",
-                    age: 20
-                },
-                imgUrl: "",
-            }
-        },
-        mounted() {
-            let self = this;
-            
-            // 使用自动装配接口数据的请求函数
-            this.$rbj.autoButtJoint("one", this.oneParams, "oneData", this);
-            
-            // 也可以手动装配数据
-            this.$rbj.buttJoint("one", this.oneParams).then((resData)=>{
-                // resData 即 响应的数据
-                self.oneData = resData;
-            });
-            
-            // 上方两种请求方式二选一即可
+export default {
+data() {
+return {
+oneData: {},
+oneParams: {
+name: "xxx",
+age: 20
+},
+imgUrl: "",
+}
+},
+mounted() {
+let self = this;
 
-            // 使用文件上传函数
-            this.$rbj.upload("upload", fileObj, { reqPropertyName: "file", isFilePathUpload: true }).then((resData)=>{
-                // resData 即 服务器响应的数据
-                self.imgUrl = resData;
-            });
-        }
-    }
+// request function using autowired interface data
+this.$rbj.autoButtJoint("one", this.oneParams, "oneData", this);
+
+// You can also manually assemble the data
+this.$rbj.buttJoint("one", this.oneParams).then((resData)=>{
+// resData is the response data
+self.oneData = resData;
+});
+
+// Choose one of the above two request methods
+
+// use the file upload function
+this.$rbj.upload("upload", fileObj, { reqPropertyName: "file", isFilePathUpload: true }).then((resData)=>{
+// resData is the data that the server responds to
+self.imgUrl = resData;
+});
+}
+}
 </script>
 
 <style lang="scss">
 </style>
 ```
 
-### uniapp Nvue 使用说明
+### uniapp Nvue Instructions for use
 
 ```vue
 <template>
-    <div>
-        <text>{{oneData}}</text>
-        <img :src="imgUrl"></img>
-    </div>
+<div>
+<text>{{oneData}}</text>
+<img :src="imgUrl"></img>
+</div>
 </template>
 <script>
-    import rbj from "../../configs/index.js"; // 导入上方指定路径的 rbj 核心对象, 注意: 核心对象不包括 rbj日志对象, 所以要想使用 rbj 日志对象, 我们需要单独导入日志对象
-    import { logObj } from "rain-interface-tools"; // 导入 rbj 日志对象
-    export default {
-        data() {
-            return {
-                oneData: {},
-                oneParams: {
-                    name: "xxx",
-                    age: 20
-                },
-                imgUrl: "",
-            }
-        },
-        mounted() {
-            let self = this;
-            
-            // 使用自动装配接口数据的请求函数
-            rbj.autoButtJoint("one", this.oneParams, "oneData", this);
-            
-            // 也可以手动装配数据
-            rbj.buttJoint("one", this.oneParams).then((resData)=>{
-                // resData 即 响应的数据
-                self.oneData = resData;
-            });
-            
-            // 上方两种请求方式二选一即可
+import rbj from "../../configs/index.js"; // Import the rbj core object of the specified path above, note: the core object does not include the rbj log object, so if we want to use the rbj log object, we need to import it separately log object
+import { logObj } from "rain-interface-tools"; // import rbj log object
+export default {
+data() {
+return {
+oneData: {},
+oneParams: {
+name: "xxx",
+age: 20
+},
+imgUrl: "",
+}
+},
+mounted() {
+let self = this;
 
-            // 使用文件上传函数
-            rbj.upload("upload", fileObj, { reqPropertyName: "file", isFilePathUpload: true }).then((resData)=>{
-                // resData 即 服务器响应的数据
-                self.imgUrl = resData;
-            });
-        }
-    }
+// request function using autowired interface data
+rbj.autoButtJoint("one", this.oneParams, "oneData", this);
+
+// You can also manually assemble the data
+rbj.buttJoint("one", this.oneParams).then((resData)=>{
+// resData is the response data
+self.oneData = resData;
+});
+
+// Choose one of the above two request methods
+
+// use the file upload function
+rbj.upload("upload", fileObj, { reqPropertyName: "file", isFilePathUpload: true }).then((resData)=>{
+// resData is the data that the server responds to
+self.imgUrl = resData;
+});
+}
+}
 </script>
 
 <style lang="scss">
 </style>
 ```
 
-## 详细配置说明
+## Detailed configuration instructions
 
 ```js
-1. 接口配置对象
-(一) 模块化接口配置对象
+1. Interface configuration object
+(1) Modular interface configuration object
 const userConfigs = {
-    moduleName: "User 用户模块", // (可选) 仅用作控制台错误提示使用
-    moduleUrl: "/user", // (可选) 默认为空, 即设置当前接口对象的模块路径, 会自动添加到请求服务器地址 reqAddress 的后面 和 每个接口 url 的前面, 仅对于当前模块对象中的 interfaceList 接口列表中的接口生效
-    interfaceList: { // 定义当前模块中的接口列表 (注意: 只有 importsConfigObj() 函数才会对 模块化接口对象处理, 所以如果你使用了模块化接口对象, 就一定要使用 importsConfigObj() 函数)
-        // 接口对接对象 one, 此属性名是自定义的
-        one: {
-            // (可选) 接口描述说明, 一般用作提示使用
-            description: "接口描述说明",
-            // 自定义当前接口的请求服务地址(注意: 自定义当前接口的请求服务地址时, 必须要带上 http:// 或 https:// 协议前缀), 默认使用全局的 reqAddress 路径
-            reqAddress: "https://localhost:8080/",
-            // 当全局是别的请求对象时是否临时使用 fetch 为请求对象, 注意: 当处于 uniapp 项目时此选项不可用
-            tempUseFetch: true,
-            // 设置请求路径
-            url: "/user/home",
-            // 请求的方法类型
-            method: "GET", // GET 方法默认是 application/x-www-form-urlencoded 的方式, 进行传参, POST 默认是 application/json 的形式, 进行传参
-            // 当前接口的请求配置对象
-            requestConfig: {
-                // 配置当前接口的请求头
-                headers: {
-                    // 注意: 设置属性名时, 必须加上双引号, 才会生效
-                    // "Content-Type": "application/x-www-form-urlencoded",
-                }
-                //... 还可以配置一些其他的属性
-            },
-            /**
-             * 当声明了此函数时 会对参数进行过滤, 此函数返回什么数据, 请求时就发送什么样的参数给服务器
-             * @param data | Object 说明: data 包含 paramsObj 主体参数, pathParams 路径参数, 可以直接修改 data 对象中 属性的引用数据, 进行达到修改请求参数的作用
-             * @param operandObj | Object 说明: operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
-             * @param isAppendData | boolean 说明: 当前接口是否处于追加模式, 非自动对接时此值为 null, 注意: 处于自动对接时除非你在 autoButtJoint() 的 options 对象中设置了此 isAppendData 属性, 否则此处的 isAppendData 还是为空
-             * @param frontORback | boolean 说明: 处于追加模式时, 确认向前追加数据 还是 向后追加数据, 非自动对接时此值为 null, 默认值: false 向后追加
-             */
-            paramsData(data, operandObj, isAppendData, frontORback) {
-                // data.paramsObj = {names: "小明"};
-                // data.pathParams = 1;
-                // data.paramsObj = JSON.stringify(data.paramsObj); // 也可以将整个参数转成 json 字符串
-                // 注意: 本函数只具有, 修改请求参数的功能, 不具备拦截并中断请求的功能
-                return { // 如有返回值请按照下方格式进行返回
-                    paramsObj: {}, // 此返回值对 paramsObj 参数对象进行重新设置
-                    pathParams: "" // 此返回值对 pathParams 参数进行重新设置
-                }
-            },
-            // 过滤响应数据, 不管是 buttJoint 手动对象, 还是 autoButtJoint 自动对接, 此 interfaceData() 函数都会运行(即都可以正常的进行响应数据的过滤操作)
-            interfaceData(data, operandObj) { // data 服务器响应的对象, operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null, 注意: 只有接口对接时才能使用此函数, 或者假数据模式下也可以使用, 但是 假数据模式下 此 data 没有数据
-                // 数据对接操作, 返回什么数据, 组件中的数据就会接收什么数据
-                // return {}
-                // 注意: 本函数只具有修改响应数据的功能, 不具有拦截响应的功能
-                // 注意: 如果 return 返回的是未定义的属性 或 undefined , Rbj插件对象则会当作此函数没有返回数据, 且响应的数据会不经过 interfaceData 函数的过滤, 直接返回的页面上, 所以 return 前最好先判断一个返回的属性是否存在
-                // 注意: 如果返回的是 null, Rbj插件对象则会当作此函数已返回数据, 即 返回 null 是有效的
-            }
-        },
-        two: 'one' // 把 one 接口定义一个 two 别名, 即支持对一个接口加一个别名, 主要是为了一个接口在不同页面使用，会造成不知道这是哪个页面的接口，所以给同一个接口定义多个别名，可以让你在进行 多模块或多页面 式的开发时，更容易分辨出不同模块或不同页面的接口
-    }
+moduleName: "User user module", // (optional) only used for console error prompts
+moduleUrl: "/user", // (optional) is empty by default, that is, to set the module path of the current interface object, which will be automatically added after the request server address reqAddress and in front of each interface url, only for the current module object The interfaces in the interfaceList interface list take effect
+interfaceList: { // Define the interface list in the current module (note: only the importsConfigObj() function will process the modular interface object, so if you use the modular interface object, you must use the importsConfigObj() function)
+// Interface docking object one, this attribute name is customized
+one: {
+// (Optional) Interface description, generally used as a prompt
+description: "Interface Description",
+// Customize the request service address of the current interface (note: when customizing the request service address of the current interface, you must bring the http:// or https:// protocol prefix), and use the global reqAddress path by default
+reqAddress: "https://localhost:8080/",
+// Whether to temporarily use fetch as the request object when the global is another request object, note: this option is not available when in the uniapp project
+tempUseFetch: true,
+// set request path
+url: "/user/home",
+// Requested method type
+method: "GET", // The GET method defaults to the application/x-www-form-urlencoded method to pass parameters, and the POST defaults to the application/json form to pass parameters
+// The request configuration object of the current interface
+requestConfig: {
+// Configure the request header of the current interface
+headers: {
+// Note: When setting the attribute name, double quotes must be added to take effect
+// "Content-Type": "application/x-www-form-urlencoded",
+}
+//... You can also configure some other properties
+},
+/**
+* When this function is declared, the parameters will be filtered, what data is returned by this function, and what parameters are sent to the server when requesting
+* @param data | Object Explanation: data contains paramsObj body parameters and pathParams path parameters, which can directly modify the reference data of attributes in the data object to achieve the effect of modifying request parameters
+* @param operandObj | Object Description: operandObj is the operation object to assemble data during automatic docking, and this value is null when it is not automatic docking
+* @param isAppendData | boolean Description: Whether the current interface is in the append mode, this value is null when it is not automatically connected, Note: Unless you set the isAppendData property in the options object of autoButtJoint() when it is in automatic connection, otherwise the isAppendData is still empty
+* @param frontORback | boolean Description: When in append mode, confirm whether to append data forward or backward, this value is null when not automatically connected, default value: false append backward
+*/
+paramsData(data, operandObj, isAppendData, frontORback) {
+// data.paramsObj = {names: "Xiao Ming"};
+// data.pathParams = 1;
+// data.paramsObj = JSON.stringify(data.aramsObj); // You can also convert the entire parameter into a json string
+// Note: This function only has the function of modifying request parameters, but does not have the function of intercepting and interrupting requests
+return { // If there is a return value, please return it according to the following format
+paramsObj: {}, // This return value resets the paramsObj parameter object
+pathParams: "" // This return value resets the pathParams parameter
+}
+},
+// Filter the response data, whether it is a buttJoint manual object or an autoButtJoint automatic docking, this interfaceData() function will run (that is, the response data can be filtered normally)
+interfaceData(data, operandObj) { // The object that the data server responds to, operandObj is the operation object that needs to assemble data during automatic docking. This value is null when it is not automatic docking. Note: this function can only be used when the interface is docked, or fake data It can also be used in the mode, but this data has no data in the false data mode
+// Data docking operation, what data is returned, the data in the component will receive what data
+// return {}
+// Note: This function only has the function of modifying the response data, not the function of intercepting the response
+// Note: If return returns an undefined attribute or undefined, the Rbj plug-in object will treat it as if this function does not return data, and the response data will be directly returned to the page without being filtered by the interfaceData function, so before return It is best to first determine whether a returned attribute exists
+// Note: If the return is null, the Rbj plug-in object will be regarded as this function has returned data, that is, returning null is valid
+}
+},
+two: 'one' // Define a two alias for the one interface, that is, support adding an alias to an interface, mainly for the use of an interface on different pages, which will cause the interface of which page it is not known, so give the same interface Defining multiple aliases can make it easier for you to distinguish the interfaces of different modules or pages during multi-module or multi-page development
+}
 }
 
-(二) 非模块化接口配置对象, 直接不使用 moduleUrl 和 interfaceList 即可
+(2) Non-modular interface configuration objects, just do not use moduleUrl and interfaceList directly
 const userConfigs = {
-    // 对接对象 one, 此属性名是自定义的
-    one: {
-        // 可选, 默认为 ''
-        description: "接口描述说明",
-        // 自定义当前接口的请求服务地址(注意: 自定义当前接口的请求服务地址时, 必须要带上 http:// 或 https:// 协议前缀), 默认使用全局的 reqAddress 路径
-        reqAddress: "https://localhost:8080/",
-        // 当全局是别的请求对象时是否临时使用 fetch 为请求对象, 注意: 当处于 uniapp 项目时此选项不可用
-        tempUseFetch: true,
-        // 设置请求路径
-        url: "/user/home",
-        // 请求的方法类型
-        method: "GET", // GET 方法默认是 application/x-www-form-urlencoded 的方式, 进行传参, POST 默认是 application/json 的形式, 进行传参
-        // 当前接口的请求配置对象
-        requestConfig: {
-            // 配置当前接口的请求头
-            headers: {
-                // 注意: 设置属性名时, 必须加上双引号, 才会生效
-                // "Content-Type": "application/x-www-form-urlencoded",
-            }
-            //... 还可以配置一些其他的属性
-        },
-        /**
-         * 当声明了此函数时 会对参数进行过滤, 此函数返回什么数据, 请求时就发送什么样的参数给服务器
-         * @param data | Object 说明: data 包含 paramsObj 主体参数, pathParams 路径参数, 可以直接修改 data 对象中 属性的引用数据, 进行达到修改请求参数的作用
-         * @param operandObj | Object 说明: operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
-         * @param isAppendData | boolean 说明: 当前接口是否处于追加模式, 非自动对接时此值为 null, 注意: 处于自动对接时除非你在 autoButtJoint() 的 options 对象中设置了此 isAppendData 属性, 否则此处的 isAppendData 还是为空
-         * @param frontORback | boolean 说明: 处于追加模式时, 确认向前追加数据 还是 向后追加数据, 非自动对接时此值为 null, 默认值: false 向后追加
-         */
-        paramsData(data, operandObj, isAppendData, frontORback) {
-            // data.paramsObj = {names: "小明"};
-            // data.pathParams = 1;
-            // data.paramsObj = JSON.stringify(data.paramsObj); // 也可以将整个参数转成 json 字符串
-            // 注意: 本函数只具有, 修改请求参数的功能, 不具备拦截并中断请求的功能
-            return { // 如有返回值请按照下方格式进行返回
-                paramsObj: {}, // 此返回值对 paramsObj 参数对象进行重新设置
-                pathParams: "" // 此返回值对 pathParams 参数进行重新设置
-            }
-        },
-        // 过滤响应数据, 不管是 buttJoint 手动对象, 还是 autoButtJoint 自动对接, 此 interfaceData() 函数都会运行(即都可以正常的进行响应数据的过滤操作)
-        interfaceData(data, operandObj) { // data 服务器响应的对象, operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null, 注意: 只有接口对接时才能使用此函数, 或者假数据模式下也可以使用, 但是 假数据模式下 此 data 没有数据
-            // 数据对接操作, 返回什么数据, 组件中的数据就会接收什么数据
-            // return {}
-            // 注意: 本函数只具有修改响应数据的功能, 不具有拦截响应的功能
-            // 注意: 如果 return 返回的是未定义的属性 或 undefined , Rbj插件对象则会当作此函数没有返回数据, 且响应的数据会不经过 interfaceData 函数的过滤, 直接返回的页面上, 所以 return 前最好先判断一个返回的属性是否存在
-            // 注意: 如果返回的是 null, Rbj插件对象则会当作此函数已返回数据, 即 返回 null 是有效的
-        }
-    },
-    two: 'one' // 把 one 接口定义一个 two 别名, 即支持对一个接口加一个别名, 主要是为了一个接口在不同页面使用，会造成不知道这是哪个页面的接口，所以给同一个接口定义多个别名，可以让你在进行 多模块或多页面 式的开发时，更容易分辨出不同模块或不同页面的接口
+// Docking object one, this attribute name is customized
+one: {
+// optional, default is ''
+description: "Interface Description",
+// Customize the request service address of the current interface (note: when customizing the request service address of the current interface, you must bring the http:// or https:// protocol prefix), and use the global reqAddress path by default
+reqAddress: "https://localhost:8080/",
+// Whether to temporarily use fetch as the request object when the global is another request object, note: this option is not available when in the uniapp project
+tempUseFetch: true,
+// set request path
+url: "/user/home",
+// Requested method type
+method: "GET", // The GET method defaults to the application/x-www-form-urlencoded method to pass parameters, and the POST defaults to the application/json form to pass parameters
+// The request configuration object of the current interface
+requestConfig: {
+// Configure the request header of the current interface
+headers: {
+// Note: When setting the attribute name, double quotes must be added to take effect
+// "Content-Type": "application/x-www-form-urlencoded",
+}
+//... You can also configure some other properties
+},
+/**
+* When this function is declared, the parameters will be filtered, what data is returned by this function, and what parameters are sent to the server when the request is made
+* @param data | Object Explanation: data contains paramsObj body parameters and pathParams path parameters, which can directly modify the reference data of attributes in the data object to achieve the effect of modifying request parameters
+* @param operandObj | Object Description: operandObj is the operation object to assemble data during automatic docking, and this value is null when it is not automatic docking
+* @param isAppendData | boolean Description: Whether the current interface is in the append mode, this value is null when it is not automatically connected, Note: Unless you set the isAppendData property in the options object of autoButtJoint() when it is in automatic connection, otherwise the isAppendData is still empty
+* @param frontORback | boolean Description: When in append mode, confirm whether to append data forward or backward, this value is null when not automatically connected, default value: false append backward
+*/
+paramsData(data, operandObj, isAppendData, frontORback) {
+// data.paramsObj = {names: "Xiao Ming"};
+// data.pathParams = 1;
+// data.paramsObj = JSON.stringify(data.aramsObj); // You can also convert the entire parameter into a json string
+// Note: This function only has the function of modifying request parameters, but does not have the function of intercepting and interrupting requests
+return { // If there is a return value, please return it according to the following format
+paramsObj: {}, // This return value resets the paramsObj parameter object
+pathParams: "" // This return value resets the pathParams parameter
+}
+},
+// Filter the response data, whether it is a buttJoint manual object or an autoButtJoint automatic docking, this interfaceData() function will run (that is, the response data can be filtered normally)
+interfaceData(data, operandObj) { // The object that the data server responds to, operandObj is the operation object that needs to assemble data during automatic docking. This value is null when it is not automatic docking. Note: this function can only be used when the interface is docked, or fake data It can also be used in the mode, but this data has no data in the false data mode
+// Data docking operation, what data is returned, the data in the component will receive what data
+// return {}
+// Note: This function only has the function of modifying the response data, not the function of intercepting the response
+// Note: If return returns an undefined attribute or undefined, the Rbj plug-in object will treat it as if this function does not return data, and the response data will be directly returned to the page without being filtered by the interfaceData function, so before return It is best to first determine whether a returned property exists
+// Note: If the return is null, the Rbj plug-in object will be regarded as this function has returned data, that is, returning null is valid
+}
+},
+two: 'one' // Define a two alias for the one interface, that is, support adding an alias to an interface, mainly for the use of an interface on different pages, which will cause the interface of which page it is not known, so give the same interface Defining multiple aliases can make it easier for you to distinguish the interfaces of different modules or pages during multi-module or multi-page development
 }
 
 
-2. 引入 (Rbj || UniRbjTwo || UniRbjThere) 插件对象, 使用 importsConfigObj 函数融合指定目录下所有的 (接口配置对象) 和 指定目录下所有的全局组件对象(uniapp 不建议使用此方式来注册全局组件, 建议使用 uniapp 内置的注册全局组件方式)
+2. Import (Rbj || UniRbjTwo || UniRbjThere) plug-in object, use the importsConfigObj function to integrate all (interface configuration objects) in the specified directory and all global component objects in the specified directory (uniapp does not recommend using this method to register global components, It is recommended to use uniapp's built-in way to register global components)
 import { Rbj, UniRbjTwo, UniRbjThere, importsConfigObj, logObj } from 'rain-interface-tools';
-// 注意: 除了 Rbj 基础核心对象外, 还有对 uniapp 做了兼容的 UniRbjTwo (即用于 uniapp Vue2 版本) 和 UniRbjThere (即用于 uniapp Vue3 版本) 的 rbj 对象, 建议在开发 uniapp 项目时使用 UniRbjTwo 或 UniRbjThere 对象来进行 uniapp 项目的开发, 核心的 rbj 对象可以在 web 或 H5 项目上进行使用
-// 注意: 由于日志对象, 一般是自动挂载在 Vue 全局属性上的, 所以非 Vue 组件内, 不能使用 日志对象, 我们可以通过 import { logObj } from 'rain-interface-tools'; 直接导入的方式来使用 rbj日志对象
+// Note: In addition to the Rbj basic core object, there are also UniRbjTwo (that is, for uniapp Vue2 version) and UniRbjThere (that is, for uniapp Vue3 version) rbj objects that are compatible with uniapp. It is recommended to use UniRbjTwo when developing uniapp projects Or UniRbjThere object to develop uniapp project, the core rbj object can be used on web or H5 project
+// Note: Since log objects are generally automatically mounted on Vue global properties, log objects cannot be used in non-Vue components. We can directly import them through import { logObj } from 'rain-interface-tools'; way to use the rbj log object
 
-// importsConfigObj() 辅助函数的作用: 融合多个接口配置对象, 或者也可以 导入指定目录下所有的配置对象文件, 但导入文件要结合 require.context 或 import.meta.globEager 来使用, 详情使用方法可以看下方示例
-// 参数示例 :
-// [   // 这是文件导入 方式, 可以直接使用 require.context 或 import.meta.globEager 统一获取指定目录下的所有文件的接口配置对象, 就不用再手动一个一个的导入了, 详情使用方法可以看下方示例
-//     require("one.js"),
-//     require("two.js"),
-//     require("there.js")
+// The role of the importsConfigObj() helper function: to integrate multiple interface configuration objects, or to import all configuration object files in the specified directory, but the imported files should be used in combination with require.context or import.meta.globEager, see how to use them in detail You can see an example below
+// parameter example:
+// [ // This is the file import method. You can directly use require.context or import.meta.globEager to uniformly obtain the interface configuration objects of all files in the specified directory, so you don't need to manually import them one by one. For details, you can use see example below
+// require("one.js"),
+// require("two. js"),
+// require("there.js")
 // ]
-// 或多个配置对象, 配置对象可以是 模块化配置对象, 也可以是非模块化配置对象, 两者也可以混在一起用, importsConfigObj 函数会自动处理的
-// [
-//      {one: {url:''}},
-//      {one: {url:''}},
-//      {interfaceList: {one: {url:''}}}
-// ]
-// 或单个模块配置对象, 可以直接将单个模块化接口配置对象, 传入 importsConfigObj 函数, importsConfigObj 函数会直接对模块化接口配置对象进行处理
+// or multiple configuration objects, the configuration object can be a modular configuration object or a non-modular configuration object, the two can also be used together, the importsConfigObj function will automatically handle it
+//[
+// {one: {url:''}},
+// {one: {url:''}},
 // {interfaceList: {one: {url:''}}}
-// 返回值: {...} 把数组中所有模块的对象合成后 返回一个多个配置融合在一起的合成对象
+// ]
+// Or a single module configuration object, you can directly pass a single modular interface configuration object into the importsConfigObj function, and the importsConfigObj function will directly process the modular interface configuration object
+// {interfaceList: {one: {url:''}}}
+// Return value: {...} After synthesizing the objects of all modules in the array, return a synthetic object with multiple configurations fused together
 
 // #ifndef VUE3
-const configObj = importsConfigObj(require.context("configs/subConfig/", true, /.js$/).keys().map(item => require("configs/subConfig/" + item.substr(2, item.length)))); // 可以直接使用 webpack自带的 require.context() 方法来导入指定目录下的多个 js 文件
-// 注意: 在开发 uniapp 项目中, 不用使用下方 vue全局组件的方式, 只要组件安装在项目 "根目录" 或 "uni_modules" 的 components 目录下，并符合 components/组件名称/组件名称.vue 或 uni_modules/插件ID/components/组件名称/组件名称.vue目录结构。 就可以直接在页面中使用, 注意: 在 uniapp 项目中, 组件外层要创建一个和组件同名的目录
-const globalComponentObj = require.context("components/", true, /.vue$/).keys().map(item => require("components/" + item.substr(2, item.length))); // 使用 require.context() 来获取指定目录的组件
+const configObj = importsConfigObj(require.context("configs/subConfig/", true, /.js$/).keys().map(item => require("configs/subConfig/" + item.substr(2, item .length)))); // You can directly use the require.context() method that comes with webpack to import multiple js files in the specified directory
+// Note: In the development of uniapp projects, you don't need to use the vue global component method below, as long as the components are installed in the components directory of the project "root directory" or "uni_modules", and conform to components/component name/component name.vue or uni_modules /plugin ID/components/component name/component name.vue directory structure. It can be used directly on the page. Note: In the uniapp project, a directory with the same name as the component should be created in the outer layer of the component
+const globalComponentObj = require.context("components/", true, /.vue$/).keys().map(item => require("components/" + item.substr(2, item.length))); // Use require.context() to get the components of the specified directory
 // #endif
 
 // #ifdef VUE3
-const configObj = importsConfigObj(import.meta.globEager("configs/subConfig/**.js")); // 或者使用 import.meta.globEager 的方式
-// 注意: 在开发 uniapp 项目中, 不用使用下方vue全局组件的方式, 只要组件安装在项目 "根目录"或 "uni_modules" 的 components 目录下，并符合components/组件名称/组件名称.vue 或 uni_modules/插件ID/components/组件名称/组件名称.vue目录结构。 就可以直接在页面中使用, 注意: 在 uniapp 项目中, 组件外层要创建一个和组件同名的目录
-const globalComponentObj = import.meta.glob("components/*.vue"); // 使用 import.meta.glob() 函数获取, 指定目录下的所有组件
+const configObj = importsConfigObj(import.meta.globEager("configs/subConfig/**.js")); // Or use import.meta.lobEager way
+// Note: In developing a uniapp project, you don't need to use the vue global component method below, as long as the component is installed in the components directory of the project "root directory" or "uni_modules", and complies with components/component name/component name.vue or uni_modules /plugin ID/components/component name/component name.vue directory structure. It can be used directly on the page. Note: In the uniapp project, a directory with the same name as the component should be created in the outer layer of the component
+const globalComponentObj = import.meta.glob("components/*.vue"); // Use the import.meta.glob() function to obtain all components in the specified directory
 // #endif
 
-// ======== 注意: uniapp 在开发 手机APP 项目时不支持 Vue 的全局组件, 所以开发 uniapp 项目时最好用内置的 easycom 组件模式 ========
+// ======== Note: uniapp does not support Vue's global components when developing mobile APP projects, so it is best to use the built-in easycom component mode when developing uniapp projects ========
 
-const configObj = importsConfigObj(userConfigs); // 可以直接将单个模块化接口配置对象, 传入 importsConfigObj 函数, importsConfigObj 函数会直接对模块化接口配置对象进行处理
+const configObj = importsConfigObj(userConfigs); // You can directly pass a single modular interface configuration object into the importsConfigObj function, and the importsConfigObj function will directly process the modular interface configuration object
 
 
-3. 利用 (Rbj || UniRbjTwo || UniRbjThere) 插件对象, 在 Vue 上安装插件, 导入融合后的接口配置对象, 导入融合后的全局组件对象(uniapp 不建议使用此方式来注册全局组件, 建议使用 uniapp 内置的 easycom 方式, 来注册全局组件)
-Vue.use(
-    new Rbj({ // 此处除了可以使用核心的 Rbj 插件对象外, 还可以使用对 uniapp 做了兼容的 UniRbjTwo (即用于 uniapp Vue2 版本) 和 UniRbjThere (即用于 uniapp Vue3 版本) 的 rbj 插件对象, 建议在开发 uniapp 项目时使用 UniRbjTwo 或 UniRbjThere 对象来进行 uniapp 项目的开发, 核心的 Rbj 对象可以在 web 或 H5 项目上进行使用
-        // 请求的主机地址, 默认值: "localhost:8080", 当需要使用 https 时, 可以直接在请求地址前面加 https://localhost:8080
-        reqAddress: "localhost:8080",
-        // 用户的接口配置对象, userConfigs 即直接导入的配置对象, configObj 即 使用上方的 importsConfigObj 函数导入多个 js 文件合成的对象, 两种方式可任选其一即可
-        userConfig: configObj,
-        // 设置全局组件, 注意: 自定义的全局组件必须要有 name 属性, 作用: 即是全局组件的名字, 也是全局组件的标签名
-        globalComponent: globalComponentObj,
-        // 是否全局使用 fetch 为 数据请求对象, 默认值: false
-        // 注意: fetch 请求是不进行空数据过滤的
-        useFetch: false,
-        // 控制台是否进行日志输出, 默认值: false
-        logs: process.env.NODE_ENV === "development", // 判断是否开发或生产环境, 开发环境即为 true 则打印日志, 生产环境即为 false 则不打印日志
-        // 控制台打印的日志是否, 携带样式进行输出, 此配置需搭配上方的 logs 属性配置进行使用, 且此样式仅在 H5模式 下才能正常生效, 默认值: false
-        isLogStyle: false,
-        // 是否开启假数据模式, 默认值: false
-        falseDataMode: false,
-        // 全局请求配置函数
-        globalRequestConfig(dataObj) {
-            // dataObj 可以获取 rbj 对象
-            // return { // 返回的对象即全局的请求头设置
-            //     headers: {
-            //         "Content-Type": "application/x-www-form-urlencoded",
-            //     }
-            // }
-        },
-        // 配置请求响应时, 对响应的数据进行过滤时的空值补全字符串, 也可以调用 dataFilter() 函数对指定的数据对象进行空值过滤, 注意: 默认不进行响应时的空值过滤
-        setNullString: "-暂无数据-",
-        // 开启请求数据的缓存模式 (开启后假数据模式也会生效), 默认值: false
-        // 缓存模式的主要作用是对接口请求后的数据进行一个临时缓存 可以使用 getCacheData("接口配置名") 函数, 来获取指定接口临时缓存的数据, 临时缓存是时效是同一个接口的下一次请求之前都可以获取, 因为同一个接口的下一次请求的数据会覆盖这个临时缓存的数据
-        isEnableCache: true,
-        // 规则拦截器, 注意: 只对用户接口配置对象中的请求路径进行正则验证拦截, 不包括 https 协议 和 域名主机地址
-        interceptor: [
-            {
-                // 正则表达式, 可传入 字符串 或 对象 或 数组(即多个规则可以用到一个拦截器上), 解释说明: 根据正则表达式进行拦截 请求和响应
-                regular: "^ab$" | {
-                    str: "^ab$", // 正则表达式
-                    pattern: "g" // 正则的验证模式
-                } | [{str: "^ab$", pattern: "g"}, "^ab$", ...], // 数组内也支持 字符串, 对象 两种方式
-                reversalVerify: false, // 正则反转拦截, 会拦截验证失败的, 放行验证成功的, 默认: false 不进行反转操作
-                /**
-                 * @description 全局, 请求过滤器函数
-                 * @param reqParams 当前请求的参数
-                 * @param pathParams 路径参数
-                 * @param regularData 如果多个拦截器, 都匹配到了同一个请求, 并且上一个拦截器 return 返回了非布尔值的数据, 那么 regularData 就是上一个拦截器返回的数据, 如果有三个拦截器 第一个返回了数据, 第二个没有返回数据 或者 返回了 boolean 值, 则第三个拦截器中的 regularData 参数, 接收的就是第一个拦截器返回的数据, 如果拦截器都没有返回数据则为 null
-                 * @param rbjObj 当前 rbj 对象的实例
-                 * @param currentUserConfigObjData 当前用户的配置数据对象
-                 * @param operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
-                 * @return 注意: 如果多个拦截器, 都匹配到了同一个请求, 并且都进行 return 返回了数据要进行数据过滤的话, 那么下方的拦截器 return 返回的数据 会 覆盖上方拦截器 return 返回的数据, 但是我们可以从参数 regularData 来获取上一个拦截器返回的数据, 注意: 如果不 return 返回任何东西, 则默认放行
-                 */
-                requestRegular(reqParams, pathParams, regularData, rbjObj, currentUserConfigObjData, operandObj) { // 请求拦截, 和 下方的 globalRequestFilterFun 使用方式类似, 注意: 当你不需要此函数时可以不写
-                    if (Array.isArray(reqParams)) {
-                        return [interfaceDefinedName, Files, paramsObj, reqPropertyName, isFilePathUpload];
-                    } else {
-                        return false; // 放行, 默认值: false, 不进行拦截
-                        return true; // 拦截
-                        return { // 也可以直接返回对象, 但请按照下方格式进行返回
-                            paramsObj: {}, // paramsObj 即对请求参数对象进行重新设置
-                            pathParams: "" // pathParams 即对路径参数重新设置参数进行重新设置
-                        }
-                    }
-                },
-                /**
-                 * @description 全局, 响应过滤器函数
-                 * @param respData 当前请求的响应数据
-                 * @param regularData 如果多个拦截器, 都匹配到了同一个请求, 并且上一个拦截器 return 返回了非布尔值的数据, 那么 regularData 就是上一个拦截器返回的数据, 如果有三个拦截器 第一个返回了数据, 第二个没有返回数据 或者 返回了 boolean 值, 则第三个拦截器中的 regularData 参数, 接收的就是第一个拦截器返回的数据, 如果拦截器都没有返回数据则为 null
-                 * @param rbjObj 当前 rbj 对象的实例
-                 * @param currentUserConfigObjData 当前用户的配置数据对象
-                 * @param operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
-                 * @return 注意: 如果多个拦截器, 都匹配到了同一个请求, 并且都进行 return 返回了数据要进行数据过滤的话, 那么下方的拦截器 return 返回的数据 会 覆盖上方拦截器 return 返回的数据, 但是我们可以从参数 regularData 来获取上一个拦截器返回的数据, 注意: 如果不 return 返回任何东西, 则默认放行
-                 */
-                responseRegular(respData, regularData, rbjObj, currentUserConfigObjData, operandObj) { // 响应拦截, 和 下方的 globalResponseFilterFun 使用方式类似, 注意: 当你不需要此函数时可以不写
-                    return false;
-                    return true;
-                    // 可以直接返回对象或数组, 对响应的数据进行过滤
-                    return {};
-                    return [];
-                }
-            },
-            ... // 可以设置多个拦截器
-        ],
-        /**
-         * 全局, 请求过滤器函数, 无返回值时, 默认自动放行
-         * 参数1: reqParams 当前请求的参数
-         * 参数2: pathParams 路径参数
-         * 参数3: rbjObj 当前 rbj 对象的实例
-         * 参数4: currentUserConfigObjData 当前用户的配置数据对象
-         * 参数5: operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
-         */
-        globalRequestFilterFun(reqParams, pathParams, rbjObj, currentUserConfigObjData, operandObj) {
-            // currentUserConfigObjData 可以直接修改, 请求接口配置对象
-            // 无论 reqParams是文件上传请求还是普通请求, 我们都可以直接修改参数数组, 或参数对象, 对内部的请求参数做一个小改动 (修改后的参数会自动生效并使用在请求的接口上), 也可以返回一个新的请求参数对象(即返回一个 对象 {} 或 数组 [] 来过滤请求参数)
-            return false; // 放行
-            return true; // 拦截
-            return { // 也可以直接返回对象, 但请按照下方格式进行返回
-                paramsObj: {}, // paramsObj 即对请求参数对象进行重新设置
-                pathParams: "" // pathParams 即对路径参数重新设置参数进行重新设置
-            }
-        },
-        /**
-         * 全局, 响应过滤器函数, 无返回值时, 默认自动放行
-         * 参数1: respData 当前请求的响应数据
-         * 参数2: rbjObj 当前 rbj 对象的实例
-         * 参数3: currentUserConfigObjData 当前用户的配置数据对象
-         * 参数4: operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
-         */
-        globalResponseFilterFun(respData, rbjObj, currentUserConfigObjData, operandObj) {
-            return false; // 放行
-            return true; // 拦截, 返回值: 是否对响应进行拦截, 类型: boolean, 默认值: false (不拦截), 如果拦截的是手动对接的请求响应, 则 then 不会执行, catch 会执行, 如果拦截的是 自动对接的 请求响应, 则自动对接则不会再默认进行自动赋值
-            return {}; // 还可以返回 对象 {} 或 数组 [], 即对响应的数据进行过滤
-            return [];
-        },
-        // 初始化全局自定义调用函数, 可以在任何组件内使用 this.$rbj.globalFun.自定义的函数名(); 来调用
-        // 注意: 也可以自定义一些, 常用的全局变量, 也可以用 this.$rbj.globalFun.变量名, 的方式来调用
-        globalFun: {
-            one: 1, // 可以定义常用的全局变量
+3. Use the (Rbj || UniRbjTwo || UniRbjThere) plug-in object to install the plug-in on Vue, import the fused interface configuration object, and import the fused global component object (uniapp does not recommend using this method to register global components, it is recommended to use uniapp's built-in easycom method to register global components)
+Vue. use(
+new Rbj({ // In addition to the core Rbj plug-in object, you can also use UniRbjTwo (that is, for uniapp Vue2 version) and UniRbjThere (that is, for uniapp Vue3 version) rbj plug-in objects that are compatible with uniapp , it is recommended to use UniRbjTwo or UniRbjThere objects to develop uniapp projects when developing uniapp projects, and the core Rbj objects can be used on web or H5 projects
+// Requested host address, default value: "localhost:8080", when you need to use https, you can directly add https://localhost:8080 in front of the request address
+reqAddress: "localhost:8080",
+// The user interface configuration object, userConfigs is the configuration object directly imported, configObj is the object synthesized by importing multiple js files using the importsConfigObj function above, you can choose one of the two methods
+userConfig: configObj,
+// Set the global component, note: the custom global component must have a name attribute, function: it is the name of the global component, and also the label name of the global component
+globalComponent: globalComponentObj,
+// Whether to use fetch globally as the data request object, default value: false
+// Note: fetch requests do not filter empty data
+useFetch: false,
+// Whether the console logs output, default value: false
+logs: process.env.NODE_ENV === "development", // Determine whether it is a development or production environment. If the development environment is true, the log will be printed, and if the production environment is false, the log will not be printed
+// Whether the logs printed on the console should be output with a style. This configuration needs to be used with the logs attribute configuration above, and this style can only take effect normally in H5 mode. Default value: false
+isLogStyle: false,
+// Whether to enable the fake data mode, default value: false
+falseDataMode: false,
+// global request configuration function
+globalRequestConfig(dataObj) {
+// dataObj can get rbj object
+// return { // The returned object is the global request header setting
+// headers: {
+// "Content-Type": "application/x-www-form-urlencoded",
+// }
+// }
+},
+// When configuring the request response, the null value completion string when filtering the response data can also call the dataFilter() function to perform null value filtering on the specified data object. Note: the default is not to perform null value filtering when responding
+setNullString: "-No data-",
+// Enable the cache mode of the requested data (false data mode will also take effect after it is enabled), default value: false
+// The main function of the cache mode is to temporarily cache the data after the interface request. You can use the getCacheData("interface configuration name") function to obtain the data temporarily cached by the specified interface. The temporary cache is the time limit for the next time of the same interface It can be obtained before the request, because the data of the next request of the same interface will overwrite the temporary cached data
+isEnableCache: true,
+// Rule interceptor, note: only regular verification and interception is performed on the request path in the user interface configuration object, excluding https protocol and domain name host address
+interceptor: [
+{
+// Regular expression, string or object or array can be passed in (that is, multiple rules can be used on one interceptor), explanation: Intercept requests and responses based on regular expressions
+regular: "^ab$" | {
+str: "^ab$", // regular expression
+pattern: "g" // regular validation pattern
+} | [{str: "^ab$", pattern: "g"}, "^ab$", ..., // Strings and objects are also supported in the array
+reverseVerify: false, //regular reverse interception, it will intercept the verification failure, and pass the verification success, default: false no reverse operation
+/**
+* @description global, request filter function
+* @param reqParams The parameters of the current request
+* @param pathParams path parameters
+* @param regularData If multiple interceptors match the same request, and the previous interceptor returns non-Boolean data, then regularData is the data returned by the previous interceptor. If there are three interceptors, the first If the data is returned, the second one does not return data or returns a boolean value, then the regularData parameter in the third interceptor receives the data returned by the first interceptor, or null if none of the interceptors return data
+* @param rbjObj the instance of the current rbj object
+* @param currentUserConfigObjData The configuration data object of the current user
+* @param operandObj The operation object to assemble data during automatic docking, this value is null when it is not automatic docking
+* @return Note: If multiple interceptors match the same request, and all return data to be filtered, the data returned by the interceptor below will overwrite the data returned by the interceptor above. But we can get the data returned by the previous interceptor from the parameter regularData, note: if you don't return anything, it will be released by default
+*/
+requestRegular(reqParams, pathParams, regularData, rbjObj, currentUserConfigObjData, operandObj) { // Request interception, similar to globalRequestFilterFun below, Note: You can leave it out when you don't need this function
+if (Array.isArray(reqParams)) {
+return [interfaceDefinedName, Files, paramsObj, reqPropertyName, isFilePathUpload];
+} else {
+return false; // release, default value: false, no interception
+return true; // Intercept
+return { // Objects can also be returned directly, but please follow the format below
+paramsObj: {}, // paramsObj is to reset the request parameter object
+pathParams: "" // pathParams is to reset the path parameter reset parameters
+}
+}
+},
+/**
+* @description global, response filter function
+* @param respData The response data of the current request
+* @param regularData If multiple interceptors match the same request, and the previous interceptor returns non-Boolean data, then regularData is the data returned by the previous interceptor. If there are three interceptors, the first If the data is returned, the second one does not return data or returns a boolean value, then the regularData parameter in the third interceptor receives the data returned by the first interceptor, or null if none of the interceptors return data
+* @param rbjObj the instance of the current rbj object
+* @param currentUserConfigObjData The configuration data object of the current user
+* @param operandObj The operation object to assemble data during automatic docking, this value is null when it is not automatic docking
+* @return Note: If multiple interceptors match the same request, and all return data to be filtered, the data returned by the interceptor below will overwrite the data returned by the interceptor above. But we can get the data returned by the previous interceptor from the parameter regularData, note: if you don't return anything, it will be released by default
+*/
+responseRegular(respData, regularData, rbjObj, currentUserConfigObjData, operandObj) { // Response interception, similar to globalResponseFilterFun below, Note: You can leave it out when you don’t need this function
+return false;
+return true;
+// You can directly return an object or an array to filter the response data
+return {};
+return [];
+}
+},
+...// Multiple interceptors can be set
+],
+/**
+* Global, request filter function, when there is no return value, it will be automatically released by default
+* Parameter 1: reqParams The parameters of the current request
+* Parameter 2: pathParams path parameters
+* Parameter 3: rbjObj The instance of the current rbj object
+* Parameter 4: currentUserConfigObjData The configuration data object of the current user
+* Parameter 5: operandObj The operation object to assemble data during automatic docking, this value is null when it is not automatic docking
+*/
+globalRequestFilterFun(reqParams, pathParams, rbjObj, currentUserConfigObjData, operandObj) {
+// currentUserConfigObjData can be modified directly, request interface configuration object
+// Regardless of whether reqParams is a file upload request or a normal request, we can directly modify the parameter array, or the parameter object, and make a small change to the internal request parameters (the modified parameters will automatically take effect and be used on the requested interface), You can also return a new request parameter object (that is, return an object {} or array [] to filter request parameters)
+return false; // release
+return true; // Intercept
+return { // Objects can also be returned directly, but please follow the format below
+paramsObj: {}, // paramsObj is to reset the request parameter object
+pathParams: "" // pathParams is to reset the path parameter reset parameters
+}
+},
+/**
+* Global, response filter function, when there is no return value, it will be automatically released by default
+* Parameter 1: respData The response data of the current request
+* Parameter 2: rbjObj The instance of the current rbj object
+* Parameter 3: currentUserConfigObjData The configuration data object of the current user
+* Parameter 4: operandObj The operation object to assemble data during automatic docking, this value is null when it is not automatic docking
+*/
+globalResponseFilterFun(respData, rbjObj, currentUserConfigObjData, operandObj) {
+return false; // release
+return true; // interception, return value: whether to intercept the response, type: boolean, default value: false (not intercepted), if the interception is a manual docking request response, then will not be executed, catch will be executed, if What is intercepted is the request response of automatic docking, then automatic docking will no longer be automatically assigned by default
+return {}; // You can also return an object {} or an array [], that is, to filter the response data
+return [];
+},
+// Initialize the global custom call function, which can be called in any component using this.$rbj.globalFun.Custom function name();
+// Note: You can also customize some commonly used global variables, or use this.$rbj.globalFun. variable name to call
+globalFun: {
+one: 1, // can define commonly used global variables
 
-            fun_one(){
-                console.log("这是全局初始化的第一个全局自定义函数", this.$rbj); // 当前 全局函数内, 也可以通过 this 来调用 $rbj 对象
-                this.fun_two(); // 注意: 全局函数内, 可以直接使用 this 来调用其他全局函数
-            },
-            fun_two(){
-                console.log("这是全局初始化的第二个全局自定义函数");
-            }
-        },
-        /**
-         * 自定义 token 在请求头上的名字，默认值："Authorization"
-         */
-        tokenName: "Authorization",
-        /**
-         * 自定义设置 token 方式的函数
-         * 参数1: 要进行设置的 token 字符串
-         * 参数2: 当前 rbj 实例对象
-         * 注意: 有默认设置 token 的函数, 所以也可以不进行设置
-         * 注意: 不设置时, 需要在对象中把此函数进行删除, 防止此函数影响默认设置 token 函数的执行
-         */
-        customSetTokenFun(token, rbjObj) {
-            // 示例:
-            // window.localStorage.setItem("token", token);
-        },
-        /**
-         * 自定义获取 token 方式的函数
-         * 参数: 当前 rbj 实例对象
-         * @return 注意: 自定义获取方式后需要返回获取的 token 字符串
-         * 注意: 有默认获取 token 的函数, 所以也可以不进行设置
-         * 注意: 不设置时, 需要在对象中把此函数进行删除, 防止此函数影响默认获取 token 函数的执行
-         */
-        customGetTokenFun(rbjObj) {
-            // return "LSJFKLSDJFLJSLKDJFLSDKF";
-        },
-        /**
-         * 自定义移除 token 方式的函数
-         * 参数: 当前 rbj 实例对象
-         * 注意: 有默认移除 token 的函数, 所以也可以不进行设置
-         * 注意: 不设置时, 需要在对象中把此函数进行删除, 防止此函数影响默认移除 token 函数的执行
-         */
-        customRemoveTokenFun(rbjObj) {
-            // 示例:
-            // window.localStorage.removeItem("token", token);
-        }
-    })
+fun_one(){
+console.log("This is the first global custom function initialized globally", this.$rbj); // In the current global function, the $rbj object can also be called through this
+this.fun_two(); // Note: In a global function, you can directly use this to call other global functions
+},
+fun_two(){
+console.log("This is the second global custom function initialized globally");
+}
+},
+/**
+* The name of the custom token on the request header, the default value: "Authorization"
+*/
+tokenName: "Authorization",
+/**
+* Function to customize the way of setting token
+* Parameter 1: The token string to be set
+* Parameter 2: the current rbj instance object
+* Note: There is a function to set the token by default, so it is not necessary to set it
+* Note: When not set, you need to delete this function in the object to prevent this function from affecting the execution of the default token function
+*/
+customSetTokenFun(token, rbjObj) {
+// example:
+// window. localStorage.etItem("token", token);
+},
+/**
+* Function to customize the way to get token
+* Parameter: the current rbj instance object
+* @return Note: After customizing the acquisition method, the obtained token string needs to be returned
+* Note: There is a function to get the token by default, so it is not necessary to set it
+* Note: When not set, this function needs to be deleted in the object to prevent this function from affecting the execution of the default token acquisition function
+*/
+customGetTokenFun(rbjObj) {
+// return "LSJFKLSDJFLJSLKDJFLSDKF";
+},
+/**
+* Customize the function of removing token
+* Parameter: the current rbj instance object
+* Note: There is a function to remove the token by default, so it is not necessary to set it
+* Note: When not set, this function needs to be deleted in the object to prevent this function from affecting the execution of the default token removal function
+*/
+customRemoveTokenFun(rbjObj) {
+// example:
+// window. localStorage.removeItem("token", token);
+}
+})
 );
 
 
@@ -518,404 +518,404 @@ Vue.use(
 
 ```
 
-## 支持将配置好的 rbj 对象安装到任何对象上
+## Support to install the configured rbj object on any object
 
 ```js
 
-// 安装示例:
-let toolsObj = {}; // 可以是已经存在的对象 或者 手动定义的新对象 都可以, 此处是手动定义的一个新对象
-new Rbj({ rbj配置项 }).Install_rbj(toolsObj); // 把 rbj 对象安装到指定的对象身上
+// Installation example:
+let toolsObj = {}; // It can be an existing object or a manually defined new object, here is a manually defined new object
+new Rbj({rbj configuration item}).Install_rbj(toolsObj); // Install the rbj object to the specified object
 
-// 使用示例: toolsObj 对象中可以直接调用 $rbj 对象
+// Usage example: the $rbj object can be called directly in the toolsObj object
 toolsObj.$rbj.autoButtJoint("one", { age: 18 }, "listName", this);
 
 ```
 
-## 组件中使用说明
+## Instructions for use in components
 
 ```js
 export default {
-    data(){
-        return {
-            listName: []
-        }
-    },
-    methods: {
-        init_data_rbjData() {
-            /**
-             * @param interfaceDefinedName | String (必填), (非模块化接口配置对象中的每个接口配置的属性名) 或者也可以是 (模块化接口配置对象中的 interfaceList 接口列表中 的 每个接口配置的属性名)
-             * @param paramsObj | Object (必填, 但非必传 即 可以不传任何数据, 但必须设置一个 null), 请求参数对象, 可为 null
-             * @param dataName | String (必填), 把数据装配到对象中的哪个属性上, 即要操作的变量名, 注意: 此参数是字符串类型
-             * @param currentObj | Object (必填), 要进行装配数据的对象, 一般在组件中都是当前组件的 this 对象
-             *
-             * @param options | Object 可选参数说明: ---
-             *      参数1: pathParams(可选, 但可为 null), get 请求时 的 路径参数
-             *      参数2: callbackFunc(可选), auto 自动对接时的回调函数, 此回调函数 和 用户的请求配置中的 interfaceData() 函数是一样的作用, 区别是 这个回调函数使用的是 interfaceData() 函数已经过滤返回的数据, 然后可以对其再次进行过滤
-             *      参数3: isAppendData(可选), 是否让服务器响应的数据, 以追加的形式, 赋值到指定的变量中, 注意: 数组会追加元素, 对象会追加属性和属性值, 当然要进行追加的指定变量, 默认必须是一个数组或一个对象, 而且服务器响应的数据, 经过 过滤后 的数据必须也是一个数组或一个对象, 且数组只能向数组追加元素, 对象只能向对象追加属性
-             *      参数4: isUrlEncode(可选) | boolean, post 请求时, 是否发送 内容类型为: application/x-www-form-urlencoded 的数据
-             *      参数5: tempUseFetch(可选) | boolean 说明: 是否临时使用 fetch 请求对象, 一般在你使用了除 fetch 外的其他请求对象时使用, 注意: 当处于 uniapp 项目时此选项不可用
-             *      参数6: frontORback(可选) | boolean 说明: 需结合 isAppendData 属性参数使用, 当处于追加模式时, 确认是 向前追加数据 还是 向后追加数据, 默认值: false 向后追加数据, 注意: 只有追加目标为数组时, 此属性才能生效
-             *
-             * @return 函数返回值类型说明: Object, 包含 refRefreshFlag(), refRefreshGroup() 引用刷新标记方法
-             *          refRefreshFlag()  参数说明 : freshTagName 刷新标签名
-             *          refRefreshFlag 方法说明: 标记当前接口, 然后可以在别的地方利用 $rbj.refreshFlagInterface("标记名") 重新调用此接口
-             *                     使用场景: 引用刷新, 即当接收到后台的通知后, 自动刷新当前页的数据 (也就是重新调用当前页的接口), 此方法可以避免重新加载网页
-             *          refRefreshGroup() 参数说明 ： groupName (刷新组名)，uniqueTagName (不重复的唯一标识)
-             *          refRefreshGroup 方法说明: 标记当前接口到指定的组内, 然后可以在别的地方利用 $rbj.refreshGroupInterface("标记名") 重新调用组内的所有接口, 即可进行 批量接口刷新
-             *                      使用场景: 引用刷新, 即当接收到后台的通知后, 自动批量刷新当前页的数据 (也就是重新调用当前页的接口), 此方法可以避免重新加载网页
-             */
+data(){
+return {
+listName: []
+}
+},
+methods: {
+init_data_rbjData() {
+/**
+* @param interfaceDefinedName | String (required), (the attribute name of each interface configuration in the non-modular interface configuration object) or (the interfaceList in the modular interface configuration object, the attribute name of each interface configuration in the interface list attribute name)
+* @param paramsObj | Object (required, but you can not pass any data if it is not required, but you must set a null), request parameter object, can be null
+* @param dataName | String (required), which property in the object to assemble the data on, that is, the name of the variable to be operated, Note: This parameter is a string type
+* @param currentObj | Object (required), the object to assemble data, generally in the component is the this object of the current component
+*
+* @param options | Object Optional parameter description: ---
+* Parameter 1: pathParams (optional, but can be null), the path parameters of the get request
+* Parameter 2: callbackFunc (optional), auto The callback function for automatic docking, this callback function has the same function as the interfaceData() function in the user's request configuration, the difference is that this callback function uses the interfaceData() function already Filter the returned data, which can then be filtered again
+* Parameter 3: isAppendData (optional), whether to let the server response data be assigned to the specified variable in the form of appending. Note: Arrays will append elements, and objects will append attributes and attribute values. Of course, appending must be specified Variable, must be an array or an object by default, and the data responded by the server, the filtered data must also be an array or an object, and the array can only add elements to the array, and the object can only add attributes to the object
+* Parameter 4: isUrlEncode (optional) | boolean, whether to send data whose content type is application/x-www-form-urlencoded when post request
+* Parameter 5: tempUseFetch (optional) | boolean Description: Whether to temporarily use the fetch request object, generally used when you use other request objects except fetch, note: this option is not available when in the uniapp project
+* Parameter 6: frontORback (optional) | boolean Description: It needs to be used in conjunction with the isAppendData attribute parameter. When in the append mode, confirm whether to append data forward or backward. Default value: false Append data backward. Note: only This property only takes effect when the append target is an array
+*
+* @return function return value type description: Object, including refRefreshFlag(), refRefreshGroup() reference refresh flag method
+* refRefreshFlag() parameter description: freshTagName refresh tag name
+* refRefreshFlag method description: mark the current interface, and then use $rbj.refreshFlagInterface("tag name") to call this interface again in other places
+* Usage scenario: reference refresh, that is, after receiving the notification from the background, automatically refresh the data of the current page (that is, re-call the interface of the current page), this method can avoid reloading the webpage
+* refRefreshGroup() parameter description: groupName (refresh group name), uniqueTagName (unique tag that does not repeat)
+* refRefreshGroup method description: mark the current interface into the specified group, and then use $rbj.refreshGroupInterface("tag name") to call all the interfaces in the group again in other places to perform batch interface refresh
+* Usage scenario: reference refresh, that is, after receiving the notification from the background, automatically refresh the data of the current page in batches (that is, re-call the interface of the current page), this method can avoid reloading the web page
+*/
 
-            /* 参数:  interfaceDefinedName(必填), paramsObj(可选, 可为 null),  dataName(必填), currentObj(必填), pathParams(可选, 可为 null), callbackFunc(可选, 此回调函数和 请求配置中的 interfaceData() 函数一样的作用, 区别是 这个回调函数使用的是 函数已经过滤返回的数据, 然后可以对其再次进行过滤),isAppendData(可选), isUrlEncode(可选), tempUseFetch(可选, 注意: 当处于 uniapp 项目时此选项不可用) */
-            let refRefreshObj = this.$rbj.autoButtJoint("one", { age: 18 }, "listName", this, { // 自动对接方法, 功能: 传入参数, 根据用户配置, 发送请求, 自动将响应的数据装配到指定的对象上
-                pathParams: "123", // 直接在路径上拼接字符串, get, post 都可以使用
-                callbackFunc(data, operandObj) {}, // 注意: 如果被全局过滤器或拦截器, 拦截住没有放行时, 此函数不会运行
-                isUrlEncode: false, // 是否对 post 请求的请求主体进行键值编码, 默认值 false, 注意: 只针对 post 请求, get 请求无效, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此参数不可用
-                tempUseFetch: false, // 注意: 当处于 uniapp 项目时此选项不可用, 默认值 false
-                isAppendData: true, // 进行数据追加, 默认值 false
-                frontORback: false, // 默认值: false 向后追加数据, 注意: 需结合 isAppendData 使用
-                globalFilterInterCept: { // 全局过滤器, 如果拦截后, 默认执行的回调函数 (注意: 仅对当前接口生效)
-                    /**
-                     * 全局请求过滤器, 拦截后, 默认执行的回调函数 (注意: 仅对当前接口的请求生效)
-                     * 参数1: reqParams 当前请求的参数
-                     * 参数2: pathParams 路径参数
-                     * 参数3: rbjObj 当前 rbj 对象的实例
-                     * 参数4: currentUserConfigObjData 当前用户的配置数据对象
-                     * 参数5: operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
-                     */
-                    requestCallback(reqParams, pathParams, rbjObj, currentUserConfigObjData, operandObj) {
-                        // 回调函数内容...
-                    },
-                    /**
-                     * 全局响应过滤器, 拦截后, 默认执行的回调函数 (注意: 仅对当前接口的响应生效)
-                     * 参数1: respData 当前请求的响应数据
-                     * 参数2: rbjObj 当前 rbj 对象的实例
-                     * 参数3: currentUserConfigObjData 当前用户的配置数据对象
-                     * 参数4: operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
-                     */
-                    responseCallback(respData, rbjObj, currentUserConfigObjData, operandObj) {
-                        // 回调函数内容...
-                    }
-                },
-                /**
-                 * 是否允许当前请求在请求头加上 token, 默认值: true 允许
-                 */
-                isUseToken: true,
-            });
-            
-            /* interfaceDefinedNameUrl(必填), paramsObj(可选, 可为 null), pathParams(可选), isUrlEncode(可选), tempUseFetch(可选, 注意: 当处于 uniapp 项目时此选项不可用) 注意: 如果请求响应时被全局拦截了, catch 函数会把全局拦截也当成报错行为, 并自动执行一次 catch 函数 */
-            let butRefRefreshObj = this.$rbj.buttJoint("one", { age: 18 }, { // 手动对接方法, 功能: 传入参数, 根据用户配置, 发送请求, 返回一个 Promise 对象, 可以通过此对象接收请求响应后服务器返回的数据, 和自动对接的区别是: 返回的数据需要你自己手动处理
-                pathParams: "123", // 直接在路径上拼接字符串, get, post 都可以使用
-                isUrlEncode: true, // 是否对 post 请求的请求主体进行键值编码, 注意: 只针对 post 请求, get 请求无效, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此参数不可用
-                tempUseFetch: false, // 注意: 当处于 uniapp 项目时此选项不可用
-                isFileUpload: false, // 也可以开启此方式进行手动的文件上传, 默认值: false
-                globalFilterInterCept: { // 全局过滤器, 如果拦截后, 默认执行的回调函数 (注意: 仅对当前接口生效)
-                    /**
-                     * 全局请求过滤器, 拦截后, 默认执行的回调函数 (注意: 仅对当前接口的请求生效)
-                     * 参数1: reqParams 当前请求的参数
-                     * 参数2: pathParams 路径参数
-                     * 参数3: rbjObj 当前 rbj 对象的实例
-                     * 参数4: currentUserConfigObjData 当前用户的配置数据对象
-                     * 参数5: operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
-                     */
-                    requestCallback(reqParams, pathParams, rbjObj, currentUserConfigObjData, operandObj) {
-                        // 回调函数内容...
-                    },
-                    /**
-                     * 全局响应过滤器, 拦截后, 默认执行的回调函数 (注意: 仅对当前接口的响应生效)
-                     * 参数1: respData 当前请求的响应数据
-                     * 参数2: rbjObj 当前 rbj 对象的实例
-                     * 参数3: currentUserConfigObjData 当前用户的配置数据对象
-                     * 参数4: operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
-                     */
-                    responseCallback(respData, rbjObj, currentUserConfigObjData, operandObj) {
-                        // 回调函数内容...
-                    }
-                },
-                /**
-                 * 是否允许当前请求在请求头加上 token, 默认值: true 允许
-                 */
-                isUseToken: true,
-            }).then((data)=>{}).catch((err)=>{}); // 注意: 如果被全局过滤器或拦截器, 拦截住没有放行时, catch 函数会运行, 并且 err 的参数错误会变成一个 'ISNULL' 字符串
+/* Parameters: interfaceDefinedName(required), paramsObj(optional, may be null), dataName(required), currentObj(required), pathParams(optional, may be null), callbackFunc(optional, this callback function It has the same function as the interfaceData() function in the request configuration, the difference is that this callback function uses the data returned by the function that has been filtered, and then it can be filtered again), isAppendData (optional), isUrlEncode (optional), tempUseFetch (optional, note: this option is not available when in uniapp project) */
+let refRefreshObj = this. $rbj.utoButtJoint("one", { age: 18 }, "listName", this, { // Automatic connection method, function: pass in parameters, send a request according to user configuration, and automatically assemble the response data to the specified object
+pathParams: "123", // directly splicing strings on the path, both get and post can be used
+callbackFunc(data, operandObj) {}, // Note: If it is intercepted by a global filter or interceptor and is not released, this function will not run
+isUrlEncode: false, // Whether to key-value encode the request body of the post request, the default value is false, note: only for post requests, get requests are invalid, note: this parameter is not available when in the NVue page or component of the uniapp project
+tempUseFetch: false, // Note: This option is not available when in uniapp project, the default value is false
+isAppendData: true, // append data, default value is false
+frontORback: false, // default value: false to append data backwards, note: it needs to be used in conjunction with isAppendData
+globalFilterInterCept: { // Global filter, if intercepted, the callback function executed by default (note: only valid for the current interface)
+/**
+* Global request filter, after interception, the callback function executed by default (note: only valid for the request of the current interface)
+* Parameter 1: reqParams The parameters of the current request
+* Parameter 2: pathParams path parameters
+* Parameter 3: rbjObj The instance of the current rbj object
+* Parameter 4: currentUserConfigObjData The configuration data object of the current user
+* Parameter 5: operandObj The operation object to assemble data during automatic docking, this value is null when it is not automatic docking
+*/
+requestCallback(reqParams, pathParams, rbjObj, currentUserConfigObjData, operandObj) {
+// callback function content...
+},
+/**
+* Global response filter, after interception, the callback function executed by default (note: only valid for the response of the current interface)
+* Parameter 1: respData The response data of the current request
+* Parameter 2: rbjObj The instance of the current rbj object
+* Parameter 3: currentUserConfigObjData The configuration data object of the current user
+* Parameter 4: operandObj The operation object to assemble data during automatic docking, this value is null when it is not automatic docking
+*/
+responseCallback(respData, rbjObj, currentUserConfigObjData, operandObj) {
+// callback function content...
+}
+},
+/**
+* Whether to allow the current request to add token in the request header, default value: true to allow
+*/
+isUseToken: true,
+});
 
-            /**
-             * @description 文件上传
-             * @param interfaceDefinedName | String (请求的接口配置对象名)
-             * @param Files (文件临时路径数组 |文件对象数组 | 单个文件对象也可以直接传入), 注意: uniapp 中此参数只能上传单文件, 不支持上传多文件, 且 isFilePathUpload 一定要设置为 true
-             * @param options 参数对象说明
-             *      paramsObj(文件上传时附带的参数)
-             *      reqPropertyName(文件上传时文件的属性名), 默认值: file
-             *      isFilePathUpload (是否使用 filePath (即 单个临时路径) 进行文件上传, 此选项只针对 uniapp) 注意: uniapp 中必须此将此参数 设置为 true 文件才能上传成功
-             * 注意: 当你处于 fetch 请求模式, 进行文件上传时, 你设置的请求头将会失效, 解释说明: 因为 fetch 请求进行文件上传时如果设置请求头, 则会导致上传文件失败, 也就是说如果你使用 fetch 进行文件上传则不能在请求头上带 token 或其他参数
-             */
-            this.$rbj.upload("one", new File(), { // 文件上传函数
-                paramsObj: { age: 18 }, // 上传文件时, 携带的参数
-                reqPropertyName: "file", // 文件上传时文件的属性名
-                isFilePathUpload: true, // 会自动默认做一个 是否 uniapp 项目的判断, 如果是 uniapp 项目则此项配置默认为 true, 否则此项配置默认为 false
-                globalFilterInterCept: { // 全局过滤器, 如果拦截后, 默认执行的回调函数 (注意: 仅对当前接口生效)
-                    /**
-                     * 全局请求过滤器, 拦截后, 默认执行的回调函数 (注意: 仅对当前接口的请求生效)
-                     * 参数1: reqParams 当前请求的参数
-                     * 参数2: pathParams 路径参数
-                     * 参数3: rbjObj 当前 rbj 对象的实例
-                     * 参数4: currentUserConfigObjData 当前用户的配置数据对象
-                     * 参数5: operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
-                     */
-                    requestCallback(reqParams, pathParams, rbjObj, currentUserConfigObjData, operandObj) {
-                        // 回调函数内容...
-                    },
-                    /**
-                     * 全局响应过滤器, 拦截后, 默认执行的回调函数 (注意: 仅对当前接口的响应生效)
-                     * 参数1: respData 当前请求的响应数据
-                     * 参数2: rbjObj 当前 rbj 对象的实例
-                     * 参数3: currentUserConfigObjData 当前用户的配置数据对象
-                     * 参数4: operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
-                     */
-                    responseCallback(respData, rbjObj, currentUserConfigObjData, operandObj) {
-                        // 回调函数内容...
-                    }
-                },
-                /**
-                 * 是否允许当前请求在请求头加上 token, 默认值: true 允许
-                 */
-                isUseToken: true,
-            }).then((resData)=>{}).catch((err)=>{}); // 注意: 如果被全局过滤器或拦截器, 拦截住没有放行时, catch 函数的参数错误会变成一个 'ISNULL' 字符串
+/* interfaceDefinedNameUrl(required), paramsObj(optional, can be null), pathParams(optional), isUrlEncode(optional), tempUseFetch(optional, note: this option is not available when in uniapp project) note: if When the request response is intercepted globally, the catch function will treat the global interception as an error behavior, and automatically execute the catch function once */
+let butRefRefreshObj = this. $rbj.uttJoint("one", { age: 18 }, { // Manual docking method, function: pass in parameters, send a request according to user configuration, and return a Promise object, through which you can receive the data returned by the server after the request response, The difference from automatic docking is: the returned data needs to be processed manually by yourself
+pathParams: "123", // directly splicing strings on the path, both get and post can be used
+isUrlEncode: true, // Whether to key-value encode the request body of the post request, note: only for post requests, get requests are invalid, note: this parameter is not available when in the NVue page or component of the uniapp project
+tempUseFetch: false, // note: this option is not available when in uniapp project
+isFileUpload: false, // You can also enable this method for manual file upload, default value: false
+globalFilterInterCept: { // Global filter, if intercepted, the callback function executed by default (note: only valid for the current interface)
+/**
+* Global request filter, after interception, the callback function executed by default (note: only valid for the request of the current interface)
+* Parameter 1: reqParams The parameters of the current request
+* Parameter 2: pathParams path parameters
+* Parameter 3: rbjObj The instance of the current rbj object
+* Parameter 4: currentUserConfigObjData The configuration data object of the current user
+* Parameter 5: operandObj The operation object to assemble data during automatic docking, this value is null when it is not automatic docking
+*/
+requestCallback(reqParams, pathParams, rbjObj, currentUserConfigObjData, operandObj) {
+// callback function content...
+},
+/**
+* Global response filter, after interception, the callback function executed by default (note: only valid for the response of the current interface)
+* Parameter 1: respData The response data of the current request
+* Parameter 2: rbjObj The instance of the current rbj object
+* Parameter 3: currentUserConfigObjData The configuration data object of the current user
+* Parameter 4: operandObj The operation object to assemble data during automatic docking, this value is null when it is not automatic docking
+*/
+responseCallback(respData, rbjObj, currentUserConfigObjData, operandObj) {
+// callback function content...
+}
+},
+/**
+* Whether to allow the current request to add token in the request header, default value: true to allow
+*/
+isUseToken: true,
+}).then((data)=>{}).catch((err)=>{}); // Note: If it is intercepted by a global filter or interceptor and is not released, the catch function will run, and The parameter error of err will become an 'ISNULL' string
 
-            this.$rbj.customRequest(); // 自定义请求, 和 axios() 函数的用法一样
+/**
+* @description file upload
+* @param interfaceDefinedName | String (requested interface configuration object name)
+* @param Files (file temporary path array | file object array | single file object can also be passed in directly), note: this parameter in uniapp can only upload a single file, does not support uploading multiple files, and isFilePathUpload must be set to true
+* @param options parameter object description
+* paramsObj (parameters attached to file upload)
+* reqPropertyName (property name of the file when the file is uploaded), default value: file
+* isFilePathUpload (whether to use filePath (that is, a single temporary path) for file upload, this option is only for uniapp) Note: This parameter must be set to true in uniapp to upload files successfully
+* Note: When you are in the fetch request mode and uploading a file, the request header you set will be invalid. Explanation: Because if the request header is set when the fetch request is uploading the file, the upload file will fail, that is, if If you use fetch to upload files, you cannot bring token or other parameters in the request header
+*/
+this. $rbj.pload("one", new File(), { // file upload function
+paramsObj: { age: 18 }, // The parameters carried when uploading files
+reqPropertyName: "file", // The attribute name of the file when the file is uploaded
+isFilePathUpload: true, // Will automatically make a default judgment of whether it is a uniapp project. If it is a uniapp project, this configuration defaults to true, otherwise this configuration defaults to false
+globalFilterInterCept: { // Global filter, if intercepted, the callback function executed by default (note: only valid for the current interface)
+/**
+* Global request filter, after interception, the callback function executed by default (note: only valid for the request of the current interface)
+* Parameter 1: reqParams The parameters of the current request
+* Parameter 2: pathParams path parameters
+* Parameter 3: rbjObj The instance of the current rbj object
+* Parameter 4: currentUserConfigObjData The configuration data object of the current user
+* Parameter 5: operandObj The operation object to assemble data during automatic docking, this value is null when it is not automatic docking
+*/
+requestCallback(reqParams, pathParams, rbjObj, currentUserConfigObjData, operandObj) {
+// callback function content...
+},
+/**
+* Global response filter, after interception, the callback function executed by default (note: only valid for the response of the current interface)
+* Parameter 1: respData The response data of the current request
+* Parameter 2: rbjObj The instance of the current rbj object
+* Parameter 3: currentUserConfigObjData The configuration data object of the current user
+* Parameter 4: operandObj The operation object to assemble data during automatic docking, this value is null when it is not automatic docking
+*/
+responseCallback(respData, rbjObj, currentUserConfigObjData, operandObj) {
+// callback function content...
+}
+},
+/**
+* Whether to allow the current request to add token in the request header, default value: true to allow
+*/
+isUseToken: true,
+}).then((resData)=>{}).catch((err)=>{}); // Note: If it is intercepted by a global filter or interceptor and is not released, the parameter error of the catch function will be becomes an 'ISNULL' string
 
-            // ===================================== 刷新标记 =====================================
-            // 刷新标记说明: 标记指定接口, 或 分组标记接口, 然后可以在别的地方利用 执行刷新标记的函数, 重新调用此接口
-            // 使用场景说明: 引用刷新, 即当接收到后台的通知后, 自动刷新当前页的数据 (也就是重新调用当前页的接口), 此方法可以避免重新加载网页
+this.$rbj.customRequest(); // custom request, same usage as axios() function
 
-            // ----- autoButtJoint 添加刷新标记 -----
-            refRefreshObj.refRefreshFlag("one"); // 给当前接口定义 flag 刷新标记, refRefreshObj 是上方的 autoButtJoint() 函数的返回值对象
-            refRefreshObj.refRefreshGroup("two", "ones"); // 参数1：给当前接口定义 group 组标记， 参数2：给当前接口在刷新组内定一个，不重复的唯一标识
+// ========================================================================================================================================================= ==============================
+// Refresh tag description: mark the specified interface, or group the marked interface, and then use the function to execute the refresh mark elsewhere to call this interface again
+// Use scenario description: Reference refresh, that is, after receiving the notification from the background, automatically refresh the data of the current page (that is, re-call the interface of the current page), this method can avoid reloading the web page
 
-            // refRefreshFlag() 和 refRefreshGroup() 可以相互调用, 也就是说你可以给接口定义一个 flag 标记, 也可以将接口定义一个 group 标记
-            refRefreshObj.refRefreshFlag("one").refRefreshGroup("two", "ones");
-            refRefreshObj.refRefreshGroup("two", "ones").refRefreshFlag("one");
+// ----- autoButtJoint add refresh marker -----
+refRefreshObj.refRefreshFlag("one"); // Define the flag refresh flag for the current interface, refRefreshObj is the return value object of the autoButtJoint() function above
+refRefreshObj.refRefreshGroup("two", "ones"); // Parameter 1: Define the group group mark for the current interface, Parameter 2: Set a unique identifier for the current interface in the refresh group, which is not repeated
 
-            
-
-            // ----- buttJoint 添加刷新标记 -----
-            butRefRefreshObj.refRefreshFlag("one"); // 给当前接口定义 flag 刷新标记, butRefRefreshObj 是上方的 buttJoint() 函数的返回值对象
-            butRefRefreshObj.refRefreshGroup("two", "ones"); // 参数1：给当前接口定义 group 组标记， 参数2：给当前接口在刷新组内定一个，不重复的唯一标识
-
-            // refRefreshFlag() 和 refRefreshGroup() 可以相互调用, 也就是说你可以给接口定义一个 flag 标记, 也可以将接口定义一个 group 标记, 并且可以正常使用 then 和 catch 方法
-            butRefRefreshObj.refRefreshFlag("one").then(item => {}).refRefreshGroup("two", "ones").catch(item => {});
-            butRefRefreshObj.then(item => {}).refRefreshGroup("two", "ones").then(item => {}).catch(item => {}).refRefreshFlag("one");
-
-
-            // ------ 执行刷新标记 ------
-            this.$rbj.refreshFlagInterface("one");  // 引用刷新, 传入指定标记名, 自动刷新指定标记的接口
-            this.$rbj.refreshGroupInterface("two");  // 引用刷新整个组内所有的 flag 标记接口, 传入指定组标记名, 自动刷新组内的所有标记的接口
-            this.$rbj.refreshGroupFlagInterface("two", "there");  // 引用刷新指定组内指定 flag 标记接口的, 传入指定组标记名 和 组内指定的 flag 标记名, 自动刷新组内指定的标记接口
-
-            // ----- 删除标记 -----
-            this.$rbj.refreshFlagTagDelete("one" || ["one", "two", ...]);  // 删除引用刷新标记, 参数说明: freshTagName : Array || String
-            this.$rbj.refreshGroupTagDelete("two" || ["one", "two", ...]);  // 删除引用指定组内的所有刷新标记, 参数说明: freshTagName : Array || String
-            this.$rbj.refreshGroupFlagTagDelete("groupName", "freshTagName"); // 删除组内指定的 flag 刷新标记
-            this.$rbj.refreshFlagTagDeleteAll();  // 删除全部 flag 引用刷新, 无参数
-            this.$rbj.refreshGroupTagDeleteAll();  // 删除全部 group 引用刷新, 无参数
-            this.$rbj.refreshTagDeleteAll();  // 删除全部引用刷新, 包括 （flag, group） 无参数
-
-            // 引用刷新理解: flag 和 group 是两个不同的标记对象, 且两个对象并没有关联, 当然 group 内也有 flag 的功能, 是在 flag 的基础上增加了一个 组的概念
+// refRefreshFlag() and refRefreshGroup() can call each other, that is to say, you can define a flag tag for the interface, or define a group tag for the interface
+refRefreshObj.refRefreshFlag("one").refRefreshGroup("two", "ones");
+refRefreshObj.refRefreshGroup("two", "ones").refRefreshFlag("one");
 
 
 
+// ----- buttJoint add refresh marker -----
+butRefRefreshObj.refRefreshFlag("one"); // Define the flag refresh flag for the current interface, butRefRefreshObj is the return value object of the above buttJoint() function
+butRefRefreshObj.refRefreshGroup("two", "ones"); // Parameter 1: Define the group group mark for the current interface, Parameter 2: Set a unique identifier for the current interface in the refresh group, which is not repeated
 
-            // ======= 路径参数转换 =======
-            // 对象转路径参数, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此函数不可用
-            this.$rbj.objToPathParams(pathObj);
-
-            // 路径参数转对象, 可传入完整的路径, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此函数不可用
-            this.$rbj.pathParamsToObj(urlPath);
-        
-        },
-    },
-    created(){
-        this.init_data_rbjData(); // ------ 初始化页面数据对象 ------
-
-        /**
-         * @description 设置 token 字符串, 到本地存储中, 请求时会自动带上 token, 默认的 token 的存储方式用的是 localStorage 本地存储
-         * @param {string} tokenStr token 字符串
-         */
-        this.$rbj.setToken(tokenStr);
-
-        /**
-         * @description 获取 token
-         * @return {string} token 字符串
-         */
-        this.$rbj.getToken();
-
-        /**
-         * @description 移除 token
-         */
-        this.$rbj.removeToken();
-
-        /**
-         * 动态获取全局请求头对象
-         */
-        this.$rbj.getDynamicGlobalHeader();
-
-        /**
-         * @description 动态追加设置全局请求头的属性 (注意: 追加后当前项目的所有接口请求都会自动生效)
-         * @param {string} attributeName 属性名
-         * @param {string} attributeVal 属性值
-         */
-        this.$rbj.dynamicAddSetGlobalHeader(attributeName, attributeVal);
-
-        /**
-         * @param {string} attributeName 属性名
-         * @description 删除全局请求头的指定属性
-         */
-        this.$rbj.dynamicDeleteGlobalHeader(attributeName);
-
-        /**
-         * 动态删除全部, 全局请求头的属性
-         */
-        this.$rbj.dynamicClearAllGlobalHeader();
-
-        /**
-         * 动态获取指定接口的请求头对象 (注意: 不包括全局请求头)
-         */
-        this.$rbj.getDynamicInterfaceHeader();
-
-        /**
-         * @param {string} interfaceDefinedName 接口配置名
-         * @param {string} attributeName 属性名
-         * @param {string} attributeVal 属性值
-         * @description 动态追加设置指定接口的请求头属性 (要在具体的接口请求之前运行, 追加后只针对指定的接口生效, 且追加后, 下次再在其他任何地方请求这个指定的接口时, 此次动态追加的请求头属性不会自动消失, 还会自动生效)
-         */
-        this.$rbj.dynamicAddSetInterfaceHeader(interfaceDefinedName, attributeName, attributeVal);
-
-        /**
-         * @param {string} interfaceDefinedName 属性名
-         * @param {string} attributeName 属性值
-         * @description 动态删除指定接口的请求头属性(要在具体的接口请求之前运行)
-         */
-        this.$rbj.dynamicDeleteInterfaceHeader(interfaceDefinedName, attributeName);
-
-        /**
-         * @param {string} interfaceDefinedName 接口配置名
-         * @description 动态删除指定接口的所有请求头属性(要在具体的接口请求之前运行), 注意: 不包括全局请求头设置的属性
-         */
-        this.$rbj.dynamicClearAllInterfaceHeader(interfaceDefinedName);
-
-        /**
-         * @description 空数据过滤补全字符串的方法
-         * @param {Array | object} data 要进行过滤的数据
-         * @param {string} nullStr 用来补全空的字符串
-         * @return {object} 返回空值补全后的数据对象
-         */
-        this.$rbj.dataFilter(data, nullStr); // 可以使用此方法进行数据空值过滤, 优先使用函数上设置的 nullStr 字符串, 如果没有设置, 再使用 Rbj 全局的 setNullString 如果也没有设置全局, 则默认空值补全字符串使用的是 "-暂无数据-"
-        
-        // 为了数据的多复用性, 故推出此 缓存模式 中衍生的出来的, 获取缓存数据的函数, 注意: 前提是 你必须在 rbj 配置中开启 isEnableCache: true 模式
-        this.$rbj.getCacheData("one"); // 输入 用户的请求配置中 每个请求配置定义的名字, 即可获取对应请求后缓存下来的数据, 注意: 只有请求发起过的接口数据才会被缓存起来, 且请求接口的下一次的请求数据会覆盖上一次请求的缓存数据
+// refRefreshFlag() and refRefreshGroup() can call each other, that is to say, you can define a flag tag for the interface, or define a group tag for the interface, and then and catch methods can be used normally
+butRefRefreshObj.efRefreshFlag("one").then(item => {}).refRefreshGroup("two", "ones").catch(item => {});
+butRefreshObj.then(item => {}).refRefreshGroup("two", "ones").then(item => {}).catch(item => {}).refRefreshFlag("one");
 
 
-        // 全局自定义函数
-        this.$rbj.setGlobalFun("funName", ()=>{}); // 设置全局函数
-        this.$rbj.globalFun.自定义的函数名(); // 此方式可直接调用自定义的全局函数
+// ------ execute refresh flag------
+this.$rbj.refreshFlagInterface("one"); // Reference refresh, pass in the specified tag name, automatically refresh the interface of the specified tag
+this.$rbj.refreshGroupInterface("two"); // Refresh all flags in the entire group by referring to the interface, pass in the specified group tag name, and automatically refresh the interface of all the flags in the group
+this.$rbj.refreshGroupFlagInterface("two", "there"); // Refresh the specified flag tag interface in the specified group, pass in the specified group tag name and the specified flag tag name in the group, and automatically refresh the specified flag in the group interface
+
+// ----- DELETE MARKER-----
+this.$rbj.refreshFlagTagDelete("one" || ["one", "two", ...]); // Delete reference refresh tag, parameter description: freshTagName : Array || String
+this.$rbj.refreshGroupTagDelete("two" || ["one", "two", ...]); // Delete all refresh tags in the specified group, parameter description: freshTagName : Array || String
+this.$rbj.refreshGroupFlagTagDelete("groupName", "freshTagName"); // Delete the refresh tag of the flag specified in the group
+this.$rbj.refreshFlagTagDeleteAll(); // delete all flag reference refresh, no parameters
+this.$rbj.refreshGroupTagDeleteAll(); // delete all group reference refresh, no parameters
+this.$rbj.refreshTagDeleteAll(); // delete all references refresh, including (flag, group) no parameters
+
+// Reference refresh understanding: flag and group are two different tag objects, and the two objects are not related. Of course, the group also has the function of flag, which adds the concept of a group on the basis of flag
 
 
 
 
+// ======= path parameter conversion =======
+// object to path parameter, note: this function is not available when in the NVue page or component of the uniapp project
+this.$rbj.objToPathParams(pathObj);
+
+// The path parameter is converted to an object, and the complete path can be passed in. Note: this function is not available when it is in the NVue page or component of the uniapp project
+this.$rbj.pathParamsToObj(urlPath);
+
+},
+},
+created(){
+this.init_data_rbjData(); // ------ Initialize page data object ------
+
+/**
+* @description Set the token string, to the local storage, the token will be automatically brought when the request is made, the default token storage method uses localStorage local storage
+* @param {string} tokenStr token string
+*/
+this.$rbj.setToken(tokenStr);
+
+/**
+* @description get token
+* @return {string} token string
+*/
+this. $rbj. getToken();
+
+/**
+* @description remove token
+*/
+this.$rbj.removeToken();
+
+/**
+* Dynamically obtain the global request header object
+*/
+this.$rbj.getDynamicGlobalHeader();
+
+/**
+* @description Dynamically append and set the attributes of the global request header (note: after appending, all interface requests of the current project will automatically take effect)
+* @param {string} attributeName attribute name
+* @param {string} attributeVal attribute value
+*/
+this.$rbj.dynamicAddSetGlobalHeader(attributeName, attributeVal);
+
+/**
+* @param {string} attributeName attribute name
+* @description Delete the specified attribute of the global request header
+*/
+this. $rbj.dynamicDeleteGlobalHeader(attributeName);
+
+/**
+* Dynamically delete all and global request header attributes
+*/
+this.$rbj.dynamicClearAllGlobalHeader();
+
+/**
+* Dynamically obtain the request header object of the specified interface (note: the global request header is not included)
+*/
+this.$rbj.getDynamicInterfaceHeader();
+
+/**
+* @param {string} interfaceDefinedName interface configuration name
+* @param {string} attributeName attribute name
+* @param {string} attributeVal attribute value
+* @description Dynamically add and set the request header attribute of the specified interface (to be run before the specific interface request, after the addition, it will only take effect for the specified interface, and after the addition, when the specified interface is requested in any other place next time, this The dynamically added request header attributes will not disappear automatically, but will also take effect automatically)
+*/
+this.$rbj.dynamicAddSetInterfaceHeader(interfaceDefinedName, attributeName, attributeVal);
+
+/**
+* @param {string} interfaceDefinedName attribute name
+* @param {string} attributeName attribute value
+* @description Dynamically delete the request header attribute of the specified interface (to be run before the specific interface request)
+*/
+this.$rbj.dynamicDeleteInterfaceHeader(interfaceDefinedName, attributeName);
+
+/**
+* @param {string} interfaceDefinedName interface configuration name
+* @description Dynamically delete all request header attributes of the specified interface (to be run before the specific interface request), note: the attributes set by the global request header are not included
+*/
+this.$rbj.dynamicClearAllInterfaceHeader(interfaceDefinedName);
+
+/**
+* @description The method of empty data filtering and completion string
+* @param {Array | object} data data to be filtered
+* @param {string} nullStr is used to complete the empty string
+* @return {object} Returns the data object after empty completion
+*/
+this.$rbj.dataFilter(data, nullStr); // You can use this method to filter data null values. The nullStr string set on the function is preferred. If not set, then use Rbj's global setNullString. If the global is not set, Then the default empty value completion string uses "-no data-"
+
+// For the sake of data reusability, a function derived from this cache mode to obtain cached data is launched. Note: the premise is that you must enable the isEnableCache: true mode in the rbj configuration
+this.$rbj.getCacheData("one"); // Enter the name of each request configuration definition in the user's request configuration to get the cached data after the corresponding request. Note: only the interface data that the request has initiated will be It is cached, and the next request data of the request interface will overwrite the cache data of the previous request
 
 
-        // 辅助函数
-        /**
-         * @description 对象或数组空值判断
-         * @param verifyObj: Object | Array, 说明: 要进行空值验证的数据对象, 支持 对象 或 数组 的验证
-         * @param verifySelect: Array, 多维数组, 数组的每一个维度即代表设置每一层要进行验证的多个字段属性名 (可选: 不传 或 [] 即验证 表单对象的全部属性或元素, 可以传 null 值, 注意: 验证多层级数据时, 如果指定层级为 [], 则代表验证指定层级的所有属性或元素) 说明: 数组中就算有了对象或数组, 也算 [], 因为 数组中对象或数组是对下一个层级的设置, 不是对当前层级的设置, 即数组中必须有 字符串元素, 才不算为 []
-         *      示例: 验证对象字段 ['phone', 'password', ['phone', 'password'] ...], 验证数组指定索引元素 ['0', '1', ['0', '1'] ...], 或者验证 数组和对象的混合字段 ['phone', ['0', '2', ['phone']], ['password', ['0']]...]
-         *      多维数组内, 要想对单个对象属性或数组索引, 进行独立设置, 可以使用 对象的方式, 示例:
-         *      [
-         *        {
-         *          oneselfField: "userInfo", // 要进行单独设置验证方式的字段属性名, 一般只针对, 对象或数组类型的字段, 基本类型不支持, 注意: 不管外部是否开启了反转模式, "userInfo" 这个属性要在外部是处于进行空值验证的状态, 如果 "userInfo" 在外部没有处于空值验证状态, 则这个独立设置对象也是无效的, 因为这个独立控制, 仅针对 子属性和子索引的设置
-         *          isReversal: false, // 是否对 oneselfField 指定的 (对象或数组) 进行反转操作, 默认值 false, 注意: 当 verifyArr 未设置, 或 verifyArr为 [] 时, 会自动默认进行所有子属性值或子索引值的验证, 而你设置的isReversal 则会失去效果
-         *          isChildren: true, // 对于 oneselfField 指定的字段属性数据, 是否进行子属性值或子索引值验证, 注意: 如果不在当前对象中设置此项(当前对象中的设置优先级是最高的), 则默认以 optionsObj 中 reversalVerify 为准, 若 optionsObj 中没有定义 reversalVerify 或 reversalVerify 中没有设置指定层级是否反转的操作, 则默认值为 true
-         *          verifyArr: [], // Array, 多维数组, 和 verifySelect 一样的写法和效果, 区别是仅针对 当前 oneselfField 指定的字段, 所代表的数据对象
-         *        }
-         *      ]
-         * @param optionsObj 参数对象属性说明
-         *      参数1: reversalVerify: boolean | Array | Object, (可选, 默认值为 false) 说明: 可以将 verifySelect 中的选项 和 要进行验证的 verifyObj 表单对象, 进行反转操作, 在多级对象或多级数组状态下, 可以使用 (对象或数组) 的方式, 来控制多层级的反转操作
-         *              示例作用解释说明: 验证的对象中有 phone 和 password 两个字段，当你想要验证 verifySelect = ["phone"], 反转后: verifySelect = ["phone"] 会变成要进行忽略的字段数组，会自动把 除 需要忽略的数组以外的所有字段进行验证
-         *              使用示例: 1.布尔使用方式 true, 说明: 如果要验证的是多层级的数据, 即默认设置多层级, 都为 true 或 都为 false, 注意:  reversalVerify 的默认使用的是 布尔方式, 且默认值为 false
-         *                          布尔方式扩展说明: reversalVerify 使用布尔方式时, 虽然会同时设置多层级, 但是如果在 verifySelect 中你没有设置多个层级而只是设置了一个或两个层级, 或者把指定的层级设置为 [], 那这些没有设置的层级和空 [] 层级默认还是为 false, 此解释: 在 verifySelect 中已做过说明: "即 不传 或 [] 即验证 表单对象的全部属性或元素, 可以传 null 值", 具体详情可以查看上方的 verifySelect 的说明
-         *                       2.对象使用方式 {0: true, 1: false, ...}, 说明: 0 代表最外边的第一层, 以此类推, 如果要进行验证的数据有 四层, 而你只设置了 前两层, 则默认后两层为 false, 即不设置或设置为 null, 都为 false
-         *                       3.数组使用方式 [true, false, ...], 说明: 第一个元素代表最外边的第一层, 以此类推, 如果要进行验证的数据有 四层, 而你只设置了 前两层, 则默认后两层为 false, 即不设置或设置为 null, 都为 false
-         *      参数2: isZeroNull: boolean, (可选) 说明: 设置 零 是否算 空状态, 默认值 false, 零不算空状态
-         *      参数3: isChildren: boolean, (可选) 说明: 是否进行子级空值验证, 默认值 true, 进行子级验证
-         * @return 类型: Object, 有空值时返回 {isEmpty: true, fieldName: ""}, 没有空值返回 {isEmpty: false, fieldName: "NOT_NULL"}
-         *          isEmpty // 字段为空时是 true, 不为空时是 false, fieldName // 字段为空时的字段名, 当所有字段都不为空时他会有一个默认值  "NOT_NULL", 如果传入的数据就是空的 也会有一个 "NULL" 默认值
-         */
-        this.$rbj.assistFun.emptyVerify(verifyObj, verifySelect, {
-            reversalVerify: false, // 默认值: false
-            isZeroNull: false, // 设置 零 是否算 空状态, 默认值 false, 零不算空状态
-            isChildren: false, // 是否进行子级空值验证, 默认值 true, 进行子级验证
-        });
-        /**
-         * @description 回显数据 作用解释: 表单数据进行回显使用, 可以让后台响应的数据对象中的字段和页面的表单对象中的字段自动关联在一起, 注意：前提是两个对象中的字段名要一致才能进行关联, 对象中 (允许有冗余字段, 不会对字段关联产生影响)
-         * @param echoObj 页面的回显对象
-         * @param dataObj 后台响应的数据对象
-         * @param optionsObj 参数对象属性说明
-         *          - assignNull 说明: 即 dataObj 中有如果有空变量, 是否进行赋值操作, 默认值 false, 注意: 空变量的赋值也是针对两个对象中, 都必须都存在相同的属性名时, 才会进行赋值, 只要有一方没有则不会进行赋值操作
-         * @return void 没有返回值
-         */
-        this.$rbj.assistFun.echoFun(echoObj, dataObj, {
-            assignNull: false, // 说明: 即 dataObj 中有如果有空变量, 是否进行赋值操作, 默认值 false
-        }); // 将表单对象的属性 和 后台响应的数据对象中 相同属性名进行关联， 以此来实现数据回显
-    }
+// global custom function
+this.$rbj.setGlobalFun("funName", ()=>{}); // set global function
+this.$rbj.globalFun.Customized function name(); // This method can directly call the customized global function
+
+
+
+
+
+
+// helper function
+/**
+* @description object or array null value judgment
+* @param verifyObj: Object | Array, Description: The data object to be validated for null values, supports the validation of objects or arrays
+* @param verifySelect: Array, multi-dimensional array, each dimension of the array represents multiple field attribute names to be verified in each layer (optional: not passed or [] means to verify all attributes or elements of the form object, you can Pass null value, note: when verifying multi-level data, if the specified level is [], it means to verify all attributes or elements of the specified level) Explanation: Even if there are objects or arrays in the array, it is also considered as [], because the objects in the array Or the array is the setting for the next level, not the setting for the current level, that is, there must be string elements in the array, so it is not counted as []
+* Example: Verification object field ['phone', 'password', ['phone', 'password'] ...], verification array specified index element ['0', '1', ['0', '1' '] ...], or validate a mix of arrays and objects ['phone', ['0', '2', ['phone']], ['password', ['0']]...
+* In a multi-dimensional array, if you want to set a single object property or array index independently, you can use the object method, for example:
+*[
+* {
+* oneselfField: "userInfo", // The attribute name of the field to set the verification method separately, generally only for fields of object or array type, the basic type does not support, note: regardless of whether the external reverse mode is enabled, "userInfo" This attribute must be in the state of null value verification externally. If "userInfo" is not in the state of null value verification externally, this independent setting object is also invalid, because this independent control is only for the setting of sub-attributes and sub-indexes
+* isReversal: false, // Whether to reverse the operation specified by oneselfField (object or array), the default value is false, note: when verifyArr is not set, or verifyArr is [], all sub-attribute values or sub-attributes will be automatically defaulted The verification of the index value, and the isReversal you set will lose its effect
+* isChildren: true, // For the field attribute data specified by oneselfField, whether to verify the sub-attribute value or sub-index value, Note: If this item is not set in the current object (the setting priority in the current object is the highest), then By default, the reverseVerify in optionsObj shall prevail. If reverseVerify is not defined in optionsObj or the operation of specifying whether to reverse the level is not set in reverseVerify, the default value is true
+* verifyArr: [], // Array, a multi-dimensional array, has the same writing method and effect as verifySelect, the difference is that it is only for the field specified by the current selfField, representing the data object
+* }
+* ]
+* @param optionsObj parameter object attribute description
+* Parameter 1: reverseVerify: boolean | Array | Object, (optional, default value is false) Description: The option in verifySelect and the verifyObj form object to be verified can be reversed, in multi-level objects or multi-level In the array state, you can use the (object or array) method to control the multi-level inversion operation
+* Example function explanation: There are two fields of phone and password in the verified object. When you want to verify verifySelect = ["phone"], after inversion: verifySelect = ["phone"] will become the field to be ignored Array, will automatically validate all fields except the array that needs to be ignored
+* Example of use: 1. Boolean usage method is true, description: If the data to be verified is multi-level, that is, the default setting is multi-level, all are true or both are false, Note: The default method of reversalVerify is Boolean, and the default value is false
+* Expansion of the Boolean method: When reverseVerify uses the Boolean method, although multiple levels are set at the same time, if you do not set multiple levels in verifySelect but only set one or two levels, or set the specified level to [], Those levels that are not set and the empty [] level are still false by default. This explanation: It has been explained in verifySelect: "That is, if you do not pass or [], you can verify all attributes or elements of the form object, and you can pass null values", For details, please refer to the description of verifySelect above.
+* 2. Object usage method {0: true, 1: false, ...}, description: 0 represents the first outermost layer, and so on, if there are four layers of data to be verified, and you only set For the first two layers, the latter two layers are false by default, that is, if not set or set to null, both are false
+* 3. Array usage [true, false, ...], explanation: the first element represents the outermost first layer, and so on, if there are four layers of data to be verified, and you only set the first Two layers, then the last two layers are false by default, that is, if not set or set to null, both are false
+* Parameter 2: isZeroNull: boolean, (optional) Description: Set whether zero is considered a null state, the default value is false, and zero is not considered a null state
+* Parameter 3: isChildren: boolean, (optional) Description: Whether to verify the null value of the child, the default value is true, and verify the child
+* @return type: Object, return {isEmpty: true, fieldName: ""} when there is a null value, return {isEmpty: false, fieldName: "NOT_NULL"} if there is no null value
+* isEmpty // true when the field is empty, false when not empty, fieldName // field name when the field is empty, when all fields are not empty, it will have a default value "NOT_NULL", if passed in The data is empty and will have a "NULL" default value
+*/
+this.$rbj.assistFun.emptyVerify(verifyObj, verifySelect, {
+reverseVerify: false, // default value: false
+isZeroNull: false, // Set whether zero is considered a null state, the default value is false, zero is not considered a null state
+isChildren: false, // Whether to verify the null value of the child, the default value is true, and verify the child
+});
+/**
+* @description Explanation of the function of echo data: form data is used for echo, so that the fields in the data object of the background response and the fields in the form object of the page are automatically associated together. Note: the premise is that the field names in the two objects It must be consistent to be associated, in the object (redundant fields are allowed, and will not affect field association)
+* @param echoObj The echo object of the page
+* @param dataObj The data object of the background response
+* @param optionsObj parameter object attribute description
+* - assignNull Description: That is, if there is a null variable in dataObj, whether to perform an assignment operation, the default value is false, Note: The assignment of a null variable is also for two objects, and only when the same attribute name exists in both objects will it be assigned , as long as one of the parties does not exist, the assignment operation will not be performed
+* @return void no return value
+*/
+this. $rbj. assistFun.choFun(echoObj, dataObj, {
+assignNull: false, // Explanation: If there is a null variable in dataObj, whether to perform assignment operation, the default value is false
+}); // Associate the properties of the form object with the same property name in the data object of the background response, so as to realize data echo
+}
 }
 ```
 
-## rbj 流数据转换对象
+## rbj stream data conversion object
 
 ```js
 export default {
-    created(){
-        // 流数据转换对象
-        let streamObj = new this.$rbj.StreamConversion(Blob||file||ArrayBuffer||base64); // 注意: 流数据转换对象, 可能会转换失败, 可以利用下方的静态方法, 使用单一的方式来进行转换
-        streamObj.getFile(); // 获取 File 对象
-        streamObj.getBlob(); // 获取 Blob 对象
-        streamObj.getArrayBuffer(); // 获取 ArrayBuffer 字节流对象
-        streamObj.getArrayBuffer().then(arrayBuffer => {}); // 当你在创建 StreamConversion 对象时, 初始化传入的是 file 或 blob 时, getArrayBuffer() 返回的是一个异步对象
-        streamObj.getDataURL(); // 当你在创建 StreamConversion 对象时, 初始化传入的是 arrayBuffer 或 dataurl 时, getDataURL() 函数直接返回一个 base64 字符串, 可以直接使用
-        streamObj.getDataURL().then(dataurl => {}); // 当你在创建 StreamConversion 对象时, 初始化传入的是 file 或 blob 时, getDataURL() 返回的是一个异步对象
-        // 流数据转换对象 常用的 静态方法
-        this.$rbj.StreamConversion.canvasToDataUrl(canvas); // 返回 dataUrl 字符串
-        this.$rbj.StreamConversion.dataURLtoImage(dataUrl); // 返回 Image 对象
-        this.$rbj.StreamConversion.imageTocanvas(ctx, imageElement, x, y, width, height); // Image 转 canvas (即把图片渲染到 传入的 ctx [即 canvas 的] 画笔操作对象), 此函数没有返回值, 参数: (imageElement [图片元素], x [渲染在canvas的x轴位置], y [渲染在canvas的 y轴位置], width [渲染的宽度], height [渲染的高度])
-        this.$rbj.StreamConversion.canvasToblob(canvas); // 返回 Blob 对象
-        this.$rbj.StreamConversion.blobORfileTodataURL(paramsObj).then(dataUrl => {}).catch();
-        this.$rbj.StreamConversion.blobORfileToAffter(paramsObj).then(arrayBuffer => {}).catch();
-        this.$rbj.StreamConversion.blobORfileToText(paramsObj).then(text => {}).catch();
-        this.$rbj.StreamConversion.dataURLtoFile(dataurl, filename); // 返回 File 对象
-        this.$rbj.StreamConversion.dataURLtoBlob(dataurl); // 返回 Blob 对象
-        this.$rbj.StreamConversion.dataURLToArrayBuffer(base64); // 返回 ArrayBuffer 对象
-        this.$rbj.StreamConversion.blobToFile(blob, filename); // 返回 File 对象
-        this.$rbj.StreamConversion.blobStrUrlToBlob(blobUrl).then(blob => {}).catch(); // blob 字符路径 转成 Blob 对象
-        this.$rbj.StreamConversion.fileToBlob(file); // 返回 Blob 对象
-        this.$rbj.StreamConversion.arrayBufferToBlob(arrayBuffer); // 返回 Blob 对象
-        this.$rbj.StreamConversion.arrayBufferToFile(arrayBuffer, filename); // 返回 File 对象
-        this.$rbj.StreamConversion.arrayBufferToDataURL(buffer); // 返回 dataUrl 字符串
-    }
+created(){
+// stream data conversion object
+let streamObj = new this.$rbj.StreamConversion(Blob||file||ArrayBuffer||base64); // Note: stream data conversion object may fail to convert, you can use the static method below to do it in a single way convert
+streamObj.getFile(); // Get the File object
+streamObj.getBlob(); // Get the Blob object
+streamObj.getArrayBuffer(); // Get ArrayBuffer byte stream object
+streamObj.getArrayBuffer().then(arrayBuffer => {}); // When you create a StreamConversion object, when you initialize the incoming file or blob, getArrayBuffer() returns an asynchronous object
+streamObj.getDataURL(); // When you create a StreamConversion object, when you initialize and pass in arrayBuffer or dataurl, the getDataURL() function directly returns a base64 string, which can be used directly
+streamObj.getDataURL().then(dataurl => {}); // When you create a StreamConversion object, when the initial input is file or blob, getDataURL() returns an asynchronous object
+// Commonly used static methods for streaming data conversion objects
+this.$rbj.StreamConversion.canvasToDataUrl(canvas); // return dataUrl string
+this.$rbj.StreamConversion.dataURLtoImage(dataUrl); // return Image object
+this.$rbj.StreamConversion.imageTocanvas(ctx, imageElement, x, y, width, height); // Image to canvas (that is, render the image to the incoming ctx [that is, the brush operation object of canvas]), this function does not Return value, parameters: (imageElement [image element], x [rendered at the x-axis position of the canvas], y [rendered at the y-axis position of the canvas], width [rendered width], height [rendered height])
+this.$rbj.StreamConversion.canvasToblob(canvas); // return Blob object
+this.$rbj.StreamConversion.blobORfileTodataURL(paramsObj).then(dataUrl => {}).catch();
+this.$rbj.StreamConversion.blobORfileToAfterter(paramsObj).then(arrayBuffer => {}).catch();
+this.$rbj.StreamConversion.blobORfileToText(paramsObj).then(text => {}).catch();
+this.$rbj.StreamConversion.dataURLtoFile(dataurl, filename); // return File object
+this.$rbj.StreamConversion.dataURLtoBlob(dataurl); // return Blob object
+this.$rbj.StreamConversion.dataURLToArrayBuffer(base64); // return ArrayBuffer object
+this.$rbj.StreamConversion.blobToFile(blob, filename); // return File object
+this.$rbj.StreamConversion.blobStrUrlToBlob(blobUrl).then(blob => {}).catch(); // convert blob character path to Blob object
+this.$rbj.StreamConversion.fileToBlob(file); // return Blob object
+this.$rbj.StreamConversion.arrayBufferToBlob(arrayBuffer); // return Blob object
+this.$rbj.StreamConversion.arrayBufferToFile(arrayBuffer, filename); // return File object
+this.$rbj.StreamConversion.arrayBufferToDataURL(buffer); // return dataUrl string
+}
 }
 ```
 
-## rbj 日志
+## rbj log
 
 ```js
 export default {
-    created(){
-        // $rbj 日志, 打印各种级别的日志, 可以直接在 rbj 的配置对象中, 控制是否进行控制台打印
-        this.$rbj.logs.logs();
-        this.$rbj.logs.ALL();
-        this.$rbj.logs.DEBUG();
-        this.$rbj.logs.ERROR();
-        this.$rbj.logs.INFO();
-        this.$rbj.logs.TRACE();
-        this.$rbj.logs.WARN();
-    }
+created(){
+// $rbj log, print logs of various levels, you can directly control whether to print to the console in the configuration object of rbj
+this.$rbj.logs.logs();
+this.$rbj.logs.ALL();
+this.$rbj.logs.DEBUG();
+this.$rbj.logs.ERROR();
+this.$rbj.logs.INFO();
+this.$rbj.logs.TRACE();
+this.$rbj.logs.WARN();
+}
 }
 ```
