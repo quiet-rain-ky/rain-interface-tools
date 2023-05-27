@@ -200,7 +200,7 @@ Vue.use(Rbj); // 把 rain-interface-tools 插件, 安装到 Vue 上
 ## 详细配置说明
 
 ```js
-1. 接口配置对象
+// ==================================== <1>. 接口配置对象 ====================================
 (一) 模块化接口配置对象
 const userConfigs = {
     moduleName: "User 用户模块", // (可选) 仅用作控制台错误提示使用
@@ -310,7 +310,7 @@ const userConfigs = {
 }
 
 
-2. 引入 (Rbj || UniRbjTwo || UniRbjThere) 插件对象, 使用 importsConfigObj 函数融合指定目录下所有的 (接口配置对象) 和 指定目录下所有的全局组件对象(uniapp 不建议使用此方式来注册全局组件, 建议使用 uniapp 内置的注册全局组件方式)
+// ==================================== <2>. 引入 (Rbj || UniRbjTwo || UniRbjThere) 插件对象, 使用 importsConfigObj 函数融合指定目录下所有的 (接口配置对象) 和 指定目录下所有的全局组件对象(uniapp 不建议使用此方式来注册全局组件, 建议使用 uniapp 内置的注册全局组件方式) ====================================
 import { Rbj, UniRbjTwo, UniRbjThere, importsConfigObj, logObj } from 'rain-interface-tools';
 // 注意: 除了 Rbj 基础核心对象外, 还有对 uniapp 做了兼容的 UniRbjTwo (即用于 uniapp Vue2 版本) 和 UniRbjThere (即用于 uniapp Vue3 版本) 的 rbj 对象, 建议在开发 uniapp 项目时使用 UniRbjTwo 或 UniRbjThere 对象来进行 uniapp 项目的开发, 核心的 rbj 对象可以在 web 或 H5 项目上进行使用
 // 注意: 由于日志对象, 一般是自动挂载在 Vue 全局属性上的, 所以非 Vue 组件内, 不能使用 日志对象, 我们可以通过 import { logObj } from 'rain-interface-tools'; 直接导入的方式来使用 rbj日志对象
@@ -349,7 +349,7 @@ const globalComponentObj = import.meta.glob("components/*.vue"); // 使用 impor
 const configObj = importsConfigObj(userConfigs); // 可以直接将单个模块化接口配置对象, 传入 importsConfigObj 函数, importsConfigObj 函数会直接对模块化接口配置对象进行处理
 
 
-3. 利用 (Rbj || UniRbjTwo || UniRbjThere) 插件对象, 在 Vue 上安装插件, 导入融合后的接口配置对象, 导入融合后的全局组件对象(uniapp 不建议使用此方式来注册全局组件, 建议使用 uniapp 内置的 easycom 方式, 来注册全局组件)
+// ==================================== <3>. 利用 (Rbj || UniRbjTwo || UniRbjThere) 插件对象, 在 Vue 上安装插件, 导入融合后的接口配置对象, 导入融合后的全局组件对象(uniapp 不建议使用此方式来注册全局组件, 建议使用 uniapp 内置的 easycom 方式, 来注册全局组件) ====================================
 Vue.use(
     new Rbj({ // 此处除了可以使用核心的 Rbj 插件对象外, 还可以使用对 uniapp 做了兼容的 UniRbjTwo (即用于 uniapp Vue2 版本) 和 UniRbjThere (即用于 uniapp Vue3 版本) 的 rbj 插件对象, 建议在开发 uniapp 项目时使用 UniRbjTwo 或 UniRbjThere 对象来进行 uniapp 项目的开发, 核心的 Rbj 对象可以在 web 或 H5 项目上进行使用
         // 请求的主机地址, 默认值: "localhost:8080", 当需要使用 https 时, 可以直接在请求地址前面加 https://localhost:8080

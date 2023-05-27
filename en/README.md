@@ -200,7 +200,7 @@ Vue.use(Rbj); // Install the rain-interface-tools plugin on Vue
 ## Detailed configuration instructions
 
 ```js
-// --- <1> ---. Interface configuration object
+// ==================================== <1>. Interface configuration object ====================================
 // (1) Modular interface configuration object
 const userConfigs = {
     moduleName: "User user module", // (optional) only used for console error prompts
@@ -310,7 +310,7 @@ const userConfigs = {
 }
 
 
-// --- < 2 > ---. Import (Rbj || UniRbjTwo || UniRbjThere) plug-in object, use the importsConfigObj function to integrate all (interface configuration objects) in the specified directory and all global component objects in the specified directory (uniapp does not recommend using this method to register global components, It is recommended to use uniapp's built-in way to register global components)
+// ==================================== <2>. Import (Rbj || UniRbjTwo || UniRbjThere) plug-in object, use the importsConfigObj function to integrate all (interface configuration objects) in the specified directory and all global component objects in the specified directory (uniapp does not recommend using this method to register global components, It is recommended to use uniapp's built-in way to register global components) ====================================
 import { Rbj, UniRbjTwo, UniRbjThere, importsConfigObj, logObj } from 'rain-interface-tools';
 // Note: In addition to the Rbj basic core object, there are also UniRbjTwo (that is, for uniapp Vue2 version) and UniRbjThere (that is, for uniapp Vue3 version) rbj objects that are compatible with uniapp. It is recommended to use UniRbjTwo when developing uniapp projects Or UniRbjThere object to develop uniapp project, the core rbj object can be used on web or H5 project
 // Note: Since log objects are generally automatically mounted on Vue global properties, log objects cannot be used in non-Vue components. We can directly import them through import { logObj } from 'rain-interface-tools'; way to use the rbj log object
@@ -349,7 +349,7 @@ const globalComponentObj = import.meta.glob("components/*.vue"); // Use the impo
 const configObj = importsConfigObj(userConfigs); // You can directly pass a single modular interface configuration object into the importsConfigObj function, and the importsConfigObj function will directly process the modular interface configuration object
 
 
-// --- < 3 > ---. Use the (Rbj || UniRbjTwo || UniRbjThere) plug-in object to install the plug-in on Vue, import the fused interface configuration object, and import the fused global component object (uniapp does not recommend using this method to register global components, it is recommended to use uniapp's built-in easycom method to register global components)
+// ==================================== <3>. Use the (Rbj || UniRbjTwo || UniRbjThere) plug-in object to install the plug-in on Vue, import the fused interface configuration object, and import the fused global component object (uniapp does not recommend using this method to register global components, it is recommended to use uniapp's built-in easycom method to register global components) ====================================
 Vue.use(
     new Rbj({ // In addition to the core Rbj plug-in object, you can also use UniRbjTwo (that is, for uniapp Vue2 version) and UniRbjThere (that is, for uniapp Vue3 version) rbj plug-in objects that are compatible with uniapp , it is recommended to use UniRbjTwo or UniRbjThere objects to develop uniapp projects when developing uniapp projects, and the core Rbj objects can be used on web or H5 projects
         // Requested host address, default value: "localhost:8080", when you need to use https, you can directly add https://localhost:8080 in front of the request address
