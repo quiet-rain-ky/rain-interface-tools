@@ -17,7 +17,7 @@ npm install rain-interface-tools -D
 2. 在 /config 目录中创建 index.js 文件
 3. 在 /config/subConfig 目录下创建一些自定义的接口文件
 
-注意：目录名可以不一样上方只是示例，但在使用 require.context() 和 import.meta.globEager() 时, 注意要修改扫描的文件路径
+注意: 目录名可以不一样上方只是示例, 但在使用 require.context() 和 import.meta.globEager() 时, 注意要修改扫描的文件路径
 ```
 
 ### /config/subConfig/xxx.js
@@ -177,7 +177,7 @@ Vue.use(Rbj); // 把 rain-interface-tools 插件, 安装到 Vue 上
             rbj.autoButtJoint("one", this.oneParams, "oneData", this);
             
             // 也可以手动装配数据
-            rbj.buttJoint("one", this.oneParams).then((resData)=>{
+            rbj.buttJoint("one", this.oneParams).then((resData) => {
                 // resData 即 响应的数据
                 self.oneData = resData;
             });
