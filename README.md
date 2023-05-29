@@ -467,11 +467,11 @@ Vue.use(
         globalFun: {
             one: 1, // 可以定义常用的全局变量
 
-            fun_one(){
+            fun_one() {
                 console.log("这是全局初始化的第一个全局自定义函数", this.$rbj); // 当前 全局函数内, 也可以通过 this 来调用 $rbj 对象
                 this.fun_two(); // 注意: 全局函数内, 可以直接使用 this 来调用其他全局函数
             },
-            fun_two(){
+            fun_two() {
                 console.log("这是全局初始化的第二个全局自定义函数");
             }
         },
@@ -481,8 +481,8 @@ Vue.use(
         tokenName: "Authorization",
         /**
          * 自定义设置 token 方式的函数
-         * 参数1: 要进行设置的 token 字符串
-         * 参数2: 当前 rbj 实例对象
+         * @param token 要进行设置的 token 字符串
+         * @param rbjObj 当前 rbj 实例对象
          * 注意: 有默认设置 token 的函数, 所以也可以不进行设置
          * 注意: 不设置时, 需要在对象中把此函数进行删除, 防止此函数影响默认设置 token 函数的执行
          */
@@ -492,23 +492,23 @@ Vue.use(
         },
         /**
          * 自定义获取 token 方式的函数
-         * 参数: 当前 rbj 实例对象
+         * @param rbjObj 当前 rbj 实例对象
          * @return 注意: 自定义获取方式后需要返回获取的 token 字符串
          * 注意: 有默认获取 token 的函数, 所以也可以不进行设置
          * 注意: 不设置时, 需要在对象中把此函数进行删除, 防止此函数影响默认获取 token 函数的执行
          */
         customGetTokenFun(rbjObj) {
-            // return "LSJFKLSDJFLJSLKDJFLSDKF";
+            // return window.localStorage.getItem("token");
         },
         /**
          * 自定义移除 token 方式的函数
-         * 参数: 当前 rbj 实例对象
+         * @param rbjObj 当前 rbj 实例对象
          * 注意: 有默认移除 token 的函数, 所以也可以不进行设置
          * 注意: 不设置时, 需要在对象中把此函数进行删除, 防止此函数影响默认移除 token 函数的执行
          */
         customRemoveTokenFun(rbjObj) {
             // 示例:
-            // window.localStorage.removeItem("token", token);
+            // window.localStorage.removeItem("token");
         }
     })
 );
