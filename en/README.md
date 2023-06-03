@@ -8,7 +8,7 @@ This is a front-end page interface tool that simplifies the steps of background 
 
 npm install rain-interface-tools -D
 
-## Automatic initial configuration
+## Use the command tool to generate the Rbj configuration
 
 ```shell
 npx rain-util-cli rbj-tool # The rbj configuration file is automatically generated

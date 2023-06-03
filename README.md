@@ -8,7 +8,7 @@
 
 npm install rain-interface-tools -D
 
-## 自动初始化配置
+## 使用命令工具生成 Rbj 配置
 
 ```shell
 npx rain-util-cli rbj-tool # 自动生成 rbj 配置文件
