@@ -8,6 +8,15 @@ This is a front-end page interface tool that simplifies the steps of background 
 
 npm install rain-interface-tools -D
 
+## Automatic initial configuration
+
+```shell
+npx rain-util-cli rbj-tool # The rbj configuration file is automatically generated
+npx rain-util-cli rbj-tool -c # If you delete a configuration file by mistake, add the '-c' parameter to automatically complete the missing configuration file
+
+# Note: You can also follow the 'Easy to use' section below to configure manually, or to quickly learn what all the profiles do
+```
+
 ## easy to use
 
 ### Create configuration directory and files
