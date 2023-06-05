@@ -374,7 +374,10 @@ Vue.use(
         logs: process.env.NODE_ENV === "development", // Determine whether it is a development or production environment. If the development environment is true, the log will be printed, and if the production environment is false, the log will not be printed
         // Whether the logs printed on the console should be output with a style. This configuration needs to be used with the logs attribute configuration above, and this style can only take effect normally in H5 mode. Default value: false
         isLogStyle: false,
-        // Whether to enable the fake data mode, default value: false
+        /**
+         * If false data mode is enabled, the interface does not send requests after it is enabled. We can customize some simulated data return in the interfaceData() function configured by the interface and use it in the component. Default value: false
+         * Note: In fake data mode, the interface's data becomes custom mock data, and the autoButtJoint() and buttJoint() functions receive our custom mock data when they receive request data
+         */
         falseDataMode: false,
         // global request configuration function
         globalRequestConfig(dataObj) {

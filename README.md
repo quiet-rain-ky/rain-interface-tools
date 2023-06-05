@@ -374,7 +374,10 @@ Vue.use(
         logs: process.env.NODE_ENV === "development", // 判断是否开发或生产环境, 开发环境即为 true 则打印日志, 生产环境即为 false 则不打印日志
         // 控制台打印的日志是否, 携带样式进行输出, 此配置需搭配上方的 logs 属性配置进行使用, 且此样式仅在 H5模式 下才能正常生效, 默认值: false
         isLogStyle: false,
-        // 是否开启假数据模式, 默认值: false
+        /**
+         * 是否开启假数据模式, 开启后 接口不在发送请求, 我们可以在接口配置的 interfaceData() 函数中, 自定义一些模拟数据返回, 并在组件中使用, 默认值: false
+         * 注意: 假数据模式下, 接口的数据变成了自定义的模拟数据, autoButtJoint() 和 buttJoint() 函数在接收请求数据时, 接收的数据也会变成我们自定义的模拟数据
+         */
         falseDataMode: false,
         // 全局请求配置函数
         globalRequestConfig(dataObj) {
