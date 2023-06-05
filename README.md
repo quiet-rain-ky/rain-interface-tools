@@ -11,7 +11,7 @@ npm install rain-interface-tools -D
 ## 使用命令工具生成 Rbj 配置
 
 ```shell
-npx rain-util-cli rbj-tool # 自动生成 rbj 配置文件
+npx rain-util-cli rbj-tool -i # 自动初始化生成所有的 rbj 配置文件
 npx rain-util-cli rbj-tool -c # 当你误删配置文件时, 加上 '-c' 参数则可以自动补全缺失的配置文件
 
 # 说明: 当然你也可以根据下方的 '简单使用' 来进行手动配置, 或 快速了解所有配置文件的作用
