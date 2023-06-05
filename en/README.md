@@ -11,8 +11,8 @@ npm install rain-interface-tools -D
 ## Use the command tool to generate the Rbj configuration file
 
 ```shell
-npx rain-util-cli rbj-tool -i # The rbj configuration file is automatically generated
-npx rain-util-cli rbj-tool -c # If you delete a configuration file by mistake, add the '-c' parameter to automatically complete the missing configuration file
+npx rain-util-cli@latest rbj-tool -i # The rbj configuration file is automatically generated
+npx rain-util-cli@latest rbj-tool -c # If you delete a configuration file by mistake, add the '-c' parameter to automatically complete the missing configuration file
 # Note: After the configuration file is generated, you will also need to manually install the Rbj object exported from rbjConfigs/index.js into Vue in the same way that the Vue plugin was installed, or you can use the Install_rbj() function in the exported Rbj object. Install it on whatever object you want
 # Note: rain-interface-tools npm package, you still need to install manually, rain-util-cli does not automatically help you install rain-interface-tools npm package
 
