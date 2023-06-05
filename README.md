@@ -344,12 +344,12 @@ import { Rbj, UniRbjTwo, UniRbjThere, importsConfigObj, logObj } from 'rain-inte
 // {interfaceList: {one: {url:''}}}
 // 返回值: {...} 把数组中所有模块的对象合成后 返回一个多个配置融合在一起的合成对象
 
-// VUE2 方式
+// VUE2 环境下的使用方式
 const configObj = importsConfigObj(require.context("rbjConfigs/subConfig/", true, /.js$/).keys().map(item => require("rbjConfigs/subConfig/" + item.substr(2, item.length)))); // 可以直接使用 webpack自带的 require.context() 方法来导入指定目录下的多个 js 文件
 // 注意: 在开发 uniapp 项目中, 不用使用下方 vue全局组件的方式, 只要组件安装在项目 "根目录" 或 "uni_modules" 的 components 目录下，并符合 components/组件名称/组件名称.vue 或 uni_modules/插件ID/components/组件名称/组件名称.vue目录结构。 就可以直接在页面中使用, 注意: 在 uniapp 项目中, 组件外层要创建一个和组件同名的目录
 const globalComponentObj = require.context("components/", true, /.vue$/).keys().map(item => require("components/" + item.substr(2, item.length))); // 使用 require.context() 来获取指定目录的组件
 
-// VUE3 方式
+// VUE3 环境下的使用方式
 const configObj = importsConfigObj(import.meta.globEager("rbjConfigs/subConfig/**.js")); // 或者使用 import.meta.globEager 的方式
 // 注意: 在开发 uniapp 项目中, 不用使用下方vue全局组件的方式, 只要组件安装在项目 "根目录"或 "uni_modules" 的 components 目录下，并符合components/组件名称/组件名称.vue 或 uni_modules/插件ID/components/组件名称/组件名称.vue目录结构。 就可以直接在页面中使用, 注意: 在 uniapp 项目中, 组件外层要创建一个和组件同名的目录
 const globalComponentObj = import.meta.glob("components/*.vue"); // 使用 import.meta.glob() 函数获取, 指定目录下的所有组件

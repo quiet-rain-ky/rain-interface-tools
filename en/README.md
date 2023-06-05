@@ -24,14 +24,14 @@ npx rain-util-cli@latest rbj-tool -c # If you delete a configuration file by mis
 ### Create configuration directory and files
 
 ```js
-1. Create /config/subConfig in the root directory
-2. Create index.js file in /config directory
-3. Create some custom interface files in the /config/subConfig directory
+1. Create /rbjConfigs/subConfig in the root directory
+2. Create index.js file in /rbjConfigs directory
+3. Create some custom interface files in the /rbjConfigs/subConfig directory
 
 Note: The directory name can be different. The above is just an example, but when using require.context() and import.meta.globEager(), be careful to modify the scanned file path
 ```
 
-### /config/subConfig/xxx.js
+### /rbjConfigs/subConfig/xxx.js
 
 ```js
 /**
@@ -67,7 +67,7 @@ export default { // Note: This demo uses a non-modular interface configuration o
 }
 ```
 
-### /config/globalFun.js
+### /rbjConfigs/globalFun.js
 
 ```js
 /**
@@ -81,16 +81,16 @@ export default {
 }
 ```
 
-### /config/index.js
+### /rbjConfigs/index.js
 
 ```js
 import { Rbj, UniRbjTwo, UniRbjThere, importsConfigObj } from "rain-interface-tools";
 import globalFun from "./globalFun.js";
 // Import all the interface configuration files in the /config/subConfig/ directory, note: if the directory path is inconsistent with the configuration below, you need to modify the file path to be scanned
 // --- vue2 uses this ---
-const configObj = importsConfigObj(require.context("configs/subConfig/", true, /.js$/).keys().map(item => require("configs/subConfig/" + item.substr(2, item .length)))); // require.context() will scan all files in the specified directory, only used in Vue2
+const configObj = importsConfigObj(require.context("./subConfig/", true, /.js$/).keys().map(item => require("./subConfig/" + item.substr(2, item .length)))); // require.context() will scan all files in the specified directory, only used in Vue2
 // --- vue3 uses this ---
-const configObj = importsConfigObj(import.meta.globEager("configs/subConfig/**.js")); // import.meta.globEager() will scan all files in the specified directory, only used in Vue3
+const configObj = importsConfigObj(import.meta.globEager("./subConfig/**.js")); // import.meta.globEager() will scan all files in the specified directory, only used in Vue3
 
 
 // Create rbj plug-in object, note: uniapp project can use UniRbjTwo or UniRbjThere object to create
@@ -106,7 +106,7 @@ export default new Rbj({ // export this plug-in, install this plug-in in the mai
 ### /main.js
 
 ```js
-import Rbj from "configs/index.js";
+import Rbj from "rbjConfigs/index.js";
 Vue.use(Rbj); // Install the rain-interface-tools plugin on Vue
 ```
 
@@ -168,7 +168,7 @@ Vue.use(Rbj); // Install the rain-interface-tools plugin on Vue
     </div>
 </template>
 <script>
-    import rbj from "../../configs/index.js"; // Import the rbj core object of the specified path above, note: the core object does not include the rbj log object, so if we want to use the rbj log object, we need to import it separately log object
+    import rbj from "../../rbjConfigs/index.js"; // Import the rbj core object of the specified path above, note: the core object does not include the rbj log object, so if we want to use the rbj log object, we need to import it separately log object
     import { logObj } from "rain-interface-tools"; // import rbj log object
     export default {
         data() {
@@ -343,17 +343,16 @@ import { Rbj, UniRbjTwo, UniRbjThere, importsConfigObj, logObj } from 'rain-inte
 // {interfaceList: {one: {url:''}}}
 // Return value: {...} After synthesizing the objects of all modules in the array, return a synthetic object with multiple configurations fused together
 
-// #ifndef VUE3
-const configObj = importsConfigObj(require.context("configs/subConfig/", true, /.js$/).keys().map(item => require("configs/subConfig/" + item.substr(2, item .length)))); // You can directly use the require.context() method that comes with webpack to import multiple js files in the specified directory
+// --------- Usage mode in the VUE2 environment ---------
+const configObj = importsConfigObj(require.context("rbjConfigs/subConfig/", true, /.js$/).keys().map(item => require("rbjConfigs/subConfig/" + item.substr(2, item .length)))); // You can directly use the require.context() method that comes with webpack to import multiple js files in the specified directory
 // Note: In the development of uniapp projects, you don't need to use the vue global component method below, as long as the components are installed in the components directory of the project "root directory" or "uni_modules", and conform to components/component name/component name.vue or uni_modules /plugin ID/components/component name/component name.vue directory structure. It can be used directly on the page. Note: In the uniapp project, a directory with the same name as the component should be created in the outer layer of the component
 const globalComponentObj = require.context("components/", true, /.vue$/).keys().map(item => require("components/" + item.substr(2, item.length))); // Use require.context() to get the components of the specified directory
-// #endif
 
-// #ifdef VUE3
-const configObj = importsConfigObj(import.meta.globEager("configs/subConfig/**.js")); // Or use import.meta.lobEager way
+// --------- Usage mode in the VUE3 environment ---------
+const configObj = importsConfigObj(import.meta.globEager("rbjConfigs/subConfig/**.js")); // Or use import.meta.lobEager way
 // Note: In developing a uniapp project, you don't need to use the vue global component method below, as long as the component is installed in the components directory of the project "root directory" or "uni_modules", and complies with components/component name/component name.vue or uni_modules /plugin ID/components/component name/component name.vue directory structure. It can be used directly on the page. Note: In the uniapp project, a directory with the same name as the component should be created in the outer layer of the component
 const globalComponentObj = import.meta.glob("components/*.vue"); // Use the import.meta.glob() function to obtain all components in the specified directory
-// #endif
+
 
 // ======== Note: uniapp does not support Vue's global components when developing mobile APP projects, so it is best to use the built-in easycom component mode when developing uniapp projects ========
 
