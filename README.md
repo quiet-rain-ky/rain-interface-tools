@@ -11,6 +11,7 @@ npm install rain-interface-tools -D
 ## 使用命令工具生成 Rbj 配置文件
 
 ```shell
+# 在项目根目录运行以下命令
 npx rain-util-cli@latest rbj-tool -i # 自动初始化生成所有的 rbj 配置文件
 npx rain-util-cli@latest rbj-tool -c # 当你误删配置文件时, 加上 '-c' 参数则可以自动补全缺失的配置文件
 # 注意: 生成配置文件后, 还需要你手动把 rbjConfigs/index.js 导出的 Rbj 对象, 按照 Vue 插件的安装方式, 安装到 Vue 上, 或者 你也可以利用导出的 Rbj 对象中的 Install_rbj() 函数, 安装到你想要安装的任意对象身上
@@ -24,14 +25,14 @@ npx rain-util-cli@latest rbj-tool -c # 当你误删配置文件时, 加上 '-c' 
 ### 创建配置目录和文件
 
 ```js
-1. 在 根目录创建 /config/subConfig
-2. 在 /config 目录中创建 index.js 文件
-3. 在 /config/subConfig 目录下创建一些自定义的接口文件
+1. 在 根目录创建 /rbjConfigs/subConfig
+2. 在 /rbjConfigs 目录中创建 index.js 文件
+3. 在 /rbjConfigs/subConfig 目录下创建一些自定义的接口文件
 
 注意: 目录名可以不一样上方只是示例, 但在使用 require.context() 和 import.meta.globEager() 时, 注意要修改扫描的文件路径
 ```
 
-### /config/subConfig/xxx.js
+### /rbjConfigs/subConfig/xxx.js
 
 ```js
 /**
@@ -67,7 +68,7 @@ export default { // 注意: 这里演示, 使用的是非模块化接口配置�
 }
 ```
 
-### /config/globalFun.js
+### /rbjConfigs/globalFun.js
 
 ```js
 /**
@@ -81,16 +82,16 @@ export default {
 }
 ```
 
-### /config/index.js
+### /rbjConfigs/index.js
 
 ```js
 import {  Rbj, UniRbjTwo, UniRbjThere, importsConfigObj } from "rain-interface-tools";
 import globalFun from "./globalFun.js";
 // 把 /config/subConfig/ 目录下的所有的接口配置文件都导入进来，注意：目录路径和下方配置的不一致的需要修改要进行扫描的文件路径
 // --- vue2 使用此项 ---
-const configObj = importsConfigObj(require.context("configs/subConfig/", true, /.js$/).keys().map(item => require("configs/subConfig/" + item.substr(2, item.length)))); // require.context() 会扫描指定目录下的所有文件, 仅在 Vue2 使用
+const configObj = importsConfigObj(require.context("./subConfig/", true, /.js$/).keys().map(item => require("./subConfig/" + item.substr(2, item.length)))); // require.context() 会扫描指定目录下的所有文件, 仅在 Vue2 使用
 // --- vue3 使用此项 ---
-const configObj = importsConfigObj(import.meta.globEager("configs/subConfig/**.js")); // import.meta.globEager() 会扫描指定目录下的所有文件, 仅在 Vue3 使用
+const configObj = importsConfigObj(import.meta.globEager("./subConfig/**.js")); // import.meta.globEager() 会扫描指定目录下的所有文件, 仅在 Vue3 使用
 
 
 // 创建 rbj 插件对象, 注意：uniapp 项目可以使用 UniRbjTwo 或 UniRbjThere 对象来进行创建
@@ -106,7 +107,7 @@ export default new Rbj({ // 导出此插件, 在 main.js 文件中, 安装此插
 ### /main.js
 
 ```js
-import Rbj from "configs/index.js";
+import Rbj from "rbjConfigs/index.js";
 Vue.use(Rbj); // 把 rain-interface-tools 插件, 安装到 Vue 上
 ```
 
@@ -168,7 +169,7 @@ Vue.use(Rbj); // 把 rain-interface-tools 插件, 安装到 Vue 上
     </div>
 </template>
 <script>
-    import rbj from "../../configs/index.js"; // 导入上方指定路径的 rbj 核心对象, 注意: 核心对象不包括 rbj日志对象, 所以要想使用 rbj 日志对象, 我们需要单独导入日志对象
+    import rbj from "../../rbjConfigs/index.js"; // 导入上方指定路径的 rbj 核心对象, 注意: 核心对象不包括 rbj日志对象, 所以要想使用 rbj 日志对象, 我们需要单独导入日志对象
     import { logObj } from "rain-interface-tools"; // 导入 rbj 日志对象
     export default {
         data() {
@@ -343,17 +344,16 @@ import { Rbj, UniRbjTwo, UniRbjThere, importsConfigObj, logObj } from 'rain-inte
 // {interfaceList: {one: {url:''}}}
 // 返回值: {...} 把数组中所有模块的对象合成后 返回一个多个配置融合在一起的合成对象
 
-// #ifndef VUE3
-const configObj = importsConfigObj(require.context("configs/subConfig/", true, /.js$/).keys().map(item => require("configs/subConfig/" + item.substr(2, item.length)))); // 可以直接使用 webpack自带的 require.context() 方法来导入指定目录下的多个 js 文件
+// VUE2 方式
+const configObj = importsConfigObj(require.context("rbjConfigs/subConfig/", true, /.js$/).keys().map(item => require("rbjConfigs/subConfig/" + item.substr(2, item.length)))); // 可以直接使用 webpack自带的 require.context() 方法来导入指定目录下的多个 js 文件
 // 注意: 在开发 uniapp 项目中, 不用使用下方 vue全局组件的方式, 只要组件安装在项目 "根目录" 或 "uni_modules" 的 components 目录下，并符合 components/组件名称/组件名称.vue 或 uni_modules/插件ID/components/组件名称/组件名称.vue目录结构。 就可以直接在页面中使用, 注意: 在 uniapp 项目中, 组件外层要创建一个和组件同名的目录
 const globalComponentObj = require.context("components/", true, /.vue$/).keys().map(item => require("components/" + item.substr(2, item.length))); // 使用 require.context() 来获取指定目录的组件
-// #endif
 
-// #ifdef VUE3
-const configObj = importsConfigObj(import.meta.globEager("configs/subConfig/**.js")); // 或者使用 import.meta.globEager 的方式
+// VUE3 方式
+const configObj = importsConfigObj(import.meta.globEager("rbjConfigs/subConfig/**.js")); // 或者使用 import.meta.globEager 的方式
 // 注意: 在开发 uniapp 项目中, 不用使用下方vue全局组件的方式, 只要组件安装在项目 "根目录"或 "uni_modules" 的 components 目录下，并符合components/组件名称/组件名称.vue 或 uni_modules/插件ID/components/组件名称/组件名称.vue目录结构。 就可以直接在页面中使用, 注意: 在 uniapp 项目中, 组件外层要创建一个和组件同名的目录
 const globalComponentObj = import.meta.glob("components/*.vue"); // 使用 import.meta.glob() 函数获取, 指定目录下的所有组件
-// #endif
+
 
 // ======== 注意: uniapp 在开发 手机APP 项目时不支持 Vue 的全局组件, 所以开发 uniapp 项目时最好用内置的 easycom 组件模式 ========
 
