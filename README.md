@@ -8,13 +8,15 @@
 
 npm install rain-interface-tools -D
 
-## 使用命令工具生成 Rbj 配置
+## 使用命令工具生成 Rbj 配置文件
 
 ```shell
 npx rain-util-cli rbj-tool -i # 自动初始化生成所有的 rbj 配置文件
 npx rain-util-cli rbj-tool -c # 当你误删配置文件时, 加上 '-c' 参数则可以自动补全缺失的配置文件
+# 注意: 生成配置文件后, 还需要你手动把 rbjConfigs/index.js 导出的 Rbj 对象, 按照 Vue 插件的安装方式, 安装到 Vue 上, 或者 你也可以利用导出的 Rbj 对象中的 Install_rbj() 函数, 安装到你想要安装的任意对象身上
+# 注意: rain-interface-tools 的 npm 包, 还是需要你进行手动安装的, rain-util-cli 并不会自动帮助你安装 rain-interface-tools 的 npm 包
 
-# 说明: 当然你也可以根据下方的 '简单使用' 来进行手动配置, 或 快速了解所有配置文件的作用
+# 说明: 当然你也可以根据下方的 '简单使用' 来进行手动配置, 或 快速了解所有生成的配置文件的作用
 ```
 
 ## 简单使用
