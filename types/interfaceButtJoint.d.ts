@@ -1,4 +1,4 @@
-import { RbjVueType } from "../main";
+import { RbjVueType } from "../rbj_main";
 import interFaceConfig from "./interFaceConfig";
 
 /**

@@ -5,11 +5,11 @@
     "useTabs": false
   },
   "name": "rain-interface-tools",
-  "version": "1.8.1",
+  "version": "1.8.3",
   "description": "接口对接工具",
   "type": "module",
-  "main": "main.js",
-  "module": "main.js",
+  "main": "rbj_main.js",
+  "module": "rbj_main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -34,7 +34,7 @@
   "author": {
     "name": "Quiet Rain"
   },
-  "types": "main.d.ts",
+  "types": "rbj_main.d.ts",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.24.0",
