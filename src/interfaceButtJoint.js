@@ -878,7 +878,8 @@ export default class interfaceButtJoint {
         }
         // 组件数据变量赋值    调用用户配置的回调函数
         if (dataName || currentObj) {
-            let respData = this._getUserConfigObj(interfaceDefinedName).interfaceData(data, currentObj);
+            let respData = undefined;
+            if (this._getUserConfigObj(interfaceDefinedName).interfaceData) this._getUserConfigObj(interfaceDefinedName).interfaceData(data, currentObj);
             let apiData = null;
             if ([true, false, 0, 1].includes(respData)) {
                 apiData = respData;
@@ -931,7 +932,8 @@ export default class interfaceButtJoint {
             }
             return apiData;
         } else {
-            let respData = this._getUserConfigObj(interfaceDefinedName).interfaceData(data);
+            let respData = undefined;
+            if (this._getUserConfigObj(interfaceDefinedName).interfaceData) this._getUserConfigObj(interfaceDefinedName).interfaceData(data);
             // 判断 interfaceData() 函数, 是否 return 后返回的 null, 还是没有 return 默认返回的 null
             return respData ? respData : respData === undefined ? data : respData;
         }
