@@ -670,7 +670,7 @@ export default class interfaceButtJoint {
         if (!interfaceDefinedName) {
             // 判断是否为空
             rain_logs.ERROR("buttJoint 缺少参数");
-        } else if (this.$falseDataMode) {
+        } else if (this.$falseDataMode || this._getUserConfigObj(interfaceDefinedName).falseDataMode) {
             // 判断是否假数据模式
             return new Promise((resolve, reject) => {
                 resolve(this._assignment(false, interfaceDefinedName, {}, null, null, null, null, null, globalFilterInterCept));
@@ -724,7 +724,7 @@ export default class interfaceButtJoint {
         if (!this._oneParams(interfaceDefinedName, dataName, currentObj)) {
             // 判断是否为空
             rain_logs.ERROR("autoButtJoint 缺少参数");
-        } else if (this.$falseDataMode) {
+        } else if (this.$falseDataMode || this._getUserConfigObj(interfaceDefinedName).falseDataMode) {
             // 判断是否假数据模式
             this._assignment(false, interfaceDefinedName, {}, dataName, currentObj, callbackFunc, isAppendData, frontORback, globalFilterInterCept);
         } else {
@@ -767,7 +767,7 @@ export default class interfaceButtJoint {
         if (!interfaceDefinedName) {
             // 判断是否为空
             rain_logs.ERROR("buttJoint 缺少参数");
-        } else if (this.$falseDataMode) {
+        } else if (this.$falseDataMode || this._getUserConfigObj(interfaceDefinedName).falseDataMode) {
             // 判断是否假数据模式
             return new Promise((resolve, reject) => {
                 resolve(this._assignment(false, interfaceDefinedName, {}, null, null, null, null, null, globalFilterInterCept));
@@ -783,11 +783,11 @@ export default class interfaceButtJoint {
                 isUseToken,
             });
             let interfaceInfo = self._getUserConfigObj(interfaceDefinedName);
-            return new Promise((reolve, reject) => {
+            return new Promise((resolve, reject) => {
                 uni.request({
                     ...configObj,
                     success(data) {
-                        reolve(data);
+                        resolve(data);
                     },
                     fail(err) {
                         reject(err);
@@ -818,7 +818,7 @@ export default class interfaceButtJoint {
         if (!this._oneParams(interfaceDefinedName, dataName, currentObj)) {
             // 判断是否为空
             rain_logs.ERROR("autoButtJoint 缺少参数");
-        } else if (this.$falseDataMode) {
+        } else if (this.$falseDataMode || this._getUserConfigObj(interfaceDefinedName).falseDataMode) {
             // 判断是否假数据模式
             this._assignment(false, interfaceDefinedName, {}, dataName, currentObj, callbackFunc, isAppendData, frontORback, globalFilterInterCept);
         } else {
@@ -831,11 +831,11 @@ export default class interfaceButtJoint {
                 isUseToken,
             });
             let interfaceInfo = this._getUserConfigObj(interfaceDefinedName);
-            new Promise((reolve, reject) => {
+            new Promise((resolve, reject) => {
                 uni.request({
                     ...configObj,
                     success(data) {
-                        reolve(data);
+                        resolve(data);
                     },
                     fail(err) {
                         reject(err);

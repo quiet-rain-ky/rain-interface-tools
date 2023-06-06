@@ -16,6 +16,11 @@ declare interface interFaceConfig {
          */
         tempUseFetch: boolean;
         /**
+         * 当前接口是否开启模拟数据模式, 开启后 接口不再发送请求, 我们可以在接口配置的 interfaceData() 函数中, 自定义一些模拟数据返回, 并在组件中使用, 默认值: false
+         * 注意: 假数据模式下, 接口的数据变成了自定义的模拟数据, autoButtJoint() 和 buttJoint() 函数在接收请求数据时, 接收的数据也会变成我们自定义的模拟数据
+         */
+        falseDataMode: boolean;
+        /**
          * 设置请求路径, 示例: /user/info
          */
         url: string;

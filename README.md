@@ -226,6 +226,11 @@ const userConfigs = {
             reqAddress: "https://localhost:8080/",
             // 当全局是别的请求对象时是否临时使用 fetch 为请求对象, 注意: 当处于 uniapp 项目时此选项不可用
             tempUseFetch: true,
+            /**
+             * 当前接口是否开启模拟数据模式, 开启后 接口不再发送请求, 我们可以在接口配置的 interfaceData() 函数中, 自定义一些模拟数据返回, 并在组件中使用, 默认值: false
+             * 注意: 假数据模式下, 接口的数据变成了自定义的模拟数据, autoButtJoint() 和 buttJoint() 函数在接收请求数据时, 接收的数据也会变成我们自定义的模拟数据
+             */
+            falseDataMode: false;
             // 设置请求路径
             url: "/user/home",
             // 请求的方法类型
@@ -279,6 +284,11 @@ const userConfigs = {
         reqAddress: "https://localhost:8080/",
         // 当全局是别的请求对象时是否临时使用 fetch 为请求对象, 注意: 当处于 uniapp 项目时此选项不可用
         tempUseFetch: true,
+        /**
+         * 当前接口是否开启模拟数据模式, 开启后 接口不再发送请求, 我们可以在接口配置的 interfaceData() 函数中, 自定义一些模拟数据返回, 并在组件中使用, 默认值: false
+         * 注意: 假数据模式下, 接口的数据变成了自定义的模拟数据, autoButtJoint() 和 buttJoint() 函数在接收请求数据时, 接收的数据也会变成我们自定义的模拟数据
+         */
+        falseDataMode: false;
         // 设置请求路径
         url: "/user/home",
         // 请求的方法类型
@@ -377,7 +387,7 @@ Vue.use(
         // 控制台打印的日志是否, 携带样式进行输出, 此配置需搭配上方的 logs 属性配置进行使用, 且此样式仅在 H5模式 下才能正常生效, 默认值: false
         isLogStyle: false,
         /**
-         * 是否开启假数据模式, 开启后 接口不在发送请求, 我们可以在接口配置的 interfaceData() 函数中, 自定义一些模拟数据返回, 并在组件中使用, 默认值: false
+         * 是否开启模拟数据模式, 开启后 接口不再发送请求, 我们可以在接口配置的 interfaceData() 函数中, 自定义一些模拟数据返回, 并在组件中使用, 默认值: false
          * 注意: 假数据模式下, 接口的数据变成了自定义的模拟数据, autoButtJoint() 和 buttJoint() 函数在接收请求数据时, 接收的数据也会变成我们自定义的模拟数据
          */
         falseDataMode: false,
