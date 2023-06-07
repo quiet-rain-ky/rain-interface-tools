@@ -17,6 +17,7 @@ export default class uniappRbjVueThere extends interfaceButtJoint {
         this._initFun();
         this._globalComponentFun(Vue);
         Vue.config.globalProperties.$rbj = this;
+        Vue.provide("rbj", this);
         Vue.config.globalProperties.$rbj.logs = rain_logs;
         Vue.config.globalProperties.$rbj.customRequest = this._useAxios;
         Vue.config.globalProperties.$rbj.assistFun = assistFun;

@@ -13,39 +13,57 @@ import axios from "axios";
 import qs from "qs";
 // #endif
 
+/**
+ * 获取全局对象
+ */
+function getGlobalFun() {
+    if (typeof global !== "undefined") {
+        return global;
+    } else if (typeof window !== "undefined") {
+        return window;
+    } else if (typeof self !== "undefined") {
+        return self;
+    } else if (typeof this !== "undefined") {
+        return this;
+    } else {
+        throw new Error("无法识别全局对象！");
+    }
+}
+
 // 系统接口对接工具类
 export default class interfaceButtJoint {
     // 初始化配置
     constructor(config = {}) {
         this.$reqAddress = config.reqAddress !== undefined ? (/^http/.test(config.reqAddress) ? config.reqAddress : "http://" + config.reqAddress) : "http://localhost:8080";
-        this.$userConfig = config.userConfig !== undefined ? config.userConfig : null;
-        this.$useFetch = config.useFetch !== undefined ? config.useFetch : false;
-        rain_logs.setIsConsole(config.logs !== undefined ? config.logs : false);
-        rain_logs.setIsConsoleStyle(config.isLogStyle !== undefined ? config.isLogStyle : false);
-        this.$falseDataMode = config.falseDataMode !== undefined ? config.falseDataMode : false;
-        this.$globalRequestConfig = config.globalRequestConfig !== undefined ? config.globalRequestConfig : null;
-        this.$setNullString = config.setNullString !== undefined ? config.setNullString : undefined;
-        this.$isEnableCache = config.isEnableCache !== undefined ? config.isEnableCache : false;
-        this.$interceptor = config.interceptor !== undefined ? config.interceptor : undefined;
-        this._globalRequestFilterFun = config.globalRequestFilterFun !== undefined ? config.globalRequestFilterFun : () => false;
-        this._globalResponseFilterFun = config.globalResponseFilterFun !== undefined ? config.globalResponseFilterFun : () => false;
-        this.globalFun = config.globalFun !== undefined ? config.globalFun : {};
-        this.globalFun.$rbj = this;
-        this.rbjGlobalThis = global || window;
-        if (this.rbjGlobalThis && !this.rbjGlobalThis.uni && this.rbjGlobalThis.wx) this.rbjGlobalThis.uni = this.rbjGlobalThis.wx;
-        if (this.rbjGlobalThis) this.$isUniApp = !!this.rbjGlobalThis.uni;
-        this.$tokenName = config.tokenName !== undefined ? config.tokenName : "Authorization";
-        this.$dynamicGlobalHeaderObj = {};
-        this.$dynamicHeaderObj = {};
-        this._customSetTokenFun = config.customSetTokenFun !== undefined ? config.customSetTokenFun : undefined;
-        this._customGetTokenFun = config.customGetTokenFun !== undefined ? config.customGetTokenFun : undefined;
-        this._customRemoveTokenFun = config.customRemoveTokenFun !== undefined ? config.customRemoveTokenFun : undefined;
-        this.$globalComponent = config.globalComponent !== undefined ? config.globalComponent : undefined;
-        this._globalData = {};
-        this._tempNullString = "";
+        this.$userConfig = config.userConfig !== undefined ? config.userConfig : null; // 用户接口配置对象
+        this.$useFetch = config.useFetch !== undefined ? config.useFetch : false; // 是否使用 fetch 来进行请求
+        rain_logs.setIsConsole(config.logs !== undefined ? config.logs : false); // 是否打印日志
+        rain_logs.setIsConsoleStyle(config.isLogStyle !== undefined ? config.isLogStyle : false); // 是否开彩色日志
+        this.$falseDataMode = config.falseDataMode !== undefined ? config.falseDataMode : false; // 是否开启模拟数据模式
+        this.$globalRequestConfig = config.globalRequestConfig !== undefined ? config.globalRequestConfig : null; // 全局请求配置对象
+        this.$setNullString = config.setNullString !== undefined ? config.setNullString : undefined; // 是否开启空字符串
+        this.$isEnableCache = config.isEnableCache !== undefined ? config.isEnableCache : false; // 是否对接口开启缓存模式
+        this.$interceptor = config.interceptor !== undefined ? config.interceptor : undefined; // 全局拦截器
+        this._globalRequestFilterFun = config.globalRequestFilterFun !== undefined ? config.globalRequestFilterFun : () => false; // 全局请求过滤器函数
+        this._globalResponseFilterFun = config.globalResponseFilterFun !== undefined ? config.globalResponseFilterFun : () => false; // 全局响应过滤器函数
+        this.globalFun = config.globalFun !== undefined ? config.globalFun : {}; // 全局函数对象
+        this.globalFun.$rbj = this; // 设置全局函数内, 默认可以直接使用当前 interfaceButtJoint 对象
+        this.rbjGlobalThis = getGlobalFun(); // 在不同环境中, 获取并设置统一的 全局对象
+        if (!typeof uni !== "undefined" && typeof wx !== "undefined") uni = wx; // 如果处于 微信环境, 让 uni 等于 wx
+        this.$isUniApp = typeof uni !== "undefined" ? true : false; // 上方已经 uni 已经等于 wx, 所以不管是 uni 环境还是 wx 环境, $isUniApp 都等于 true
+        this.$tokenName = config.tokenName !== undefined ? config.tokenName : "Authorization"; // 设置请求头 token 的属性名
+        this.$dynamicGlobalHeaderObj = {}; // 动态全局请求头
+        this.$dynamicHeaderObj = {}; // 局部接口动态请求头
+        this._customSetTokenFun = config.customSetTokenFun !== undefined ? config.customSetTokenFun : undefined; // 自定义设置 token 的函数
+        this._customGetTokenFun = config.customGetTokenFun !== undefined ? config.customGetTokenFun : undefined; // 自定义获取 token 的函数
+        this._customRemoveTokenFun = config.customRemoveTokenFun !== undefined ? config.customRemoveTokenFun : undefined; // 自定义删除 token 的函数
+        this.$globalComponent = config.globalComponent !== undefined ? config.globalComponent : undefined; // 全局组件
+        this._globalData = {}; // 缓存模式的数据存储对象
+        this._tempNullString = ""; // 临时空值过滤变量
         this.$freshInterfaceData = {
-            flag: {},
-            groupFlag: {},
+            // 刷新标记对象
+            flag: {}, // 标记对象
+            groupFlag: {}, // 组标记对象
         };
     }
 
@@ -1162,6 +1180,7 @@ export default class interfaceButtJoint {
         } else if (vue_version === "3") {
             this._globalComponentFun(Vue);
             Vue.config.globalProperties.$rbj = this;
+            Vue.provide("rbj", this);
             Vue.config.globalProperties.$rbj.logs = rain_logs;
             Vue.config.globalProperties.$rbj.customRequest = this._useAxios;
             Vue.config.globalProperties.$rbj.assistFun = assistFun;
