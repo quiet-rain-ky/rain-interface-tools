@@ -120,6 +120,23 @@ Vue.use(Rbj); // 把 rain-interface-tools 插件, 安装到 Vue 上
         <img :src="imgUrl"></img>
     </div>
 </template>
+
+<script setup>
+// 注意: 在 setup 中, 只能通过 inject 的方式, 来获取 rbj 对象
+import { inject } from 'vue';
+let rbj = inject("rbj");
+let twoObj = {
+    oneData: {},
+};
+// 使用自动装配接口数据的请求函数
+rbj.autoButtJoint("one", {name: "xxx", age: 20}, "oneData", twoObj);
+// 也可以手动装配数据
+this.$rbj.buttJoint("one", this.oneParams).then((resData)=>{
+    // resData 即 响应的数据
+    twoObj.oneData = resData;
+});
+</script>
+
 <script>
     export default {
         data() {
@@ -134,9 +151,10 @@ Vue.use(Rbj); // 把 rain-interface-tools 插件, 安装到 Vue 上
         },
         mounted() {
             let self = this;
+            // 在组件中可以直接通过 this 来使用 rbj 对象
             
             // 使用自动装配接口数据的请求函数
-            this.$rbj.autoButtJoint("one", this.oneParams, "oneData", this);
+            this.$rbj.autoButtJoint("one", this.oneParams, "oneData", this); // this 即当前实例对象, oneData 即当前实例对象中的 属性 (即把响应的数据装配到 '指定对象' 中的 '指定属性' 上)
             
             // 也可以手动装配数据
             this.$rbj.buttJoint("one", this.oneParams).then((resData)=>{
