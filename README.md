@@ -16,7 +16,8 @@ npm install rain-interface-tools
 # 在项目根目录运行以下命令
 npx rain-util-cli@latest rbj-tool -i # 自动初始化生成所有的 rbj 配置文件
 npx rain-util-cli@latest rbj-tool -c # 当你误删配置文件时, 加上 '-c' 参数则可以自动补全缺失的配置文件
-# 注意: 生成配置文件后, 还需要你手动把 rbjConfigs/index.js 导出的 Rbj 对象, 按照 Vue 插件的安装方式, 安装到 Vue 上, 或者 你也可以利用导出的 Rbj 对象中的 Install_rbj() 函数, 安装到你想要安装的任意对象身上
+# 注意: 生成配置文件后, 还需要你手动把 rbjConfigs/index.js 导出的 Rbj 对象, 按照 Vue 插件的安装方式, 安装到 Vue 上, 或者 你也可以利用导出的 Rbj 对象中的 Install_rbj() 函数, 安装到你想要安装的任意对象身上, 当然你也可以不进行安装, 在其他地方通过 ' import rbj from "rbjConfigs/index.js"; ' 的方式, 直接引入并使用 rbjConfigs/index.js 导出的 Rbj 对象
+
 # 注意: rain-interface-tools 的 npm 包, 还是需要你进行手动安装的, rain-util-cli 并不会自动帮助你安装 rain-interface-tools 的 npm 包
 
 # 说明: 当然你也可以根据下方的 '简单使用' 来进行手动配置, 或 快速了解所有生成的配置文件的作用
@@ -24,7 +25,9 @@ npx rain-util-cli@latest rbj-tool -c # 当你误删配置文件时, 加上 '-c' 
 
 ## 简单使用
 
-### 创建配置目录和文件
+### 配置文件
+
+#### 创建配置目录和文件
 
 ```js
 1. 在 根目录创建 /rbjConfigs/subConfig
@@ -34,7 +37,7 @@ npx rain-util-cli@latest rbj-tool -c # 当你误删配置文件时, 加上 '-c' 
 注意: 目录名可以不一样上方只是示例, 但在使用 require.context() 和 import.meta.globEager() 时, 注意要修改扫描的文件路径
 ```
 
-### /rbjConfigs/subConfig/xxx.js
+#### /rbjConfigs/subConfig/xxx.js
 
 ```js
 /**
@@ -70,7 +73,7 @@ export default { // 注意: 这里演示, 使用的是非模块化接口配置�
 }
 ```
 
-### /rbjConfigs/globalFun.js
+#### /rbjConfigs/globalFun.js
 
 ```js
 /**
@@ -84,7 +87,7 @@ export default {
 }
 ```
 
-### /rbjConfigs/index.js
+#### /rbjConfigs/index.js
 
 ```js
 import {  Rbj, UniRbjTwo, UniRbjThere, importsConfigObj } from "rain-interface-tools";
@@ -106,14 +109,16 @@ export default new Rbj({ // 导出此插件, 在 main.js 文件中, 安装此插
 });
 ```
 
-### /main.js
+#### /main.js
 
 ```js
 import Rbj from "rbjConfigs/index.js";
 Vue.use(Rbj); // 把 rain-interface-tools 插件, 安装到 Vue 上
 ```
 
-### App.vue
+### Vue 使用
+
+#### App.vue
 
 ```vue
 <template>
@@ -179,7 +184,7 @@ this.$rbj.buttJoint("one", this.oneParams).then((resData)=>{
 </style>
 ```
 
-### uniapp Nvue 使用说明
+#### uniapp Nvue 使用说明
 
 ```vue
 <template>
