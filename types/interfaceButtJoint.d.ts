@@ -408,7 +408,7 @@ export declare class interfaceButtJoint {
      * 注意: 当你处于 fetch 请求模式, 进行文件上传时, 你设置的请求头将会失效, 解释说明: 因为 fetch 请求进行文件上传时如果设置请求头, 则会导致上传文件失败, 也就是说如果你使用 fetch 进行文件上传则不能在请求头上带 token 或其他参数
      * </p>
      */
-    upload(interfaceDefinedName: String, Files: Object, optionsObj?: {
+    upload(interfaceDefinedName: String, Files: File | Array<File> | string | object, optionsObj?: {
         /**
          * 文件上传时附带的参数
          */
