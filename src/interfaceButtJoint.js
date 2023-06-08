@@ -614,33 +614,20 @@ export default class interfaceButtJoint {
         let headers = this._requestHeader({ interfaceDefinedName, paramsObj, pathParams, isUniappUpload: true, isUseToken });
         return new Promise((resolve, reject) => {
             if (isMultipartFile) {
-                Files = Files.map((item) => {
-                    return {
-                        name: reqPropertyName ? reqPropertyName : "file",
-                        file: item,
-                    };
-                });
-                // 多文件上传
-                uni.uploadFile({
-                    url: reqAddressUrl,
-                    header: headers,
-                    files: Files,
-                    formData: paramsObj,
-                    success: (uploadFileRes) => {
-                        resolve(uploadFileRes);
-                    },
-                    fail(err) {
-                        reject(err);
-                    },
-                });
-            } else {
                 if (isFilePathUpload) {
-                    // 单文件 filePath 上传
+                    rain_logs.ERROR("你已开启 isFilePathUpload 模式, 请传入 string 类型的 临时路径或 blob 路径,  请不要传入一个 或 多个 文件对象");
+                } else {
+                    Files = Files.map((item) => {
+                        return {
+                            name: reqPropertyName ? reqPropertyName : "file",
+                            file: item,
+                        };
+                    });
+                    // 多文件上传
                     uni.uploadFile({
                         url: reqAddressUrl,
                         header: headers,
-                        filePath: Files,
-                        name: reqPropertyName ? reqPropertyName : "file",
+                        files: Files,
                         formData: paramsObj,
                         success: (uploadFileRes) => {
                             resolve(uploadFileRes);
@@ -649,6 +636,27 @@ export default class interfaceButtJoint {
                             reject(err);
                         },
                     });
+                }
+            } else {
+                if (isFilePathUpload) {
+                    if (typeof Files === "string") {
+                        // 单文件 filePath 上传
+                        uni.uploadFile({
+                            url: reqAddressUrl,
+                            header: headers,
+                            filePath: Files,
+                            name: reqPropertyName ? reqPropertyName : "file",
+                            formData: paramsObj,
+                            success: (uploadFileRes) => {
+                                resolve(uploadFileRes);
+                            },
+                            fail(err) {
+                                reject(err);
+                            },
+                        });
+                    } else {
+                        rain_logs.ERROR("你已开启 isFilePathUpload 上传模式, Files 文件参数必须是 string 类型的临时路径 或 blob 路径, 但你传入的并不是我们需要的类型");
+                    }
                 } else {
                     // 单文件上传
                     uni.uploadFile({

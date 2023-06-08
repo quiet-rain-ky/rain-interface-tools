@@ -689,17 +689,17 @@ export default {
             /**
              * @description 文件上传
              * @param interfaceDefinedName | String (请求的接口配置对象名)
-             * @param Files (文件临时路径数组 |文件对象数组 | 单个文件对象也可以直接传入), 注意: uniapp 中此参数只能上传单文件, 不支持上传多文件, 且 isFilePathUpload 一定要设置为 true
+             * @param Files (文件临时路径数组 |文件对象数组 | 单个文件对象也可以直接传入), 注意: uniapp 中此参数只能上传单文件, 不支持上传多文件, 且 isFilePathUpload 一定要设置为 true, 注意: 若你开启了 isFilePathUpload 文件上传模式, 此 Files 参数必须为 string 类型, 此 string 类型 即 文件的临时路径 或 blob 路径
              * @param options 参数对象说明
              *      paramsObj(文件上传时附带的参数)
              *      reqPropertyName(文件上传时文件的属性名), 默认值: file
-             *      isFilePathUpload (是否使用 filePath (即 单个临时路径) 进行文件上传, 此选项只针对 uniapp) 注意: uniapp 中必须此将此参数 设置为 true 文件才能上传成功
+             *      isFilePathUpload (是否使用 filePath (即 单个临时路径) 进行文件上传, 此选项只针对 uniapp) 注意: uniapp 中必须此将此参数 设置为 true 文件才能上传成功, 注意: 若你开启了 isFilePathUpload 文件上传模式, 此 Files 参数必须为 string 类型, 此 string 类型 即 文件的临时路径 或 blob 路径
              * 注意: 当你处于 fetch 请求模式, 进行文件上传时, 你设置的请求头将会失效, 解释说明: 因为 fetch 请求进行文件上传时如果设置请求头, 则会导致上传文件失败, 也就是说如果你使用 fetch 进行文件上传则不能在请求头上带 token 或其他参数
              */
             this.$rbj.upload("one", new File(), { // 文件上传函数
                 paramsObj: { age: 18 }, // 上传文件时, 携带的参数
                 reqPropertyName: "file", // 文件上传时文件的属性名
-                isFilePathUpload: true, // 会自动默认做一个 是否 uniapp 项目的判断, 如果是 uniapp 项目则此项配置默认为 true, 否则此项配置默认为 false
+                isFilePathUpload: true, // 会自动默认做一个 是否 uniapp 项目的判断, 如果是 uniapp 项目则此项配置默认为 true, 否则此项配置默认为 false, 注意: 若你开启了 isFilePathUpload 文件上传模式, 此 Files 参数必须为 string 类型, 此 string 类型 即 文件的临时路径 或 blob 路径
                 globalFilterInterCept: { // 全局过滤器, 如果拦截后, 默认执行的回调函数 (注意: 仅对当前接口生效)
                     /**
                      * 全局请求过滤器, 拦截后, 默认执行的回调函数 (注意: 仅对当前接口的请求生效)

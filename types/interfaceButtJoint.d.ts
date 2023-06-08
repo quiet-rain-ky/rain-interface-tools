@@ -401,7 +401,7 @@ export declare class interfaceButtJoint {
     /**
      * @description 文件上传
      * @param interfaceDefinedName 用户接口配置名
-     * @param Files File 对象 或 File 数组对象
+     * @param Files File 对象 或 File 数组对象, 若你开启了 isFilePathUpload 文件上传模式, 此 Files 参数必须为 string 类型, 此 string 类型 即 文件的临时路径 或 blob 路径
      * @param optionsObj 可选的参数对象
      * @return 返回 Promise 对象
      * <p>
@@ -419,6 +419,7 @@ export declare class interfaceButtJoint {
         reqPropertyName?: string;
         /**
          * (是否使用 filePath (即 单个临时路径) 进行文件上传, 此选项只针对 uniapp) 注意: uniapp 中必须此将此参数 设置为 true 文件才能上传成功
+         * 注意: 若你开启了 isFilePathUpload 文件上传模式, 此 Files 参数必须为 string 类型, 此 string 类型 即 文件的临时路径 或 blob 路径
          */
         isFilePathUpload?: boolean;
         /**
