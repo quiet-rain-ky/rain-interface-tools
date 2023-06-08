@@ -6,7 +6,9 @@
 
 ## 安装
 
+```shell
 npm install rain-interface-tools
+```
 
 ## 使用命令工具生成 Rbj 配置文件
 
