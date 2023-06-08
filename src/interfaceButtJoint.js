@@ -34,7 +34,7 @@ function getGlobalFun() {
 export default class interfaceButtJoint {
     // 初始化配置
     constructor(config = {}) {
-        this.$reqAddress = config.reqAddress !== undefined ? (/^http/.test(config.reqAddress) ? config.reqAddress : "http://" + config.reqAddress) : "http://localhost:8080";
+        this.$reqAddress = config.reqAddress !== undefined ? (/^http/.test(config.reqAddress) ? config.reqAddress : "http://" + config.reqAddress) : "http://localhost:8080"; // 接口请求地址
         this.$userConfig = config.userConfig !== undefined ? config.userConfig : null; // 用户接口配置对象
         this.$useFetch = config.useFetch !== undefined ? config.useFetch : false; // 是否使用 fetch 来进行请求
         rain_logs.setIsConsole(config.logs !== undefined ? config.logs : false); // 是否打印日志
@@ -49,7 +49,7 @@ export default class interfaceButtJoint {
         this.globalFun = config.globalFun !== undefined ? config.globalFun : {}; // 全局函数对象
         this.globalFun.$rbj = this; // 设置全局函数内, 默认可以直接使用当前 interfaceButtJoint 对象
         this.rbjGlobalThis = getGlobalFun(); // 在不同环境中, 获取并设置统一的 全局对象
-        if (!typeof uni !== "undefined" && typeof wx !== "undefined") uni = wx; // 如果处于 微信环境, 让 uni 等于 wx
+        if (this.rbjGlobalThis && !this.rbjGlobalThis.uni && this.rbjGlobalThis.wx) this.rbjGlobalThis.uni = this.rbjGlobalThis.wx; // 如果处于 微信环境, 让 uni 等于 wx
         this.$isUniApp = typeof uni !== "undefined" ? true : false; // 上方已经 uni 已经等于 wx, 所以不管是 uni 环境还是 wx 环境, $isUniApp 都等于 true
         this.$tokenName = config.tokenName !== undefined ? config.tokenName : "Authorization"; // 设置请求头 token 的属性名
         this.$dynamicGlobalHeaderObj = {}; // 动态全局请求头
