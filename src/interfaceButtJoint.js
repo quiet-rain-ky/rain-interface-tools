@@ -615,7 +615,7 @@ export default class interfaceButtJoint {
         return new Promise((resolve, reject) => {
             if (isMultipartFile) {
                 if (isFilePathUpload) {
-                    rain_logs.ERROR("你已开启 isFilePathUpload 模式, 请传入 string 类型的 临时路径或 blob 路径,  请不要传入一个 或 多个 文件对象");
+                    rain_logs.ERROR("你已开启 isFilePathUpload 模式, 请不要传入一个 或 多个 文件对象, 请传入 string 类型的 临时路径或 blob 路径");
                 } else {
                     Files = Files.map((item) => {
                         return {
