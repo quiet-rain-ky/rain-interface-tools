@@ -95,28 +95,38 @@ import globalFun from "./globalFun.js";
 // 把 /config/subConfig/ 目录下的所有的接口配置文件都导入进来，注意：目录路径和下方配置的不一致的需要修改要进行扫描的文件路径
 // --- vue2 使用此项 ---
 const configObj = importsConfigObj(require.context("./subConfig/", true, /.js$/).keys().map(item => require("./subConfig/" + item.substr(2, item.length)))); // require.context() 会扫描指定目录下的所有文件, 仅在 Vue2 使用
-// --- vue3 使用此项 ---
+// --- vue3 或 react 使用此项 ---
 const configObj = importsConfigObj(import.meta.globEager("./subConfig/**.js")); // import.meta.globEager() 会扫描指定目录下的所有文件, 仅在 Vue3 使用
 
 
 // 创建 rbj 插件对象, 注意：uniapp 项目可以使用 UniRbjTwo 或 UniRbjThere 对象来进行创建
-export default new Rbj({ // 导出此插件, 在 main.js 文件中, 安装此插件
+let rbjObj = new Rbj({ // 导出此插件, 在 main.js 文件中, 安装此插件
     reqAddress: "https://xxx.xxx.com", // 接口请求的服务器地址
     userConfig: configObj, // 设置接口配置
     logs: process.env.NODE_ENV === "development",
     tokenName: "token", // 自定义 token 在请求头上的名字, 默认名字为: Authorization
     globalFun: globalFun // 自定义全局函数
 });
+
+export default rbjObj;
 ```
+
+### Vue 使用
 
 #### /main.js
 
 ```js
 import Rbj from "rbjConfigs/index.js";
-Vue.use(Rbj); // 把 rain-interface-tools 插件, 安装到 Vue 上
-```
 
-### Vue 使用
+// Vue2 方式
+import Vue from "vue";
+Vue.use(Rbj); // 把 rain-interface-tools 插件, 安装到 Vue 上
+
+// Vue3 方式
+// 注意: 在 vue3 的 setup 中, 只能通过 inject 来获得 rbj 对象, 具体的使用方式, 可以看下方的 App.vue 的示例
+import { createApp } from "vue";
+createApp.use(Rbj).mount("#app"); // 把 rain-interface-tools 插件, 安装到 Vue 上
+```
 
 #### App.vue
 
@@ -233,6 +243,83 @@ this.$rbj.buttJoint("one", this.oneParams).then((resData)=>{
 <style lang="scss">
 </style>
 ```
+
+### React 使用
+
+#### src/index.js
+
+```js
+import rbj from "./rbjConfigs/index.js";
+rbj.Install_rbj(window); // 可以通过直接安装到 window 全局对象上来使用, 当然也可以直接使用 import rbj from "./rbjConfigs/index.js"; 导入 rbj 对象的方式来使用
+```
+
+#### App.js
+
+```jsx
+import logo from './logo.svg';
+import './App.css';
+// ------------------------- rbj 未绑定到全局的使用方式示例: -------------------------
+import rbj from "./rbjConfigs/index.js"; // 如果你没有在 main.js 文件中把 rbj 绑定到全局, 可以使用此方式把 rbj 对象引入当前文件并使用
+
+// 自定义的数据对象
+let dataObj = {
+    oneParams: {},
+    oneData: {},
+    imgUrl: ""
+};
+
+// 使用自动装配接口数据的请求函数
+rbj.autoButtJoint("one", dataObj.oneParams, "oneData", dataObj);
+
+// 也可以手动装配数据
+rbj.buttJoint("one", dataObj.oneParams).then((resData) => {
+    // resData 即 响应的数据
+    dataObj.oneData = resData;
+});
+
+// ------------------------- rbj 对象已绑定到全局的使用方式示例: (可以直接使用 'window.$rbj' 来当作 rbj 对象使用) -------------------------
+// 自定义的数据对象
+let dataObj = {
+    oneParams: {},
+    oneData: {},
+    imgUrl: ""
+};
+
+// 使用自动装配接口数据的请求函数
+window.$rbj.autoButtJoint("one", dataObj.oneParams, "oneData", dataObj);
+
+// 也可以手动装配数据
+window.$rbj.buttJoint("one", dataObj.oneParams).then((resData) => {
+    // resData 即 响应的数据
+    dataObj.oneData = resData;
+});
+
+function App() {
+    return (
+        <div className="App">
+            <header className="App-header">
+                <img src={dataObj.imgUrl} className="App-logo" alt="logo" />
+                <p>
+                    Edit <code>src/App.js</code> and save to reload.
+                </p>
+                <a
+                    className="App-link"
+                    href="https://reactjs.org"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >
+                    Learn React
+                </a>
+            </header>
+        </div>
+    );
+}
+
+export default App;
+
+```
+
+
 
 ## 详细配置说明
 

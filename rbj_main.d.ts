@@ -38,7 +38,11 @@ declare module "vue" {
 // 扩展全局类型
 declare global {
     // 全局定义 rbj 类型
-    const $rbj: RbjVueType
+    const $rbj: RbjVueType;
+    // 定义 window 对象内的 rbj 类型
+    interface Window {
+        $rbj: RbjVueType;
+    }
 }
 
 declare module "rain-interface-tools" {
