@@ -10,12 +10,12 @@ function importsConfigObj(requestObj) {
     for (const key in requestObj) {
         if (requestObj[key].default && requestObj[key].default.interfaceList) {
             for (const i in requestObj[key].default.interfaceList) {
-                if (requestObj[key].default.moduleUrl) requestObj[key].default.interfaceList[i].url = requestObj[key].default.moduleUrl + requestObj[key].default.interfaceList[i].url;
+                if (requestObj[key].default.moduleUrl && typeof requestObj[key].default.interfaceList[i] != "string") requestObj[key].default.interfaceList[i].url = requestObj[key].default.moduleUrl + requestObj[key].default.interfaceList[i].url;
                 requests[i] = requestObj[key].default.interfaceList[i];
             }
         } else if (requestObj[key].interfaceList) {
             for (const i in requestObj[key].interfaceList) {
-                if (requestObj[key].moduleUrl) requestObj[key].interfaceList[i].url = requestObj[key].moduleUrl + requestObj[key].interfaceList[i].url;
+                if (requestObj[key].moduleUrl && typeof requestObj[key].interfaceList[i] != "string") requestObj[key].interfaceList[i].url = requestObj[key].moduleUrl + requestObj[key].interfaceList[i].url;
                 requests[i] = requestObj[key].interfaceList[i];
             }
         } else if (requestObj[key].default) {
