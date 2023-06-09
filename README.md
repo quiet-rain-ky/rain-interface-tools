@@ -246,20 +246,12 @@ this.$rbj.buttJoint("one", this.oneParams).then((resData)=>{
 
 ### React 使用
 
-#### src/index.js
-
-```js
-import rbj from "./rbjConfigs/index.js";
-rbj.Install_rbj(window); // 可以通过直接安装到 window 全局对象上来使用, 当然也可以直接使用 import rbj from "./rbjConfigs/index.js"; 导入 rbj 对象的方式来使用
-```
-
 #### App.js
 
 ```jsx
 import logo from './logo.svg';
 import './App.css';
-// ------------------------- rbj 未绑定到全局的使用方式示例: -------------------------
-import rbj from "./rbjConfigs/index.js"; // 如果你没有在 main.js 文件中把 rbj 绑定到全局, 可以使用此方式把 rbj 对象引入当前文件并使用
+import rbj from "./rbjConfigs/index.js"; // 使用此方式把 rbj 对象引入当前文件并使用
 
 // 自定义的数据对象
 let dataObj = {
@@ -273,23 +265,6 @@ rbj.autoButtJoint("one", dataObj.oneParams, "oneData", dataObj);
 
 // 也可以手动装配数据
 rbj.buttJoint("one", dataObj.oneParams).then((resData) => {
-    // resData 即 响应的数据
-    dataObj.oneData = resData;
-});
-
-// ------------------------- rbj 对象已绑定到全局的使用方式示例: (可以直接使用 'window.$rbj' 来当作 rbj 对象使用) -------------------------
-// 自定义的数据对象
-let dataObj = {
-    oneParams: {},
-    oneData: {},
-    imgUrl: ""
-};
-
-// 使用自动装配接口数据的请求函数
-window.$rbj.autoButtJoint("one", dataObj.oneParams, "oneData", dataObj);
-
-// 也可以手动装配数据
-window.$rbj.buttJoint("one", dataObj.oneParams).then((resData) => {
     // resData 即 响应的数据
     dataObj.oneData = resData;
 });
@@ -316,7 +291,6 @@ function App() {
 }
 
 export default App;
-
 ```
 
 
