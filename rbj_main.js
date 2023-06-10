@@ -2,6 +2,8 @@ import Rbj from "./src/interfaceButtJoint.js";
 import UniRbjTwo from "./src/uniRbjVueTwo.js";
 import UniRbjThere from "./src/uniRbjVueThere.js";
 import logObj from "./src/logs.js";
+import StreamConversion from "./src/streamConversion.js";
+import assistFun from "./src/assist.js";
 
 // 用户配置融合函数
 function importsConfigObj(requestObj) {
@@ -37,4 +39,4 @@ function importsConfigObj(requestObj) {
     return requests;
 }
 
-export { Rbj, UniRbjTwo, UniRbjThere, importsConfigObj, logObj };
+export { Rbj, UniRbjTwo, UniRbjThere, importsConfigObj, logObj, StreamConversion, assistFun };

@@ -1,5 +1,5 @@
 import { interfaceButtJoint } from "./interfaceButtJoint";
-export declare class uniRbjVueTwo extends interfaceButtJoint {
+export declare class uniRbjVueTwo<GLOBAL_FUN_TYPE> extends interfaceButtJoint<GLOBAL_FUN_TYPE> {
     /**
      * Vue 安装插件的方法
      * @param Vue

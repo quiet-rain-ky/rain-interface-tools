@@ -205,7 +205,7 @@ this.$rbj.buttJoint("one", this.oneParams).then((resData)=>{
 </template>
 <script>
     import rbj from "../../rbjConfigs/index.js"; // 导入上方指定路径的 rbj 核心对象, 注意: 核心对象不包括 rbj日志对象, 所以要想使用 rbj 日志对象, 我们需要单独导入日志对象
-    import { logObj } from "rain-interface-tools"; // 导入 rbj 日志对象
+    import { logObj, StreamConversion, assistFun } from "rain-interface-tools"; // (1) logObj : 日志对象, (2) StreamConversion : 流转换对象, (3) assistFun 辅助函数对象
     export default {
         data() {
             return {
@@ -292,8 +292,6 @@ function App() {
 
 export default App;
 ```
-
-
 
 ## 详细配置说明
 
