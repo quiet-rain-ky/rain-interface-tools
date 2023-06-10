@@ -53,6 +53,10 @@ declare global {
     interface Window {
         $rbj: RbjVueType;
     }
+    // 定义全局的 globEager 函数, 防止让 typeScript 报错
+    interface ImportMeta {
+        globEager(pattern: string): Record<string, any>;
+    }
 }
 
 declare module "rain-interface-tools" {
