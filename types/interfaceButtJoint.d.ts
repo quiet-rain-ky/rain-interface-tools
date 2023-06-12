@@ -59,7 +59,7 @@ declare interface interceptorArrType<GLOBAL_FUN_TYPE> {
      * @param operandObj 自动化对接时要操作的对象, 非自动对接时此值为 null
      * @returns boolean 当你返回 boolean, 会进行拦截或放行
      */
-    requestRegular(reqParams: object, pathParams: string, regularData: object, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: object, operandObj: object): any;
+    requestRegular(reqParams: Object, pathParams: string, regularData: Object, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object): any;
 
     /**
      * @description 响应拦截器
@@ -70,7 +70,7 @@ declare interface interceptorArrType<GLOBAL_FUN_TYPE> {
      * @param operandObj 自动化对接时要操作的对象, 非自动对接时此值为 null
      * @returns 当你返回 boolean, 会进行拦截或放行, 返回非 boolean, 会进行数据过滤操作
      */
-    responseRegular(respData: object | Array<any>, regularData: object, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: object, operandObj: object): any;
+    responseRegular(respData: Object | Array<any>, regularData: Object, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object): any;
 }
 
 /**
@@ -88,7 +88,7 @@ declare interface configParamsType<GLOBAL_FUN_TYPE> {
     /**
      * 设置全局组件, 注意: 自定义的全局组件必须要有 name 属性, 作用: 即是全局组件的名字, 也是全局组件的标签名
      */
-    globalComponent?: object;
+    globalComponent?: Object;
     /**
      * 是否全局使用 fetch 为 数据请求对象, 默认值: false
      * 注意: fetch 请求是不进行空数据过滤的
@@ -114,7 +114,7 @@ declare interface configParamsType<GLOBAL_FUN_TYPE> {
         /**
          * 设置全局请求头
          */
-        headers: object;
+        headers: Object;
     };
     /**
      * 配置请求响应时, 对响应的数据进行过滤时的空值补全字符串, 也可以调用 dataFilter() 函数对指定的数据对象进行空值过滤, 注意: 默认不进行响应时的空值过滤
@@ -139,7 +139,7 @@ declare interface configParamsType<GLOBAL_FUN_TYPE> {
      * @param operandObj 自动化对接时要操作的对象, 非自动对接时此值为 null
      * @returns boolean 当你返回 boolean, 会进行拦截或放行
      */
-    globalRequestFilterFun?: (reqParams: object, pathParams: string, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: object, operandObj: object) => any;
+    globalRequestFilterFun?: (reqParams: Object, pathParams: string, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object) => any;
     /**
      * 全局, 响应过滤器函数
      * @param respData 当前请求的响应数据
@@ -148,7 +148,7 @@ declare interface configParamsType<GLOBAL_FUN_TYPE> {
      * @param operandObj 自动化对接时要操作的对象, 非自动对接时此值为 null
      * @returns 当你返回 boolean, 会进行拦截或放行, 返回非 boolean, 会进行数据过滤操作
      */
-    globalResponseFilterFun?: (respData: object | Array<any>, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: object, operandObj: object) => any;
+    globalResponseFilterFun?: (respData: Object | Array<any>, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object) => any;
     /**
      * 初始化全局自定义调用函数, 可以在任何组件内使用 this.$rbj.globalFun.自定义的函数名(); 来调用
      * 注意: 也可以自定义一些, 常用的全局变量, 也可以用 this.$rbj.globalFun.变量名, 的方式来调用
@@ -206,14 +206,14 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
      * @description 对象转路径参数
      * @param pathObj 参数对象
      */
-    objToPathParams(pathObj: object): void;
+    objToPathParams(pathObj: Object): void;
 
     /**
      * @description 路径参数转对象
      * @param urlPath 字符串路径参数
      * @return 返回转换后的对象
      */
-    pathParamsToObj(urlPath: string): object;
+    pathParamsToObj(urlPath: string): Object;
 
     /**
      * @description 手动对接
@@ -248,7 +248,7 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
              * @param operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
              * @return 此函数不需要返回值
              */
-            requestCallback(reqParams: object, pathParams: string, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: object, operandObj: object): void;
+            requestCallback(reqParams: Object, pathParams: string, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object): void;
             /**
              * @description 说明: 全局响应过滤器, 拦截后, 默认执行的回调函数 (注意: 仅对当前接口的响应生效)
              * @param respData 当前请求的响应数据
@@ -257,7 +257,7 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
              * @param operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
              * @return 此函数不需要返回值
              */
-            responseCallback(respData: object | Array<any>, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: object, operandObj: object): void;
+            responseCallback(respData: Object | Array<any>, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object): void;
         },
         /**
          * 是否允许当前请求在请求头加上 token, 默认值: true 允许
@@ -287,7 +287,7 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
          * 此回调函数 和 用户的请求配置中的 interfaceData() 函数是一样的作用, 区别是 这个回调函数使用的是 interfaceData() 函数已经过滤返回的数据, 然后可以对其再次进行过滤
          * </p>
          */
-        callbackFunc(data: object, operandObj: object): any | object;
+        callbackFunc(data: Object, operandObj: Object): any | Object;
         /**
          * 是否对 post 请求的请求主体进行键值编码, 默认值 false, 注意: 只针对 post 请求, get 请求无效, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此参数不可用
          */
@@ -317,7 +317,7 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
              * @param operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
              * @return 此函数不需要返回值
              */
-            requestCallback(reqParams: object, pathParams: string, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: object, operandObj: object): void;
+            requestCallback(reqParams: Object, pathParams: string, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object): void;
             /**
              * @description 说明: 全局响应过滤器, 拦截后, 默认执行的回调函数 (注意: 仅对当前接口的响应生效)
              * @param respData 当前请求的响应数据
@@ -326,7 +326,7 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
              * @param operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
              * @return 此函数不需要返回值
              */
-            responseCallback(respData: object | Array<any>, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: object, operandObj: object): void;
+            responseCallback(respData: Object | Array<any>, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object): void;
         },
         /**
          * 是否允许当前请求在请求头加上 token, 默认值: true 允许
@@ -397,11 +397,11 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
      * 注意: 当你处于 fetch 请求模式, 进行文件上传时, 你设置的请求头将会失效, 解释说明: 因为 fetch 请求进行文件上传时如果设置请求头, 则会导致上传文件失败, 也就是说如果你使用 fetch 进行文件上传则不能在请求头上带 token 或其他参数
      * </p>
      */
-    upload(interfaceDefinedName: String, Files: File | Array<File> | string | object, optionsObj?: {
+    upload(interfaceDefinedName: String, Files: File | Array<File> | string | Object, optionsObj?: {
         /**
          * 文件上传时附带的参数
          */
-        paramsObj?: object;
+        paramsObj?: Object;
         /**
          * 文件上传时文件的属性名, 默认值: "file"
          */
@@ -424,7 +424,7 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
              * @param operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
              * @return 此函数不需要返回值
              */
-            requestCallback(reqParams: object, pathParams: string, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: object, operandObj: object): void;
+            requestCallback(reqParams: Object, pathParams: string, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object): void;
             /**
              * @description 说明: 全局响应过滤器, 拦截后, 默认执行的回调函数 (注意: 仅对当前接口的响应生效)
              * @param respData 当前请求的响应数据
@@ -433,7 +433,7 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
              * @param operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
              * @return 此函数不需要返回值
              */
-            responseCallback(respData: object | Array<any>, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: object, operandObj: object): void;
+            responseCallback(respData: Object | Array<any>, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object): void;
         },
         /**
          * 是否允许当前请求在请求头加上 token, 默认值: true 允许
@@ -446,12 +446,12 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
      * @param params 接口配置名
      * @return 返回响应的数据对象
      */
-    getCacheData(params: string): object | any;
+    getCacheData(params: string): Object | any;
 
     /**
      * 动态获取全局请求头对象
      */
-    getDynamicGlobalHeader(): object;
+    getDynamicGlobalHeader(): Object;
 
     /**
      * @description 动态追加设置全局请求头的属性
@@ -474,7 +474,7 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
     /**
      * 动态获取指定接口的请求头对象 (注意: 不包括全局请求头)
      */
-    getDynamicInterfaceHeader(): object;
+    getDynamicInterfaceHeader(): Object;
 
     /**
      * @param interfaceDefinedName 接口配置名
@@ -523,7 +523,7 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
     /**
      * @description 将 rbj 对象手动安装到 任何指定的对象上, 例如: 可以安装到, 全局的 window 对象上, 来全局使用 window 对象, 注意: 手动安装不支持 全局组件功能
      */
-    Install_rbj(useToolObj: object, ...val: any): void;
+    Install_rbj(useToolObj: Object, ...val: any): void;
 
     /**
      * @description 空数据过滤补全字符串的方法
@@ -531,5 +531,5 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
      * @param nullStr 用来补全空的字符串
      * @return 返回空值补全后的数据对象
      */
-    dataFilter(data: object, nullStr: string): any;
+    dataFilter(data: Object, nullStr: string): any;
 }
