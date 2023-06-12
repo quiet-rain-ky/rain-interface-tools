@@ -6,7 +6,7 @@ import assist from "./types/assist";
 import logs from "./types/logs";
 
 /**
- * 全局函数对象类型
+ * 声明全局函数对象类型 (无具体作用)
  */
 declare interface globalFunType {
     /**
@@ -16,7 +16,7 @@ declare interface globalFunType {
 }
 
 // 定义 Vue 的 Rbj 类型接口, 让接口继承类, 这样 类就有了和接口一样的特性
-export declare interface RbjVueType<GLOBAL_FUN_TYPE = globalFunType> extends interfaceButtJoint<GLOBAL_FUN_TYPE> {
+export declare interface RbjVueType<GLOBAL_FUN_TYPE = {}> extends interfaceButtJoint<GLOBAL_FUN_TYPE> {
     /**
      * 流数据转换类, 支持 base64, file, blob, arrayBuffer, canvas 互转
      */
@@ -41,7 +41,7 @@ declare module "vue/types/vue" {
 declare module "vue" {
     // 扩展 Vue3 的类型
     interface ComponentCustomProperties { // 这种方式只针对 Vue3, Vue2 不支持
-        $rbj: RbjVueType
+        $rbj: RbjVueType;
     }
 }
 
@@ -63,7 +63,7 @@ declare module "rain-interface-tools" {
     /**
      * 核心类
      */
-    export class Rbj<GLOBAL_FUN_TYPE = globalFunType> extends interfaceButtJoint<GLOBAL_FUN_TYPE> { }
+    export class Rbj<GLOBAL_FUN_TYPE = {}> extends interfaceButtJoint<GLOBAL_FUN_TYPE> { }
     /**
      * @description 融合多个 (普通接口对象) 或 (模块接口对象), 也可以直接对单个模块接口对象进行处理
      * @param requestObj 可以是数组或对象
@@ -72,11 +72,11 @@ declare module "rain-interface-tools" {
     /**
      * 导出已继承核心类的 uniapp Vue2 对象
      */
-    export class UniRbjTwo<GLOBAL_FUN_TYPE = globalFunType> extends uniRbjVueTwo<GLOBAL_FUN_TYPE> { }
+    export class UniRbjTwo<GLOBAL_FUN_TYPE = {}> extends uniRbjVueTwo<GLOBAL_FUN_TYPE> { }
     /**
      * 已继承核心类的 uniapp Vue3 对象
      */
-    export class UniRbjThere<GLOBAL_FUN_TYPE = globalFunType> extends uniRbjVueThere<GLOBAL_FUN_TYPE> { }
+    export class UniRbjThere<GLOBAL_FUN_TYPE = {}> extends uniRbjVueThere<GLOBAL_FUN_TYPE> { }
     /**
      * 日志对象
     */

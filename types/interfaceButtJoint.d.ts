@@ -153,7 +153,7 @@ declare interface configParamsType<GLOBAL_FUN_TYPE> {
      * 初始化全局自定义调用函数, 可以在任何组件内使用 this.$rbj.globalFun.自定义的函数名(); 来调用
      * 注意: 也可以自定义一些, 常用的全局变量, 也可以用 this.$rbj.globalFun.变量名, 的方式来调用
      */
-    globalFun?: GLOBAL_FUN_TYPE;
+    globalFun?: { $rbj: interfaceButtJoint<GLOBAL_FUN_TYPE> } & GLOBAL_FUN_TYPE;
     /**
      * 自定义 token 在请求头上的名字，默认值："Authorization"
      */
