@@ -4,16 +4,8 @@ import { uniRbjVueThere } from "./types/uniRbjVueThere";
 import streamConversion from "./types/streamConversion";
 import assist from "./types/assist";
 import logs from "./types/logs";
-
-/**
- * 声明全局函数对象类型 (无具体作用)
- */
-declare interface globalFunType {
-    /**
-     * 在当前全局函数对象中, 可以直接利用 this 关键字, 来引用 rbj 对象, 例如: this.$rbj...
-     */
-    $rbj: RbjVueType;
-}
+import interFaceConfig from "./types/interFaceConfig";
+import interFaceModuleConfig from "./types/interFaceModuleConfig";
 
 // 定义 Vue 的 Rbj 类型接口, 让接口继承类, 这样 类就有了和接口一样的特性
 export declare interface RbjVueType<GLOBAL_FUN_TYPE = {}> extends interfaceButtJoint<GLOBAL_FUN_TYPE> {
@@ -57,18 +49,26 @@ declare global {
     interface ImportMeta {
         globEager(pattern: string): Record<string, any>;
     }
+    // 声明 require() 函数
+    function require(regExp?: string): any;
+    // 声明 require.context() 函数
+    class require {
+        static context(directory: string, useSubdirectories?: boolean, regExp?: RegExp): { keys(): string[]; <T>(id: string): T; };
+    }
 }
 
 declare module "rain-interface-tools" {
     /**
-     * 核心类
+     * 导出 rbj 核心类
+     * 注意: 在 ts 文件中, GLOBAL_FUN_TYPE 你也可以不用传, 当你在 new Rbj({ globalFun: 全局函数 }) 初始化全局函数时, 只要你传入了 globalFun 全局函数对象, typescript 会自动推导 'GLOBAL_FUN_TYPE' 类型, 
+     * 当然你要想手动传入也可以, 也相当于做了一下类型限制而已, 但感觉并没有什么意义
      */
     export class Rbj<GLOBAL_FUN_TYPE = {}> extends interfaceButtJoint<GLOBAL_FUN_TYPE> { }
     /**
      * @description 融合多个 (普通接口对象) 或 (模块接口对象), 也可以直接对单个模块接口对象进行处理
      * @param requestObj 可以是数组或对象
      */
-    export function importsConfigObj(requestObj: Array<any> | object): object;
+    export function importsConfigObj(requestObj: Array<any> | object): interFaceConfig | interFaceModuleConfig;
     /**
      * 导出已继承核心类的 uniapp Vue2 对象
      */

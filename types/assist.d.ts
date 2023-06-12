@@ -5,20 +5,20 @@ declare type recursiveTypeDefinition = Array<string | {
     /**
      * 要进行单独设置验证方式的对象或数组的 (属性或索引) 名, 一般只针对, 对象或数组类型的字段, 基本类型不支持, 注意: 不管外部是否开启了反转模式, 当前对象中 oneselfField 指定的 (属性或索引) 在外部必须处于进行空值验证的状态, 如果指定的 (属性或索引) 在外部没有处于空值验证状态, 则这个独立设置对象也是无效的, 因为这个独立控制, 仅针对指定 (属性或索引) 的子属性和子索引的设置
      */
-    oneselfField: string;
+    oneselfField?: string;
     /**
      * 是否对 oneselfField 指定的 (对象或数组) 进行反转操作, 默认值 false, 注意: 当 verifyArr 未设置, 或 verifyArr为 [] 时, 会自动默认进行所有子属性值或子索引值的验证, 而你设置的isReversal 则会失去效果
      */
-    isReversal: boolean;
+    isReversal?: boolean;
     /**
      * 对于 oneselfField 指定的字段属性数据, 是否进行子属性值或子索引值验证
      * 注意: 如果不在当前对象中设置此项(当前对象中的设置优先级是最高的), 则默认以 optionsObj 中 reversalVerify 为准, 若 optionsObj 中没有定义 reversalVerify 或 reversalVerify 中没有设置指定层级是否反转的操作, 则默认为 true
      */
-    isChildren: boolean;
+    isChildren?: boolean;
     /**
      * Array, 多维数组, 和 verifySelect 一样的效果, 区别是只针对 当前 oneselfField 指定的字段, 所代表的数据对象
      */
-    verifyArr: recursiveTypeDefinition;
+    verifyArr?: recursiveTypeDefinition;
 } | recursiveTypeDefinition>;
 
 /**

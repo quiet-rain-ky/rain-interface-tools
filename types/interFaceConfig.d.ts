@@ -2,24 +2,24 @@
  * 非模块化接口配置
  */
 declare interface interFaceConfig {
-    [index: string]: {
+    [index: string]: string | {
         /**
          * (可选) 接口描述说明, 一般用作提示使用
          */
-        description: string;
+        description?: string;
         /**
          * 自定义当前接口的请求服务地址(注意: 自定义当前接口的请求服务地址时, 必须要带上 http:// 或 https:// 协议前缀), 默认使用全局的 reqAddress 路径
          */
-        reqAddress: string;
+        reqAddress?: string;
         /**
          * 当全局是别的请求对象时是否临时使用 fetch 为请求对象, 注意: 当处于 uniapp 项目时此选项不可用
          */
-        tempUseFetch: boolean;
+        tempUseFetch?: boolean;
         /**
          * 当前接口是否开启模拟数据模式, 开启后 接口不再发送请求, 我们可以在接口配置的 interfaceData() 函数中, 自定义一些模拟数据返回, 并在组件中使用, 默认值: false
          * 注意: 假数据模式下, 接口的数据变成了自定义的模拟数据, autoButtJoint() 和 buttJoint() 函数在接收请求数据时, 接收的数据也会变成我们自定义的模拟数据
          */
-        falseDataMode: boolean;
+        falseDataMode?: boolean;
         /**
          * 设置请求路径, 示例: /user/info
          */
@@ -31,11 +31,11 @@ declare interface interFaceConfig {
         /**
          * 当前接口的请求配置对象
          */
-        requestConfig: {
+        requestConfig?: {
             /**
              * 配置当前接口的请求头
              */
-            headers: {
+            headers?: {
                 /**
                  * 注意: 设置属性名时, 必须加上双引号, 才会生效, 示例: "Content-Type": "application/x-www-form-urlencoded"
                  */
@@ -53,7 +53,7 @@ declare interface interFaceConfig {
          * 注意: 本函数只具有, 修改请求参数的功能, 不具备拦截并中断请求的功能
          * </p>
          */
-        paramsData(data: { paramsObj: object, pathParams: string }, operandObj: object, isAppendData: boolean, frontORback: boolean): {
+        paramsData?(data: { paramsObj: object, pathParams: string }, operandObj: object, isAppendData: boolean, frontORback: boolean): {
             /**
              * 此返回值对 paramsObj 参数对象进行重新设置
              */
@@ -62,7 +62,7 @@ declare interface interFaceConfig {
              * 此返回值对 pathParams 参数进行重新设置
              */
             pathParams: string;
-        };
+        } | void; // void 代表这个函数可以不 return 返回数据
         /**
          * @description 过滤响应数据, 不管是 buttJoint 手动对象, 还是 autoButtJoint 自动对接, 此 interfaceData() 函数都会运行(即都可以正常的进行响应数据的过滤操作)
          * @param data 响应的数据对象
@@ -74,7 +74,7 @@ declare interface interFaceConfig {
          * 注意: 如果返回的是 null, Rbj插件对象则会当作此函数已返回数据, 即 返回 null 是有效的
          * </p>
          */
-        interfaceData(data: object, operandObj: object): object;
+        interfaceData?(data: object, operandObj: object): Object | void; // void 代表这个函数可以不 return 返回数据
     }
 }
 

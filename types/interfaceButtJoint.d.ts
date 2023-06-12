@@ -1,4 +1,15 @@
 import interFaceConfig from "./interFaceConfig";
+import interFaceModuleConfig from "./interFaceModuleConfig";
+
+/**
+ * 声明全局函数对象类型 (无具体作用)
+ */
+declare interface globalFunType<GLOBAL_FUN_TYPE = {}> {
+    /**
+     * 在当前全局函数对象中, 可以直接利用 this 关键字, 来引用 rbj 对象, 例如: this.$rbj...
+     */
+    $rbj?: interfaceButtJoint<GLOBAL_FUN_TYPE>;
+}
 
 /**
  * 自动对接引用标记对象
@@ -84,7 +95,7 @@ declare interface configParamsType<GLOBAL_FUN_TYPE> {
     /**
      * 用户的数据对接配置文件, userConfigs 即直接导入的对象, configObj 即 使用上方的 importsConfigObj 函数导入多个 js 文件合成的对象, 两种方式可任选其一即可
      */
-    userConfig?: interFaceConfig;
+    userConfig?: interFaceConfig | interFaceModuleConfig;
     /**
      * 设置全局组件, 注意: 自定义的全局组件必须要有 name 属性, 作用: 即是全局组件的名字, 也是全局组件的标签名
      */
@@ -153,7 +164,7 @@ declare interface configParamsType<GLOBAL_FUN_TYPE> {
      * 初始化全局自定义调用函数, 可以在任何组件内使用 this.$rbj.globalFun.自定义的函数名(); 来调用
      * 注意: 也可以自定义一些, 常用的全局变量, 也可以用 this.$rbj.globalFun.变量名, 的方式来调用
      */
-    globalFun?: { $rbj: interfaceButtJoint<GLOBAL_FUN_TYPE> } & GLOBAL_FUN_TYPE;
+    globalFun?: globalFunType<GLOBAL_FUN_TYPE> & GLOBAL_FUN_TYPE;
     /**
      * 自定义 token 在请求头上的名字，默认值："Authorization"
      */
