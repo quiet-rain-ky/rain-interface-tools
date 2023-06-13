@@ -30,11 +30,11 @@ npx rain-util-cli@latest rbj-tool -c # 当你误删配置文件时, 加上 '-c' 
 #### 创建配置目录和文件
 
 ```js
-1. 在 根目录创建 /rbjConfigs/subConfig
-2. 在 /rbjConfigs 目录中创建 index.js 文件
-3. 在 /rbjConfigs/subConfig 目录下创建一些自定义的接口文件
+1. 在 根目录创建 '/rbjConfigs/subConfig'
+2. 在 '/rbjConfigs' 目录中创建 'index.js' 文件
+3. 在 '/rbjConfigs/subConfig' 目录下创建一些自定义的接口文件
 
-注意: 目录名可以不一样上方只是示例, 但在使用 require.context() 和 import.meta.globEager() 时, 注意要修改扫描的文件路径
+// 注意: 目录名可以不一样上方只是示例, 但在使用 require.context() 和 import.meta.globEager() 时, 注意要修改扫描的文件路径
 ```
 
 #### /rbjConfigs/subConfig/xxx.js

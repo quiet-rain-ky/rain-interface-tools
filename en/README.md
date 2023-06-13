@@ -24,11 +24,11 @@ npx rain-util-cli@latest rbj-tool -c # If you delete a configuration file by mis
 ### Create configuration directory and files
 
 ```js
-1. Create /rbjConfigs/subConfig in the root directory
-2. Create index.js file in /rbjConfigs directory
-3. Create some custom interface files in the /rbjConfigs/subConfig directory
+1. Create '/rbjConfigs/subConfig' in the root directory
+2. Create 'index.js' file in '/rbjConfigs' directory
+3. Create some custom interface files in the '/rbjConfigs/subConfig' directory
 
-Note: The directory name can be different. The above is just an example, but when using require.context() and import.meta.globEager(), be careful to modify the scanned file path
+// Note: The directory name can be different. The above is just an example, but when using require.context() and import.meta.globEager(), be careful to modify the scanned file path
 ```
 
 ### /rbjConfigs/subConfig/xxx.js
