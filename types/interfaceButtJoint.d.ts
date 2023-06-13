@@ -1,5 +1,4 @@
 import interFaceConfig from "./interFaceConfig";
-import interFaceModuleConfig from "./interFaceModuleConfig";
 
 /**
  * 声明全局函数对象类型
@@ -95,7 +94,7 @@ declare interface configParamsType<GLOBAL_FUN_TYPE> {
     /**
      * 用户的数据对接配置文件, userConfigs 即直接导入的对象, configObj 即 使用上方的 importsConfigObj 函数导入多个 js 文件合成的对象, 两种方式可任选其一即可
      */
-    userConfig?: interFaceConfig | interFaceModuleConfig;
+    userConfig?: interFaceConfig;
     /**
      * 设置全局组件, 注意: 自定义的全局组件必须要有 name 属性, 作用: 即是全局组件的名字, 也是全局组件的标签名
      */

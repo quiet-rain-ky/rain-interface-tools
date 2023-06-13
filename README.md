@@ -471,7 +471,25 @@ const globalComponentObj = import.meta.glob("components/*.vue"); // 使用 impor
 
 // ======== 注意: uniapp 在开发 手机APP 项目时不支持 Vue 的全局组件, 所以开发 uniapp 项目时最好用内置的 easycom 组件模式 ========
 
-const configObj = importsConfigObj(userConfigs); // 可以直接将单个模块化接口配置对象, 传入 importsConfigObj 函数, importsConfigObj 函数会直接对模块化接口配置对象进行处理
+let independentObj = {
+    moduleName: "User 用户模块",
+    moduleUrl: "/user",
+    interfaceList: {
+        one: {
+            url: "/user/home",
+            method: "GET",
+        }
+    }
+}
+const configObj = importsConfigObj(userConfigs); // importsConfigObj() 支持单独传入独立的模块化接口配置对象, 而非多个模块化接口配置对象组合成的数组, 注意: 单个或多个模块化接口配置对象, 都必须经过 importsConfigObj 函数处理后, 才能导入下方 userConfig 配置中
+
+let independentObj = {
+    one: {
+        url: "/user/home",
+        method: "GET",
+    }
+}
+const configObj = importsConfigObj(independentObj); // importsConfigObj() 支持单独传入独立的(非模块化接口配置对象), 而非多个(非模块化接口配置对象)组合成的数组
 
 
 // ==================================== <3>. 利用 (Rbj || UniRbjTwo || UniRbjThere) 插件对象, 在 Vue 上安装插件, 导入融合后的接口配置对象, 导入融合后的全局组件对象(uniapp 不建议使用此方式来注册全局组件, 建议使用 uniapp 内置的 easycom 方式, 来注册全局组件) ====================================

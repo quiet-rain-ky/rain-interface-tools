@@ -214,7 +214,7 @@ Vue.use(Rbj); // Install the rain-interface-tools plugin on Vue
 // ==================================== <1>. Interface configuration object ====================================
 // (1) Modular interface configuration object
 const userConfigs = {
-    moduleName: "User user module", // (optional) only used for console error prompts
+    moduleName: "User module Name", // (optional) only used for console error prompts
     moduleUrl: "/user", // (optional) is empty by default, that is, to set the module path of the current interface object, which will be automatically added after the request server address reqAddress and in front of each interface url, only for the current module object The interfaces in the interfaceList interface list take effect
     interfaceList: { // Define the interface list in the current module (note: only the importsConfigObj() function will process the modular interface object, so if you use the modular interface object, you must use the importsConfigObj() function)
         // Interface docking object one, this attribute name is customized
@@ -376,8 +376,25 @@ const globalComponentObj = import.meta.glob("components/*.vue"); // Use the impo
 
 // ======== Note: uniapp does not support Vue's global components when developing mobile APP projects, so it is best to use the built-in easycom component mode when developing uniapp projects ========
 
-const configObj = importsConfigObj(userConfigs); // You can directly pass a single modular interface configuration object into the importsConfigObj function, and the importsConfigObj function will directly process the modular interface configuration object
+let independentObj = {
+    moduleName: "User module Name",
+    moduleUrl: "/user",
+    interfaceList: {
+        one: {
+            url: "/user/home",
+            method: "GET",
+        }
+    }
+}
+const configObj = importsConfigObj(userConfigs); // importsConfigObj() supports passing in a separate modular interface configuration object instead of an array of multiple modular interface configuration objects. Note: One or more modular interface configuration objects can be imported to the following userConfig configuration only after being processed by the importsConfigObj function
 
+let independentObj = {
+    one: {
+        url: "/user/home",
+        method: "GET",
+    }
+}
+const configObj = importsConfigObj(independentObj); // importsConfigObj() supports passing individual (non-modular interface configuration objects) instead of arrays of multiple (non-modular interface configuration objects)
 
 // ==================================== <3>. Use the (Rbj || UniRbjTwo || UniRbjThere) plug-in object to install the plug-in on Vue, import the fused interface configuration object, and import the fused global component object (uniapp does not recommend using this method to register global components, it is recommended to use uniapp's built-in easycom method to register global components) ====================================
 Vue.use(
