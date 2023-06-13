@@ -2,7 +2,7 @@ import interFaceConfig from "./interFaceConfig";
 import interFaceModuleConfig from "./interFaceModuleConfig";
 
 /**
- * 声明全局函数对象类型 (无具体作用)
+ * 声明全局函数对象类型
  */
 declare interface globalFunType<GLOBAL_FUN_TYPE = {}> {
     /**
