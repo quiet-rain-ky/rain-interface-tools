@@ -342,13 +342,33 @@ import { Rbj, UniRbjTwo, UniRbjThere, importsConfigObj, logObj } from 'rain-inte
 // Or a single module configuration object, you can directly pass a single modular interface configuration object into the importsConfigObj function, and the importsConfigObj function will directly process the modular interface configuration object
 // {interfaceList: {one: {url:''}}}
 // Return value: {...} After synthesizing the objects of all modules in the array, return a synthetic object with multiple configurations fused together
+// ================== Examples of use of require and import imports: ==================
+// -------------- Method 1: Manually import and merge --------------
+// Import the user's interface profile using require() and merge it
+const configObj = importsConfigObj([
+require("./subConfig/user.js"),
+require("./subConfig/home.js"),
+]);
+// Import global components using require()
+const globalComponentObj = [ require("../components/popup.vue"), require("../components/hint.vue")];
 
-// --------- Usage mode in the VUE2 environment ---------
+// Use import to import the user's interface configuration file and fuse it
+import user from "./subConfig/user.js";
+import home from "./subConfig/home.js";
+const configObj = importsConfigObj([user, home]);
+
+// Use import to import global components
+import popup from "../components/popup.vue";
+import hint from "../components/hint.vue";
+const globalComponentObj = [ popup, hint ];
+
+// -------------- Method 2: Use a third-party api interface to automatically scan and import, and merge --------------
+// Using webpack's unique api interface, 'require.context()' scans the paths of all files in the specified directory and merges all interface configuration objects in the specified directory
 const configObj = importsConfigObj(require.context("rbjConfigs/subConfig/", true, /.js$/).keys().map(item => require("rbjConfigs/subConfig/" + item.substr(2, item .length)))); // You can directly use the require.context() method that comes with webpack to import multiple js files in the specified directory
 // Note: In the development of uniapp projects, you don't need to use the vue global component method below, as long as the components are installed in the components directory of the project "root directory" or "uni_modules", and conform to components/component name/component name.vue or uni_modules /plugin ID/components/component name/component name.vue directory structure. It can be used directly on the page. Note: In the uniapp project, a directory with the same name as the component should be created in the outer layer of the component
 const globalComponentObj = require.context("components/", true, /.vue$/).keys().map(item => require("components/" + item.substr(2, item.length))); // Use require.context() to get the components of the specified directory
 
-// --------- Usage mode in the VUE3 environment ---------
+// Using the unique vite api interface, 'import.meta.globEager()' scans the paths of all files in the specified directory and merges all interface configuration objects in the specified directory
 const configObj = importsConfigObj(import.meta.globEager("rbjConfigs/subConfig/**.js")); // Or use import.meta.lobEager way
 // Note: In developing a uniapp project, you don't need to use the vue global component method below, as long as the component is installed in the components directory of the project "root directory" or "uni_modules", and complies with components/component name/component name.vue or uni_modules /plugin ID/components/component name/component name.vue directory structure. It can be used directly on the page. Note: In the uniapp project, a directory with the same name as the component should be created in the outer layer of the component
 const globalComponentObj = import.meta.glob("components/*.vue"); // Use the import.meta.glob() function to obtain all components in the specified directory

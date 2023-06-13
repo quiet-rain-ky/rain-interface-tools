@@ -437,13 +437,33 @@ import { Rbj, UniRbjTwo, UniRbjThere, importsConfigObj, logObj } from 'rain-inte
 // 或单个模块配置对象, 可以直接将单个模块化接口配置对象, 传入 importsConfigObj 函数, importsConfigObj 函数会直接对模块化接口配置对象进行处理
 // {interfaceList: {one: {url:''}}}
 // 返回值: {...} 把数组中所有模块的对象合成后 返回一个多个配置融合在一起的合成对象
+// ================== require 和 import 导入的使用示例: ==================
+// -------------- 方式一: 手动导入, 并进行融合 --------------
+// 使用 require() 导入, 用户的接口配置文件, 并进行融合
+const configObj = importsConfigObj([
+require("./subConfig/user.js"),
+require("./subConfig/home.js"),
+]);
+// 使用 require() 导入全局组件
+const globalComponentObj = [ require("../components/addFriend/addFriend.vue"), require("../components/bubbleMenu/bubbleMenu.vue")];
 
-// VUE2 环境下的使用方式
+// 使用 import 导入, 用户的接口配置文件, 并进行融合
+import user from "./subConfig/user.js";
+import home from "./subConfig/home.js";
+const configObj = importsConfigObj([user, home]);
+
+// 使用 import 导入全局组件
+import addFriend from "../components/addFriend/addFriend.vue";
+import bubbleMenu from "../components/bubbleMenu/bubbleMenu.vue";
+const globalComponentObj = [ addFriend, bubbleMenu ];
+
+// -------------- 方式二: 使用第三方的 api 接口, 自动扫描导入, 并进行融合 --------------
+// 使用 webpack 独有的 api 接口, 'require.context()' 扫描指定目录下所有文件的路径, 并融合指定目录下, 所有的接口配置对象
 const configObj = importsConfigObj(require.context("rbjConfigs/subConfig/", true, /.js$/).keys().map(item => require("rbjConfigs/subConfig/" + item.substr(2, item.length)))); // 可以直接使用 webpack自带的 require.context() 方法来导入指定目录下的多个 js 文件
 // 注意: 在开发 uniapp 项目中, 不用使用下方 vue全局组件的方式, 只要组件安装在项目 "根目录" 或 "uni_modules" 的 components 目录下，并符合 components/组件名称/组件名称.vue 或 uni_modules/插件ID/components/组件名称/组件名称.vue目录结构。 就可以直接在页面中使用, 注意: 在 uniapp 项目中, 组件外层要创建一个和组件同名的目录
 const globalComponentObj = require.context("components/", true, /.vue$/).keys().map(item => require("components/" + item.substr(2, item.length))); // 使用 require.context() 来获取指定目录的组件
 
-// VUE3 环境下的使用方式
+// 使用 vite 独有的 api 接口, 'import.meta.globEager()' 扫描指定目录下所有文件的路径, 融合指定目录下, 所有的接口配置对象
 const configObj = importsConfigObj(import.meta.globEager("rbjConfigs/subConfig/**.js")); // 或者使用 import.meta.globEager 的方式
 // 注意: 在开发 uniapp 项目中, 不用使用下方vue全局组件的方式, 只要组件安装在项目 "根目录"或 "uni_modules" 的 components 目录下，并符合components/组件名称/组件名称.vue 或 uni_modules/插件ID/components/组件名称/组件名称.vue目录结构。 就可以直接在页面中使用, 注意: 在 uniapp 项目中, 组件外层要创建一个和组件同名的目录
 const globalComponentObj = import.meta.glob("components/*.vue"); // 使用 import.meta.glob() 函数获取, 指定目录下的所有组件

@@ -99,7 +99,7 @@ declare interface configParamsType<GLOBAL_FUN_TYPE> {
     /**
      * 设置全局组件, 注意: 自定义的全局组件必须要有 name 属性, 作用: 即是全局组件的名字, 也是全局组件的标签名
      */
-    globalComponent?: Object;
+    globalComponent?: Array<Object>;
     /**
      * 是否全局使用 fetch 为 数据请求对象, 默认值: false
      * 注意: fetch 请求是不进行空数据过滤的
