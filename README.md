@@ -93,9 +93,9 @@ export default {
 import {  Rbj, UniRbjTwo, UniRbjThere, importsConfigObj } from "rain-interface-tools";
 import globalFun from "./globalFun.js";
 // 把 /config/subConfig/ 目录下的所有的接口配置文件都导入进来，注意：目录路径和下方配置的不一致的需要修改要进行扫描的文件路径
-// --- vue2 使用此项 ---
+// --- 使用 webpack 独有的 api 接口, 'require.context()' 扫描指定目录下所有文件的路径, 并融合指定目录下, 所有的接口配置对象 ---
 const configObj = importsConfigObj(require.context("./subConfig/", true, /.js$/).keys().map(item => require("./subConfig/" + item.substr(2, item.length)))); // require.context() 会扫描指定目录下的所有文件, 仅在 Vue2 使用
-// --- vue3 或 react 使用此项 ---
+// --- 使用 vite 独有的 api 接口, 'import.meta.globEager()' 扫描指定目录下所有文件的路径, 融合指定目录下, 所有的接口配置对象 ---
 const configObj = importsConfigObj(import.meta.globEager("./subConfig/**.js")); // import.meta.globEager() 会扫描指定目录下的所有文件, 仅在 Vue3 使用
 
 

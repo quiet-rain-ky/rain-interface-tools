@@ -87,9 +87,9 @@ export default {
 import { Rbj, UniRbjTwo, UniRbjThere, importsConfigObj } from "rain-interface-tools";
 import globalFun from "./globalFun.js";
 // Import all the interface configuration files in the /config/subConfig/ directory, note: if the directory path is inconsistent with the configuration below, you need to modify the file path to be scanned
-// --- vue2 uses this ---
+// --- Using webpack's unique api interface, 'require.context()' scans the paths of all files in the specified directory and merges all interface configuration objects in the specified directory ---
 const configObj = importsConfigObj(require.context("./subConfig/", true, /.js$/).keys().map(item => require("./subConfig/" + item.substr(2, item .length)))); // require.context() will scan all files in the specified directory, only used in Vue2
-// --- vue3 uses this ---
+// --- Using the unique vite api interface, 'import.meta-. globEager()' scans the paths of all files in the specified directory and merges all interface configuration objects in the specified directory ---
 const configObj = importsConfigObj(import.meta.globEager("./subConfig/**.js")); // import.meta.globEager() will scan all files in the specified directory, only used in Vue3
 
 
