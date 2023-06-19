@@ -232,7 +232,7 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
      * @param optionsObj 可选属性对象
      * @return 返回手动对接引用标记对象
      */
-    buttJoint(interfaceDefinedName: String, paramsObj: Object, optionsObj?: {
+    buttJoint(interfaceDefinedName: String, paramsObj: Object | null, optionsObj?: {
         /**
          * 直接在路径上拼接字符串, get, post 都可以使用
          */
@@ -284,7 +284,7 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
      * @param optionsObj 可选属性对象
      * @return 返回自动对接引用标记对象
      */
-    autoButtJoint(interfaceDefinedName: String, paramsObj: Object, dataName: String, currentObj: Object, optionsObj?: {
+    autoButtJoint(interfaceDefinedName: String, paramsObj: Object | null, dataName: String, currentObj: Object, optionsObj?: {
         /**
          * 直接在路径上拼接字符串, get, post 都可以使用
          */
