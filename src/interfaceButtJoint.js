@@ -697,7 +697,7 @@ export default class interfaceButtJoint {
         if (!interfaceDefinedName) {
             // 判断是否为空
             rain_logs.ERROR("buttJoint 缺少参数");
-        } else if (this.$falseDataMode || this._getUserConfigObj(interfaceDefinedName).falseDataMode) {
+        } else if (this._getUserConfigObj(interfaceDefinedName).falseDataMode !== undefined ? this._getUserConfigObj(interfaceDefinedName).falseDataMode : this.$falseDataMode) {
             // 判断是否假数据模式
             return new Promise((resolve, reject) => {
                 resolve(this._assignment(false, interfaceDefinedName, {}, null, null, null, null, null, globalFilterInterCept));
@@ -751,7 +751,7 @@ export default class interfaceButtJoint {
         if (!this._oneParams(interfaceDefinedName, dataName, currentObj)) {
             // 判断是否为空
             rain_logs.ERROR("autoButtJoint 缺少参数");
-        } else if (this.$falseDataMode || this._getUserConfigObj(interfaceDefinedName).falseDataMode) {
+        } else if (this._getUserConfigObj(interfaceDefinedName).falseDataMode !== undefined ? this._getUserConfigObj(interfaceDefinedName).falseDataMode : this.$falseDataMode) {
             // 判断是否假数据模式
             this._assignment(false, interfaceDefinedName, {}, dataName, currentObj, callbackFunc, isAppendData, frontORback, globalFilterInterCept);
         } else {
@@ -794,7 +794,7 @@ export default class interfaceButtJoint {
         if (!interfaceDefinedName) {
             // 判断是否为空
             rain_logs.ERROR("buttJoint 缺少参数");
-        } else if (this.$falseDataMode || this._getUserConfigObj(interfaceDefinedName).falseDataMode) {
+        } else if (this._getUserConfigObj(interfaceDefinedName).falseDataMode !== undefined ? this._getUserConfigObj(interfaceDefinedName).falseDataMode : this.$falseDataMode) {
             // 判断是否假数据模式
             return new Promise((resolve, reject) => {
                 resolve(this._assignment(false, interfaceDefinedName, {}, null, null, null, null, null, globalFilterInterCept));
@@ -845,7 +845,7 @@ export default class interfaceButtJoint {
         if (!this._oneParams(interfaceDefinedName, dataName, currentObj)) {
             // 判断是否为空
             rain_logs.ERROR("autoButtJoint 缺少参数");
-        } else if (this.$falseDataMode || this._getUserConfigObj(interfaceDefinedName).falseDataMode) {
+        } else if (this._getUserConfigObj(interfaceDefinedName).falseDataMode !== undefined ? this._getUserConfigObj(interfaceDefinedName).falseDataMode : this.$falseDataMode) {
             // 判断是否假数据模式
             this._assignment(false, interfaceDefinedName, {}, dataName, currentObj, callbackFunc, isAppendData, frontORback, globalFilterInterCept);
         } else {
