@@ -509,8 +509,9 @@ Vue.use(
         // 控制台打印的日志是否, 携带样式进行输出, 此配置需搭配上方的 logs 属性配置进行使用, 且此样式仅在 H5模式 下才能正常生效, 默认值: false
         isLogStyle: false,
         /**
-         * 是否开启模拟数据模式, 开启后 接口不再发送请求, 我们可以在接口配置的 interfaceData() 函数中, 自定义一些模拟数据返回, 并在组件中使用, 默认值: false
+         * 是否开启模拟数据模式, 开启后 接口不再发送请求, 我们可以在 "接口配置对象" 中的 interfaceData() 函数中, 自定义一些模拟数据返回, 并在组件中使用, 默认值: false
          * 注意: 假数据模式下, 接口的数据变成了自定义的模拟数据, autoButtJoint() 和 buttJoint() 函数在接收请求数据时, 接收的数据也会变成我们自定义的模拟数据
+         * 注意: 模拟数据模式, 开启后, 全局过滤器函数 和 拦截器, 一定不能拦截, 否则 "接口配置对象" 中的 interfaceData() 函数则不会运行, 而 autoButtJoint() 和 buttJoint() 也会自动按照响应拦截的逻辑, 来执行代码
          */
         falseDataMode: false,
         // 全局请求配置函数
@@ -712,7 +713,7 @@ export default {
              */
 
             /* 参数:  interfaceDefinedName(必填), paramsObj(可选, 可为 null),  dataName(必填), currentObj(必填), pathParams(可选, 可为 null), callbackFunc(可选, 此回调函数和 请求配置中的 interfaceData() 函数一样的作用, 区别是 这个回调函数使用的是 函数已经过滤返回的数据, 然后可以对其再次进行过滤),isAppendData(可选), isUrlEncode(可选), tempUseFetch(可选, 注意: 当处于 uniapp 项目时此选项不可用) */
-            let refRefreshObj = this.$rbj.autoButtJoint("one", { age: 18 }, "listName", this, { // 自动对接方法, 功能: 传入参数, 根据用户配置, 发送请求, 自动将响应的数据装配到指定的对象上
+            let refRefreshObj = this.$rbj.autoButtJoint("one", { age: 18 }, "listName", this, { // 自动对接方法, 功能: 传入参数, 根据用户配置, 发送请求, 自动将响应的数据装配到指定的对象上, 注意: 如果此函数被全局过滤器拦截后, 则不再对指定对象中的属性, 进行数据的装配操作
                 pathParams: "123", // 直接在路径上拼接字符串, get, post 都可以使用
                 callbackFunc(data, operandObj) {}, // 注意: 如果被全局过滤器或拦截器, 拦截住没有放行时, 此函数不会运行
                 isUrlEncode: false, // 是否对 post 请求的请求主体进行键值编码, 默认值 false, 注意: 只针对 post 请求, get 请求无效, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此参数不可用
