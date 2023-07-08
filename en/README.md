@@ -255,7 +255,7 @@ const userConfigs = {
                     pathParams: "" // This return value resets the pathParams parameter
                 }
             },
-            // Filter the response data, whether it is a buttJoint manual object or an autoButtJoint automatic docking, this interfaceData() function will run (that is, the response data can be filtered normally)
+            // The interfaceData() function is used to filter the response data, whether it is buttJoint() manually or autoButtJoint() automatically (that is, the response data filtering operation is normal).
             interfaceData(data, operandObj) { // The object that the data server responds to, operandObj is the operation object that needs to assemble data during automatic docking. This value is null when it is not automatic docking. Note: this function can only be used when the interface is docked, or fake data It can also be used in the mode, but this data has no data in the false data mode
                 // Data docking operation, what data is returned, the data in the component will receive what data
                 // return {}
@@ -308,7 +308,7 @@ const userConfigs = {
                 pathParams: "" // This return value resets the pathParams parameter
             }
         },
-        // Filter the response data, whether it is a buttJoint manual object or an autoButtJoint automatic docking, this interfaceData() function will run (that is, the response data can be filtered normally)
+        // The interfaceData() function is used to filter the response data, whether it is buttJoint() manually or autoButtJoint() automatically (that is, the response data filtering operation is normal).
         interfaceData(data, operandObj) { // The object that the data server responds to, operandObj is the operation object that needs to assemble data during automatic docking. This value is null when it is not automatic docking. Note: this function can only be used when the interface is docked, or fake data It can also be used in the mode, but this data has no data in the false data mode
             // Data docking operation, what data is returned, the data in the component will receive what data
             // return {}

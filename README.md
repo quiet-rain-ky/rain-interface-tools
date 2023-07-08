@@ -345,7 +345,7 @@ const userConfigs = {
                     pathParams: "" // 此返回值对 pathParams 参数进行重新设置
                 }
             },
-            // 过滤响应数据, 不管是 buttJoint 手动对接, 还是 autoButtJoint 自动对接, 此 interfaceData() 函数都会运行(即都可以正常的进行响应数据的过滤操作)
+            // 过滤响应数据, 不管是 buttJoint() 手动对接, 还是 autoButtJoint() 自动对接, 此 interfaceData() 函数都会运行(即都可以正常的进行响应数据的过滤操作)
             interfaceData(data, operandObj) { // data 服务器响应的对象, operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null, 注意: 只有接口对接时才能使用此函数, 或者假数据模式下也可以使用, 但是 假数据模式下 此 data 没有数据
                 // 数据对接操作, 返回什么数据, 组件中的数据就会接收什么数据
                 // return {}
@@ -403,7 +403,7 @@ const userConfigs = {
                 pathParams: "" // 此返回值对 pathParams 参数进行重新设置
             }
         },
-        // 过滤响应数据, 不管是 buttJoint 手动对接, 还是 autoButtJoint 自动对接, 此 interfaceData() 函数都会运行(即都可以正常的进行响应数据的过滤操作)
+        // 过滤响应数据, 不管是 buttJoint() 手动对接, 还是 autoButtJoint() 自动对接, 此 interfaceData() 函数都会运行(即都可以正常的进行响应数据的过滤操作)
         interfaceData(data, operandObj) { // data 服务器响应的对象, operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null, 注意: 只有接口对接时才能使用此函数, 或者假数据模式下也可以使用, 但是 假数据模式下 此 data 没有数据
             // 数据对接操作, 返回什么数据, 组件中的数据就会接收什么数据
             // return {}
