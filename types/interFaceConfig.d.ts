@@ -65,7 +65,7 @@ declare interface interFaceConfig {
             pathParams: string;
         } | void; // void 代表这个函数可以不 return 返回数据
         /**
-         * @description 过滤响应数据, 不管是 buttJoint 手动对象, 还是 autoButtJoint 自动对接, 此 interfaceData() 函数都会运行(即都可以正常的进行响应数据的过滤操作)
+         * @description 过滤响应数据, 不管是 buttJoint() 手动对接, 还是 autoButtJoint() 自动对接, 此 interfaceData() 函数都会运行(即都可以正常的进行响应数据的过滤操作)
          * @param data 响应的数据对象
          * @param operandObj | Object 说明: operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
          * @return 数据对接操作, 返回什么数据, 组件中的数据就会接收什么数据
