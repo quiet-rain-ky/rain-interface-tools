@@ -331,11 +331,12 @@ const userConfigs = {
             /**
              * 当声明了此函数时 会对参数进行过滤, 此函数返回什么数据, 请求时就发送什么样的参数给服务器
              * @param data | Object 说明: data 包含 paramsObj 主体参数, pathParams 路径参数, 可以直接修改 data 对象中 属性的引用数据, 进行达到修改请求参数的作用
+             * @param rbjObj 当前 rbj 对象的实例
              * @param operandObj | Object 说明: operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
              * @param isAppendData | boolean 说明: 当前接口是否开启追加模式, 非自动对接时此值为 null, 注意: 处于自动对接时除非你在 autoButtJoint() 的 options 对象中设置了此 isAppendData 属性, 否则此处的 isAppendData 还是为空
              * @param frontORback | boolean 说明: 处于追加模式时, 确认向前追加数据 还是 向后追加数据, 非自动对接时此值为 null, 默认值: false 向后追加
              */
-            paramsData(data, operandObj, isAppendData, frontORback) {
+            paramsData(data, rbjObj, operandObj, isAppendData, frontORback) {
                 // data.paramsObj = {names: "小明"}; 不一定非要通过 return 的方式, 来达到修改请求参数的目的, 也可以直接修改 data 对象中 属性的引用数据, 来达到修改请求参数的目的
                 // data.pathParams = 1;
                 // data.paramsObj = JSON.stringify(data.paramsObj); // 也可以将整个参数转成 json 字符串
@@ -345,8 +346,13 @@ const userConfigs = {
                     pathParams: "" // 此返回值对 pathParams 参数进行重新设置
                 }
             },
-            // 过滤响应数据, 不管是 buttJoint() 手动对接, 还是 autoButtJoint() 自动对接, 此 interfaceData() 函数都会运行(即都可以正常的进行响应数据的过滤操作)
-            interfaceData(data, operandObj) { // data 服务器响应的对象, operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null, 注意: 只有接口对接时才能使用此函数, 或者假数据模式下也可以使用, 但是 假数据模式下 此 data 没有数据
+            /**
+             * 过滤响应数据, 不管是 buttJoint() 手动对接, 还是 autoButtJoint() 自动对接, 此 interfaceData() 函数都会运行(即都可以正常的进行响应数据的过滤操作)
+             * @param data | Object 说明: data 包含 paramsObj 主体参数, pathParams 路径参数, 可以直接修改 data 对象中 属性的引用数据, 进行达到修改请求参数的作用
+             * @param rbjObj 当前 rbj 对象的实例
+             * @param operandObj | Object 说明: operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
+             */
+            interfaceData(data, rbjObj, operandObj) { // data 服务器响应的对象, operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null, 注意: 只有接口对接时才能使用此函数, 或者假数据模式下也可以使用, 但是 假数据模式下 此 data 没有数据
                 // 数据对接操作, 返回什么数据, 组件中的数据就会接收什么数据
                 // return {}
                 // 注意: 本函数只具有修改响应数据的功能, 不具有拦截响应的功能
@@ -389,11 +395,12 @@ const userConfigs = {
         /**
          * 当声明了此函数时 会对参数进行过滤, 此函数返回什么数据, 请求时就发送什么样的参数给服务器
          * @param data | Object 说明: data 包含 paramsObj 主体参数, pathParams 路径参数, 可以直接修改 data 对象中 属性的引用数据, 进行达到修改请求参数的作用
+         * @param rbjObj 当前 rbj 对象的实例
          * @param operandObj | Object 说明: operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
          * @param isAppendData | boolean 说明: 当前接口是否开启追加模式, 非自动对接时此值为 null, 注意: 处于自动对接时除非你在 autoButtJoint() 的 options 对象中设置了此 isAppendData 属性, 否则此处的 isAppendData 还是为空
          * @param frontORback | boolean 说明: 处于追加模式时, 确认向前追加数据 还是 向后追加数据, 非自动对接时此值为 null, 默认值: false 向后追加
          */
-        paramsData(data, operandObj, isAppendData, frontORback) {
+        paramsData(data, rbjObj, operandObj, isAppendData, frontORback) {
             // data.paramsObj = {names: "小明"}; 不一定非要通过 return 的方式, 来达到修改请求参数的目的, 也可以直接修改 data 对象中 属性的引用数据, 来达到修改请求参数的目的
             // data.pathParams = 1;
             // data.paramsObj = JSON.stringify(data.paramsObj); // 也可以将整个参数转成 json 字符串
@@ -403,8 +410,13 @@ const userConfigs = {
                 pathParams: "" // 此返回值对 pathParams 参数进行重新设置
             }
         },
-        // 过滤响应数据, 不管是 buttJoint() 手动对接, 还是 autoButtJoint() 自动对接, 此 interfaceData() 函数都会运行(即都可以正常的进行响应数据的过滤操作)
-        interfaceData(data, operandObj) { // data 服务器响应的对象, operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null, 注意: 只有接口对接时才能使用此函数, 或者假数据模式下也可以使用, 但是 假数据模式下 此 data 没有数据
+        /**
+         * 过滤响应数据, 不管是 buttJoint() 手动对接, 还是 autoButtJoint() 自动对接, 此 interfaceData() 函数都会运行(即都可以正常的进行响应数据的过滤操作)
+         * @param data | Object 说明: data 包含 paramsObj 主体参数, pathParams 路径参数, 可以直接修改 data 对象中 属性的引用数据, 进行达到修改请求参数的作用
+         * @param rbjObj 当前 rbj 对象的实例
+         * @param operandObj | Object 说明: operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
+         */
+        interfaceData(data, rbjObj, operandObj) { // data 服务器响应的对象, operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null, 注意: 只有接口对接时才能使用此函数, 或者假数据模式下也可以使用, 但是 假数据模式下 此 data 没有数据
             // 数据对接操作, 返回什么数据, 组件中的数据就会接收什么数据
             // return {}
             // 注意: 本函数只具有修改响应数据的功能, 不具有拦截响应的功能

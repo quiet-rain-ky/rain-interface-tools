@@ -241,11 +241,12 @@ const userConfigs = {
            /**
             * When this function is declared, the parameters will be filtered, what data is returned by this function, and what parameters are sent to the server when requesting
             * @param data | Object Explanation: data contains paramsObj body parameters and pathParams path parameters, which can directly modify the reference data of attributes in the data object to achieve the effect of modifying request parameters
+            * @param rbjObj An instance of the current rbj object
             * @param operandObj | Object Description: operandObj is the operation object to assemble data during automatic docking, and this value is null when it is not automatic docking
             * @param isAppendData | boolean Description: Whether the current interface is in the append mode, this value is null when it is not automatically connected, Note: Unless you set the isAppendData property in the options object of autoButtJoint() when it is in automatic connection, otherwise the isAppendData is still empty
             * @param frontORback | boolean Description: When in append mode, confirm whether to append data forward or backward, this value is null when not automatically connected, default value: false append backward
             */
-            paramsData(data, operandObj, isAppendData, frontORback) {
+            paramsData(data, rbjObj, operandObj, isAppendData, frontORback) {
                 // data.paramsObj = {names: "Xiao Ming"};
                 // data.pathParams = 1;
                 // data.paramsObj = JSON.stringify(data.aramsObj); // You can also convert the entire parameter into a json string
@@ -255,8 +256,13 @@ const userConfigs = {
                     pathParams: "" // This return value resets the pathParams parameter
                 }
             },
-            // The interfaceData() function is used to filter the response data, whether it is buttJoint() manually or autoButtJoint() automatically (that is, the response data filtering operation is normal).
-            interfaceData(data, operandObj) { // The object that the data server responds to, operandObj is the operation object that needs to assemble data during automatic docking. This value is null when it is not automatic docking. Note: this function can only be used when the interface is docked, or fake data It can also be used in the mode, but this data has no data in the false data mode
+            /**
+             * The interfaceData() function is used to filter the response data, whether it is buttJoint() manually or autoButtJoint() automatically (that is, the response data filtering operation is normal)
+             * @param data | Object explain: data contains paramsObj body parameters and pathParams path parameters. You can directly modify the reference data of attributes in the data object to modify request parameters
+             * @param rbjObj An instance of the current rbj object
+             * @param operandObj | Object explain: operandObj Indicates the operation object for which data is to be assembled during automatic interconnection. The value is null for non-automatic interconnection
+             */
+            interfaceData(data, rbjObj, operandObj) { // The object that the data server responds to, operandObj is the operation object that needs to assemble data during automatic docking. This value is null when it is not automatic docking. Note: this function can only be used when the interface is docked, or fake data It can also be used in the mode, but this data has no data in the false data mode
                 // Data docking operation, what data is returned, the data in the component will receive what data
                 // return {}
                 // Note: This function only has the function of modifying the response data, not the function of intercepting the response
@@ -294,11 +300,12 @@ const userConfigs = {
        /**
         * When this function is declared, the parameters will be filtered, what data is returned by this function, and what parameters are sent to the server when the request is made
         * @param data | Object Explanation: data contains paramsObj body parameters and pathParams path parameters, which can directly modify the reference data of attributes in the data object to achieve the effect of modifying request parameters
+        * @param rbjObj An instance of the current rbj object
         * @param operandObj | Object Description: operandObj is the operation object to assemble data during automatic docking, and this value is null when it is not automatic docking
         * @param isAppendData | boolean Description: Whether the current interface is in the append mode, this value is null when it is not automatically connected, Note: Unless you set the isAppendData property in the options object of autoButtJoint() when it is in automatic connection, otherwise the isAppendData is still empty
         * @param frontORback | boolean Description: When in append mode, confirm whether to append data forward or backward, this value is null when not automatically connected, default value: false append backward
         */
-        paramsData(data, operandObj, isAppendData, frontORback) {
+        paramsData(data, rbjObj, operandObj, isAppendData, frontORback) {
             // data.paramsObj = {names: "Xiao Ming"};
             // data.pathParams = 1;
             // data.paramsObj = JSON.stringify(data.aramsObj); // You can also convert the entire parameter into a json string
@@ -308,8 +315,13 @@ const userConfigs = {
                 pathParams: "" // This return value resets the pathParams parameter
             }
         },
-        // The interfaceData() function is used to filter the response data, whether it is buttJoint() manually or autoButtJoint() automatically (that is, the response data filtering operation is normal).
-        interfaceData(data, operandObj) { // The object that the data server responds to, operandObj is the operation object that needs to assemble data during automatic docking. This value is null when it is not automatic docking. Note: this function can only be used when the interface is docked, or fake data It can also be used in the mode, but this data has no data in the false data mode
+        /**
+         * The interfaceData() function is used to filter the response data, whether it is buttJoint() manually or autoButtJoint() automatically (that is, the response data filtering operation is normal)
+         * @param data | Object explain: data contains paramsObj body parameters and pathParams path parameters. You can directly modify the reference data of attributes in the data object to modify request parameters
+         * @param rbjObj An instance of the current rbj object
+         * @param operandObj | Object explain: operandObj Indicates the operation object for which data is to be assembled during automatic interconnection. The value is null for non-automatic interconnection
+         */
+        interfaceData(data, rbjObj, operandObj) { // The object that the data server responds to, operandObj is the operation object that needs to assemble data during automatic docking. This value is null when it is not automatic docking. Note: this function can only be used when the interface is docked, or fake data It can also be used in the mode, but this data has no data in the false data mode
             // Data docking operation, what data is returned, the data in the component will receive what data
             // return {}
             // Note: This function only has the function of modifying the response data, not the function of intercepting the response

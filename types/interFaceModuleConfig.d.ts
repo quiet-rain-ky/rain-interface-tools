@@ -2,7 +2,7 @@ import interFaceConfig from "./interFaceConfig";
 /**
  * 模块化接口配置
  */
-declare interface interFaceModuleConfig {
+declare interface interFaceModuleConfig<GLOBAL_FUN_TYPE = {}> {
     /**
      * (可选) 仅用作控制台错误提示使用
      */
@@ -14,7 +14,7 @@ declare interface interFaceModuleConfig {
     /**
      * 接口列表
      */
-    interfaceList: interFaceConfig;
+    interfaceList: interFaceConfig<GLOBAL_FUN_TYPE>;
 }
 
 export default interFaceModuleConfig;

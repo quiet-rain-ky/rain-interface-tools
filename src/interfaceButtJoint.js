@@ -77,7 +77,7 @@ export default class interfaceButtJoint {
             paramsObj,
             pathParams,
         };
-        if (this._getUserConfigObj(interfaceDefinedName).paramsData) this._getUserConfigObj(interfaceDefinedName).paramsData(paramsDatas, currentObj, isAppendData, frontORback);
+        if (this._getUserConfigObj(interfaceDefinedName).paramsData) this._getUserConfigObj(interfaceDefinedName).paramsData(paramsDatas, this, currentObj, isAppendData, frontORback);
         if (paramsDatas.paramsObj) paramsObj = paramsDatas.paramsObj;
         if (paramsDatas.pathParams) pathParams = paramsDatas.pathParams;
     }
@@ -234,13 +234,13 @@ export default class interfaceButtJoint {
             if (globalReqFunData.paramsObj) paramsObj = globalReqFunData.paramsObj;
             if (globalReqFunData.pathParams) pathParams = globalReqFunData.pathParams;
         }
+        this._executiveParamsDataFun({ interfaceDefinedName, paramsObj, pathParams });
         let refRefreshFlagObj = null;
         if (this.$isUniApp) {
             refRefreshFlagObj = this._uniappButtJoint(interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, null, globalFilterInterCept, isUseToken);
         } else {
             refRefreshFlagObj = this._buttJoint(interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, isFileUpload, globalFilterInterCept, isUseToken);
         }
-
         // 记录刷新标记
         let self = this;
         let params = [interfaceDefinedName, paramsObj, optionsObj];
@@ -315,6 +315,14 @@ export default class interfaceButtJoint {
             if (globalReqFunData.paramsObj) paramsObj = globalReqFunData.paramsObj;
             if (globalReqFunData.pathParams) pathParams = globalReqFunData.pathParams;
         }
+        this._executiveParamsDataFun({
+            interfaceDefinedName,
+            paramsObj,
+            currentObj,
+            pathParams,
+            isAppendData,
+            frontORback,
+        });
         if (this.$isUniApp) {
             this._uniappAutoButtJoint(interfaceDefinedName, paramsObj, dataName, currentObj, pathParams, callbackFunc, isAppendData, isUrlEncode, tempUseFetch, frontORback, globalFilterInterCept, isUseToken);
         } else {
@@ -693,7 +701,6 @@ export default class interfaceButtJoint {
 
     // 手动对接
     _buttJoint(interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, isFileUpload, globalFilterInterCept, isUseToken) {
-        this._executiveParamsDataFun({ interfaceDefinedName, paramsObj, pathParams });
         if (!interfaceDefinedName) {
             // 判断是否为空
             rain_logs.ERROR("buttJoint 缺少参数");
@@ -740,14 +747,6 @@ export default class interfaceButtJoint {
 
     // 自动对接
     _autoButtJoint(interfaceDefinedName, paramsObj, dataName, currentObj, pathParams, callbackFunc, isAppendData, isUrlEncode, tempUseFetch, frontORback, globalFilterInterCept, isUseToken) {
-        this._executiveParamsDataFun({
-            interfaceDefinedName,
-            paramsObj,
-            currentObj,
-            pathParams,
-            isAppendData,
-            frontORback,
-        });
         if (!this._oneParams(interfaceDefinedName, dataName, currentObj)) {
             // 判断是否为空
             rain_logs.ERROR("autoButtJoint 缺少参数");
@@ -790,7 +789,6 @@ export default class interfaceButtJoint {
 
     // uniapp 手动对接
     _uniappButtJoint(interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, isFileUpload, globalFilterInterCept, isUseToken) {
-        this._executiveParamsDataFun({ interfaceDefinedName, paramsObj, pathParams });
         if (!interfaceDefinedName) {
             // 判断是否为空
             rain_logs.ERROR("buttJoint 缺少参数");
@@ -834,14 +832,6 @@ export default class interfaceButtJoint {
 
     // uniapp 自动对接
     _uniappAutoButtJoint(interfaceDefinedName, paramsObj, dataName, currentObj, pathParams, callbackFunc, isAppendData, isUrlEncode, tempUseFetch, frontORback, globalFilterInterCept, isUseToken) {
-        this._executiveParamsDataFun({
-            interfaceDefinedName,
-            paramsObj,
-            currentObj,
-            pathParams,
-            isAppendData,
-            frontORback,
-        });
         if (!this._oneParams(interfaceDefinedName, dataName, currentObj)) {
             // 判断是否为空
             rain_logs.ERROR("autoButtJoint 缺少参数");
@@ -906,7 +896,7 @@ export default class interfaceButtJoint {
         // 组件数据变量赋值    调用用户配置的回调函数
         if (dataName || currentObj) {
             let respData = undefined;
-            if (this._getUserConfigObj(interfaceDefinedName).interfaceData) respData = this._getUserConfigObj(interfaceDefinedName).interfaceData(data, currentObj);
+            if (this._getUserConfigObj(interfaceDefinedName).interfaceData) respData = this._getUserConfigObj(interfaceDefinedName).interfaceData(data, this, currentObj);
             let apiData = null;
             if ([true, false, 0, 1].includes(respData)) {
                 apiData = respData;
@@ -960,7 +950,7 @@ export default class interfaceButtJoint {
             return apiData;
         } else {
             let respData = undefined;
-            if (this._getUserConfigObj(interfaceDefinedName).interfaceData) respData = this._getUserConfigObj(interfaceDefinedName).interfaceData(data);
+            if (this._getUserConfigObj(interfaceDefinedName).interfaceData) respData = this._getUserConfigObj(interfaceDefinedName).interfaceData(data, this);
             // 判断 interfaceData() 函数, 是否 return 后返回的 null, 还是没有 return 默认返回的 null
             return respData ? respData : respData === undefined ? data : respData;
         }

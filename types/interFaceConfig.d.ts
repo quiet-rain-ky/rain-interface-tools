@@ -1,7 +1,8 @@
+import { interfaceButtJoint } from "./interfaceButtJoint";
 /**
  * 非模块化接口配置
  */
-declare interface interFaceConfig {
+declare interface interFaceConfig<GLOBAL_FUN_TYPE = {}> {
     [index: string]: string | {
         /**
          * (可选) 接口描述说明, 一般用作提示使用
@@ -46,6 +47,7 @@ declare interface interFaceConfig {
         /**
          * 当声明了此函数时 会对参数进行过滤, 此函数返回什么数据, 请求时就发送什么样的参数给服务器
          * @param data | Object 说明: data 包含 paramsObj 主体参数, pathParams 路径参数, 可以直接修改 data 对象中 属性的引用数据, 进行达到修改请求参数的作用
+         * @param rbjObj 当前 rbj 对象的实例
          * @param operandObj | Object 说明: operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
          * @param isAppendData | boolean 说明: 当前接口是否处于追加模式, 非自动对接时此值为 null, 注意: 处于自动对接时除非你在 autoButtJoint() 的 options 对象中设置了此 isAppendData 属性, 否则此处的 isAppendData 还是为空
          * @param frontORback | boolean 说明: 处于追加模式时, 确认向前追加数据 还是 向后追加数据, 非自动对接时此值为 null, 默认值: false 向后追加
@@ -54,7 +56,7 @@ declare interface interFaceConfig {
          * 注意: 本函数只具有, 修改请求参数的功能, 不具备拦截并中断请求的功能
          * </p>
          */
-        paramsData?(data: { paramsObj: object, pathParams: string }, operandObj: object, isAppendData: boolean, frontORback: boolean): {
+        paramsData?(data: { paramsObj: object, pathParams: string }, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, operandObj: object, isAppendData: boolean, frontORback: boolean): {
             /**
              * 此返回值对 paramsObj 参数对象进行重新设置
              */
@@ -67,6 +69,7 @@ declare interface interFaceConfig {
         /**
          * @description 过滤响应数据, 不管是 buttJoint() 手动对接, 还是 autoButtJoint() 自动对接, 此 interfaceData() 函数都会运行(即都可以正常的进行响应数据的过滤操作)
          * @param data 响应的数据对象
+         * @param rbjObj 当前 rbj 对象的实例
          * @param operandObj | Object 说明: operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
          * @return 数据对接操作, 返回什么数据, 组件中的数据就会接收什么数据
          * <p>
@@ -75,7 +78,7 @@ declare interface interFaceConfig {
          * 注意: 如果返回的是 null, Rbj插件对象则会当作此函数已返回数据, 即 返回 null 是有效的
          * </p>
          */
-        interfaceData?(data: object, operandObj: object): Object | void; // void 代表这个函数可以不 return 返回数据
+        interfaceData?(data: object, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, operandObj: object): Object | void; // void 代表这个函数可以不 return 返回数据
     }
 }
 
