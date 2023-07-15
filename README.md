@@ -621,6 +621,13 @@ Vue.use(
             return {}; // 还可以返回 对象 {} 或 数组 [], 即对响应的数据进行过滤
             return [];
         },
+        /**
+         * 全局请求错误处理函数
+         * @param err 错误信息对象
+         * @param rbjObj 当前 rbj 对象的实例
+         * @return 没有返回值
+         */
+        globalRequestErrorFun(err, rbjObj) {};
         // 初始化全局自定义调用函数, 可以在任何组件内使用 this.$rbj.globalFun.自定义的函数名(); 来调用
         // 注意: 也可以自定义一些, 常用的全局变量, 也可以用 this.$rbj.globalFun.变量名, 的方式来调用
         globalFun: {

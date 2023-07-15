@@ -524,6 +524,13 @@ Vue.use(
             return {}; // You can also return an object {} or an array [], that is, to filter the response data
             return [];
         },
+        /**
+         * Global request error handler
+         * @param err Error message object
+         * @param rbjObj An instance of the current rbj object
+         * @return No return value
+         */
+        globalRequestErrorFun(err, rbjObj) {};
         // Initialize the global custom call function, which can be called in any component using this.$rbj.globalFun.Custom function name();
         // Note: You can also customize some commonly used global variables, or use this.$rbj.globalFun. variable name to call
         globalFun: {

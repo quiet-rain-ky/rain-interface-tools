@@ -47,6 +47,7 @@ export default class interfaceButtJoint {
         this.$interceptor = config.interceptor !== undefined ? config.interceptor : undefined; // 全局拦截器
         this._globalRequestFilterFun = config.globalRequestFilterFun !== undefined ? config.globalRequestFilterFun : () => false; // 全局请求过滤器函数
         this._globalResponseFilterFun = config.globalResponseFilterFun !== undefined ? config.globalResponseFilterFun : () => false; // 全局响应过滤器函数
+        this._globalRequestErrorFun = config.globalRequestErrorFun !== undefined ? config.globalRequestErrorFun : () => false; // 全局请求异常回调函数
         this.globalFun = config.globalFun !== undefined ? config.globalFun : {}; // 全局函数对象
         this.globalFun.$rbj = this; // 设置全局函数内, 默认可以直接使用当前 interfaceButtJoint 对象
         this.rbjGlobalThis = getGlobalFun(); // 在不同环境中, 获取并设置统一的 全局对象
@@ -574,9 +575,15 @@ export default class interfaceButtJoint {
             if (globalReqFunData.pathParams) pathParams = globalReqFunData.pathParams;
         }
         if (this.$isUniApp) {
-            return this._uniappUpload(interfaceDefinedName, Files, paramsObj, pathParams, reqPropertyName, isFilePathUpload, globalFilterInterCept, isUseToken);
+            return this._uniappUpload(interfaceDefinedName, Files, paramsObj, pathParams, reqPropertyName, isFilePathUpload, globalFilterInterCept, isUseToken).catch((err) => {
+                this._globalRequestErrorFun(err, this);
+                throw err;
+            });
         } else {
-            return this._upload(interfaceDefinedName, Files, paramsObj, pathParams, reqPropertyName, null, globalFilterInterCept, isUseToken);
+            return this._upload(interfaceDefinedName, Files, paramsObj, pathParams, reqPropertyName, null, globalFilterInterCept, isUseToken).catch((err) => {
+                this._globalRequestErrorFun(err, this);
+                throw err;
+            });
         }
     }
 
@@ -730,6 +737,8 @@ export default class interfaceButtJoint {
                     })
                     .catch((err) => {
                         rain_logs.ERROR(interfaceInfo.url, " 请求失败了 : ", err, this._isDescription(interfaceInfo));
+                        self._globalRequestErrorFun(err, self);
+                        throw err;
                     });
             } else {
                 return axios(configObj)
@@ -739,6 +748,7 @@ export default class interfaceButtJoint {
                     })
                     .catch((err) => {
                         rain_logs.ERROR(interfaceInfo.url, " 请求失败了 : ", err, this._isDescription(interfaceInfo));
+                        self._globalRequestErrorFun(err, self);
                         throw err;
                     });
             }
@@ -773,6 +783,7 @@ export default class interfaceButtJoint {
                     })
                     .catch((err) => {
                         rain_logs.ERROR(interfaceInfo.url, " 请求失败了 : ", err, this._isDescription(interfaceInfo));
+                        this._globalRequestErrorFun(err, this);
                     });
             } else {
                 axios(configObj)
@@ -782,6 +793,7 @@ export default class interfaceButtJoint {
                     })
                     .catch((err) => {
                         rain_logs.ERROR(interfaceInfo.url, " 请求失败了 : ", err, this._isDescription(interfaceInfo));
+                        this._globalRequestErrorFun(err, this);
                     });
             }
         }
@@ -825,6 +837,7 @@ export default class interfaceButtJoint {
                 })
                 .catch((err) => {
                     rain_logs.ERROR(interfaceInfo.url, " 请求失败了 : ", err, this._isDescription(interfaceInfo));
+                    self._globalRequestErrorFun(err, self);
                     throw err;
                 });
         }
@@ -865,6 +878,7 @@ export default class interfaceButtJoint {
                 })
                 .catch((err) => {
                     rain_logs.ERROR(interfaceInfo.url, " 请求失败了 : ", err, this._isDescription(interfaceInfo));
+                    this._globalRequestErrorFun(err, this);
                 });
         }
     }

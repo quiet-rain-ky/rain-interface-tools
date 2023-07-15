@@ -160,6 +160,12 @@ declare interface configParamsType<GLOBAL_FUN_TYPE> {
      */
     globalResponseFilterFun?: (respData: Object | Array<any>, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object) => any;
     /**
+     * 全局请求错误处理函数
+     * @param err 错误信息对象
+     * @param rbjObj 当前 rbj 对象的实例
+     */
+    globalRequestErrorFun?: (err: any, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>) => void;
+    /**
      * 初始化全局自定义调用函数, 可以在任何组件内使用 this.$rbj.globalFun.自定义的函数名(); 来调用
      * 注意: 也可以自定义一些, 常用的全局变量, 也可以用 this.$rbj.globalFun.变量名, 的方式来调用
      */
