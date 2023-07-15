@@ -160,7 +160,7 @@ declare interface configParamsType<GLOBAL_FUN_TYPE> {
      */
     globalResponseFilterFun?: (respData: Object | Array<any>, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object) => any;
     /**
-     * 全局请求错误处理函数
+     * 全局请求错误回调函数
      * @param err 错误信息对象
      * @param rbjObj 当前 rbj 对象的实例
      */

@@ -525,7 +525,7 @@ Vue.use(
             return [];
         },
         /**
-         * Global request error handler
+         * Global request error callback function
          * @param err Error message object
          * @param rbjObj An instance of the current rbj object
          * @return No return value
