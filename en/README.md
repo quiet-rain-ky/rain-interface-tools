@@ -525,7 +525,7 @@ Vue.use(
             return [];
         },
         /**
-         * Global request error callback function
+         * Global request error callback function, when automatic docking, manual docking, upload file, etc., when the request function is running, this function callback will run if the request error occurs (interceptor and global response filter interception will not cause this function to run), note: This function does not affect the running of the catch function that manually connects and uploads files
          * @param err Error message object
          * @param rbjObj An instance of the current rbj object
          * @return No return value

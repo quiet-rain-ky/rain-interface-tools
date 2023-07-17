@@ -160,7 +160,7 @@ declare interface configParamsType<GLOBAL_FUN_TYPE> {
      */
     globalResponseFilterFun?: (respData: Object | Array<any>, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object) => any;
     /**
-     * 全局请求错误回调函数
+     * 全局请求错误回调函数, 当 自动对接, 手动对接, 上传文件, 等请求函数运行时, 如果发生请求错误此函数回调就会运行 (拦截器 和 全局响应过滤器的 拦截不会导致此函数的运行), 注意: 此函数不影响 手动对接 和 上传文件的 catch 函数的运行
      * @param err 错误信息对象
      * @param rbjObj 当前 rbj 对象的实例
      */
