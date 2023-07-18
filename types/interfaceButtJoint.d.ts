@@ -240,6 +240,10 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
      */
     buttJoint(interfaceDefinedName: String, paramsObj: Object | null, optionsObj?: {
         /**
+         * 接口局部调用注释, 注意: 此注释字符串会和接口配置对象中的 description 字段的字符串进行拼接, 当你请求 (成功或失败) 时会打印在控制台, 让你知道是哪个接口在发出请求
+         */
+        descriptionStr: string;
+        /**
          * 直接在路径上拼接字符串, get, post 都可以使用
          */
         pathParams?: string;
@@ -291,6 +295,10 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
      * @return 返回自动对接引用标记对象
      */
     autoButtJoint(interfaceDefinedName: String, paramsObj: Object | null, dataName: String, currentObj: Object, optionsObj?: {
+        /**
+         * 接口局部调用注释, 注意: 此注释字符串会和接口配置对象中的 description 字段的字符串进行拼接, 当你请求 (成功或失败) 时会打印在控制台, 让你知道是哪个接口在发出请求
+         */
+        descriptionStr: string;
         /**
          * 直接在路径上拼接字符串, get, post 都可以使用
          */

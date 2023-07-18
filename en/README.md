@@ -6,7 +6,7 @@ This is a front-end page interface tool that simplifies the steps of background 
 
 ## Install
 
-npm install rain-interface-tools -D
+npm install rain-interface-tools
 
 ## Use the command tool to generate the Rbj configuration file
 
@@ -388,7 +388,7 @@ const globalComponentObj = import.meta.glob("components/*.vue"); // Use the impo
 
 // ======== Note: uniapp does not support Vue's global components when developing mobile APP projects, so it is best to use the built-in easycom component mode when developing uniapp projects ========
 
-let independentObj = {
+let independentModuleObj = {
     moduleName: "User module Name",
     moduleUrl: "/user",
     interfaceList: {
@@ -398,7 +398,7 @@ let independentObj = {
         }
     }
 }
-const configObj = importsConfigObj(userConfigs); // importsConfigObj() supports passing in a separate modular interface configuration object instead of an array of multiple modular interface configuration objects. Note: One or more modular interface configuration objects can be imported to the following userConfig configuration only after being processed by the importsConfigObj function
+const configObj = importsConfigObj(independentModuleObj); // importsConfigObj() supports passing in a separate modular interface configuration object instead of an array of multiple modular interface configuration objects. Note: One or more modular interface configuration objects can be imported to the following userConfig configuration only after being processed by the importsConfigObj function
 
 let independentObj = {
     one: {
@@ -631,7 +631,8 @@ export default {
             */
 
             /* Parameters: interfaceDefinedName(required), paramsObj(optional, may be null), dataName(required), currentObj(required), pathParams(optional, may be null), callbackFunc(optional, this callback function It has the same function as the interfaceData() function in the request configuration, the difference is that this callback function uses the data returned by the function that has been filtered, and then it can be filtered again), isAppendData (optional), isUrlEncode (optional), tempUseFetch (optional, note: this option is not available when in uniapp project) */
-            let refRefreshObj = this. $rbj.utoButtJoint("one", { age: 18 }, "listName", this, { // Automatic connection method, function: pass in parameters, send a request according to user configuration, and automatically assemble the response data to the specified object
+            let refRefreshObj = this. $rbj.autoButtJoint("one", { age: 18 }, "listName", this, { // Automatic connection method, function: pass in parameters, send a request according to user configuration, and automatically assemble the response data to the specified object
+                descriptionStr: "comment", // Interface local call annotation, Note: This comment string is concatenated with the string of the description field in the interface configuration object and printed in the console when you request (successful or failed), so that you know which interface is making the request
                 pathParams: "123", // directly splicing strings on the path, both get and post can be used
                 callbackFunc(data, operandObj) {}, // Note: If it is intercepted by a global filter or interceptor and is not released, this function will not run
                 isUrlEncode: false, // Whether to key-value encode the request body of the post request, the default value is false, note: only for post requests, get requests are invalid, note: this parameter is not available when in the NVue page or component of the uniapp project
@@ -668,7 +669,8 @@ export default {
             });
 
             /* interfaceDefinedNameUrl(required), paramsObj(optional, can be null), pathParams(optional), isUrlEncode(optional), tempUseFetch(optional, note: this option is not available when in uniapp project) note: if When the request response is intercepted globally, the catch function will treat the global interception as an error behavior, and automatically execute the catch function once */
-            let butRefRefreshObj = this. $rbj.uttJoint("one", { age: 18 }, { // Manual docking method, function: pass in parameters, send a request according to user configuration, and return a Promise object, through which you can receive the data returned by the server after the request response, The difference from automatic docking is: the returned data needs to be processed manually by yourself
+            let butRefRefreshObj = this.$rbj.buttJoint("one", { age: 18 }, { // Manual docking method, function: pass in parameters, send a request according to user configuration, and return a Promise object, through which you can receive the data returned by the server after the request response, The difference from automatic docking is: the returned data needs to be processed manually by yourself
+                descriptionStr: "comment", // Interface local call annotation, Note: This comment string is concatenated with the string of the description field in the interface configuration object and printed in the console when you request (successful or failed), so that you know which interface is making the request
                 pathParams: "123", // directly splicing strings on the path, both get and post can be used
                 isUrlEncode: true, // Whether to key-value encode the request body of the post request, note: only for post requests, get requests are invalid, note: this parameter is not available when in the NVue page or component of the uniapp project
                 tempUseFetch: false, // note: this option is not available when in uniapp project
@@ -712,7 +714,7 @@ export default {
             * isFilePathUpload (whether to use filePath (that is, a single temporary path) for file upload, this option is only for uniapp) Note: This parameter must be set to true in uniapp to upload files successfully
             * Note: When you are in the fetch request mode and uploading a file, the request header you set will be invalid. Explanation: Because if the request header is set when the fetch request is uploading the file, the upload file will fail, that is, if If you use fetch to upload files, you cannot bring token or other parameters in the request header
             */
-            this. $rbj.pload("one", new File(), { // file upload function
+            this. $rbj.upload("one", new File(), { // file upload function
                 paramsObj: { age: 18 }, // The parameters carried when uploading files
                 reqPropertyName: "file", // The attribute name of the file when the file is uploaded
                 isFilePathUpload: true, // Will automatically make a default judgment of whether it is a uniapp project. If it is a uniapp project, this configuration defaults to true, otherwise this configuration defaults to false
@@ -766,7 +768,7 @@ export default {
             butRefRefreshObj.refRefreshGroup("two", "ones"); // Parameter 1: Define the group group mark for the current interface, Parameter 2: Set a unique identifier for the current interface in the refresh group, which is not repeated
 
             // refRefreshFlag() and refRefreshGroup() can call each other, that is to say, you can define a flag tag for the interface, or define a group tag for the interface, and then and catch methods can be used normally
-            butRefRefreshObj.efRefreshFlag("one").then(item => {}).refRefreshGroup("two", "ones").catch(item => {});
+            butRefRefreshObj.refRefreshFlag("one").then(item => {}).refRefreshGroup("two", "ones").catch(item => {});
             butRefreshObj.then(item => {}).refRefreshGroup("two", "ones").then(item => {}).catch(item => {}).refRefreshFlag("one");
 
 
@@ -777,7 +779,7 @@ export default {
 
             // ----- DELETE MARKER-----
             this.$rbj.refreshFlagTagDelete("one" || ["one", "two", ...]); // Delete reference refresh tag, parameter description: freshTagName : Array || String
-                                                     this.$rbj.refreshGroupTagDelete("two" || ["one", "two", ...]); // Delete all refresh tags in the specified group, parameter description: freshTagName : Array || String
+            this.$rbj.refreshGroupTagDelete("two" || ["one", "two", ...]); // Delete all refresh tags in the specified group, parameter description: freshTagName : Array || String
             this.$rbj.refreshGroupFlagTagDelete("groupName", "freshTagName"); // Delete the refresh tag of the flag specified in the group
             this.$rbj.refreshFlagTagDeleteAll(); // delete all flag reference refresh, no parameters
             this.$rbj.refreshGroupTagDeleteAll(); // delete all group reference refresh, no parameters

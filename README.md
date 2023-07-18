@@ -483,7 +483,7 @@ const globalComponentObj = import.meta.glob("components/*.vue"); // 使用 impor
 
 // ======== 注意: uniapp 在开发 手机APP 项目时不支持 Vue 的全局组件, 所以开发 uniapp 项目时最好用内置的 easycom 组件模式 ========
 
-let independentObj = {
+let independentModuleObj = {
     moduleName: "User 用户模块",
     moduleUrl: "/user",
     interfaceList: {
@@ -493,7 +493,7 @@ let independentObj = {
         }
     }
 }
-const configObj = importsConfigObj(userConfigs); // importsConfigObj() 支持单独传入独立的模块化接口配置对象, 而非多个模块化接口配置对象组合成的数组, 注意: 单个或多个模块化接口配置对象, 都必须经过 importsConfigObj 函数处理后, 才能导入下方 userConfig 配置中
+const configObj = importsConfigObj(independentModuleObj); // importsConfigObj() 支持单独传入独立的模块化接口配置对象, 而非多个模块化接口配置对象组合成的数组, 注意: 单个或多个模块化接口配置对象, 都必须经过 importsConfigObj 函数处理后, 才能导入下方 userConfig 配置中
 
 let independentObj = {
     one: {
@@ -733,6 +733,7 @@ export default {
 
             /* 参数:  interfaceDefinedName(必填), paramsObj(可选, 可为 null),  dataName(必填), currentObj(必填), pathParams(可选, 可为 null), callbackFunc(可选, 此回调函数和 请求配置中的 interfaceData() 函数一样的作用, 区别是 这个回调函数使用的是 函数已经过滤返回的数据, 然后可以对其再次进行过滤),isAppendData(可选), isUrlEncode(可选), tempUseFetch(可选, 注意: 当处于 uniapp 项目时此选项不可用) */
             let refRefreshObj = this.$rbj.autoButtJoint("one", { age: 18 }, "listName", this, { // 自动对接方法, 功能: 传入参数, 根据用户配置, 发送请求, 自动将响应的数据装配到指定的对象上, 注意: 如果此函数被全局过滤器拦截后, 则不再执行对指定对象中的属性, 进行数据的装配操作
+                descriptionStr: "局部注释", // 接口局部调用注释, 注意: 此注释字符串会和接口配置对象中的 description 字段的字符串进行拼接, 当你请求 (成功或失败) 时会打印在控制台, 让你知道是哪个接口在发出请求
                 pathParams: "123", // 直接在路径上拼接字符串, get, post 都可以使用
                 callbackFunc(data, operandObj) {}, // 注意: 如果被全局过滤器或拦截器, 拦截住没有放行时, 此函数不会运行
                 isUrlEncode: false, // 是否对 post 请求的请求主体进行键值编码, 默认值 false, 注意: 只针对 post 请求, get 请求无效, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此参数不可用
@@ -770,6 +771,7 @@ export default {
             
             /* interfaceDefinedNameUrl(必填), paramsObj(可选, 可为 null), pathParams(可选), isUrlEncode(可选), tempUseFetch(可选, 注意: 当处于 uniapp 项目时此选项不可用) 注意: 如果请求响应时被全局拦截了, catch 函数会把全局拦截也当成报错行为, 并自动执行一次 catch 函数 */
             let butRefRefreshObj = this.$rbj.buttJoint("one", { age: 18 }, { // 手动对接方法, 功能: 传入参数, 根据用户配置, 发送请求, 返回一个 Promise 对象, 可以通过此对象接收请求响应后服务器返回的数据, 和自动对接的区别是: 返回的数据需要你自己手动处理
+                descriptionStr: "局部注释", // 接口局部调用注释, 注意: 此注释字符串会和接口配置对象中的 description 字段的字符串进行拼接, 当你请求 (成功或失败) 时会打印在控制台, 让你知道是哪个接口在发出请求
                 pathParams: "123", // 直接在路径上拼接字符串, get, post 都可以使用
                 isUrlEncode: true, // 是否对 post 请求的请求主体进行键值编码, 注意: 只针对 post 请求, get 请求无效, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此参数不可用
                 tempUseFetch: false, // 注意: 当处于 uniapp 项目时此选项不可用

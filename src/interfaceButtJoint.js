@@ -214,7 +214,7 @@ export default class interfaceButtJoint {
     // 手动对接
     buttJoint(interfaceDefinedName, paramsObj, optionsObj = {}) {
         // 处理参数
-        let { pathParams, isUrlEncode = false, tempUseFetch = false, isFileUpload = false, globalFilterInterCept, isUseToken = true } = optionsObj;
+        let { pathParams, isUrlEncode = false, tempUseFetch = false, isFileUpload = false, globalFilterInterCept, isUseToken = true, descriptionStr } = optionsObj;
         // 请求拦截器
         let requestInterceptorVal = this._requestOrResponseInterceptor(interfaceDefinedName, paramsObj, pathParams, null, true);
         if (typeof requestInterceptorVal == "boolean") {
@@ -238,9 +238,9 @@ export default class interfaceButtJoint {
         this._executiveParamsDataFun({ interfaceDefinedName, paramsObj, pathParams });
         let refRefreshFlagObj = null;
         if (this.$isUniApp) {
-            refRefreshFlagObj = this._uniappButtJoint(interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, null, globalFilterInterCept, isUseToken);
+            refRefreshFlagObj = this._uniappButtJoint(interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, null, globalFilterInterCept, isUseToken, descriptionStr);
         } else {
-            refRefreshFlagObj = this._buttJoint(interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, isFileUpload, globalFilterInterCept, isUseToken);
+            refRefreshFlagObj = this._buttJoint(interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, isFileUpload, globalFilterInterCept, isUseToken, descriptionStr);
         }
         // 记录刷新标记
         let self = this;
@@ -295,7 +295,7 @@ export default class interfaceButtJoint {
     // 自动对接 (dataName 和 currentObj 不直接合并为一个, 即传入一个对象的原因: 我们可以在别的地方从 currentObj 对象中操作或获取一些其他的数据)
     autoButtJoint(interfaceDefinedName, paramsObj, dataName, currentObj, optionsObj = {}) {
         // 处理参数
-        let { pathParams, callbackFunc, isAppendData = false, isUrlEncode = false, tempUseFetch = false, frontORback = false, globalFilterInterCept, isUseToken = true } = optionsObj;
+        let { pathParams, callbackFunc, isAppendData = false, isUrlEncode = false, tempUseFetch = false, frontORback = false, globalFilterInterCept, isUseToken = true, descriptionStr } = optionsObj;
         // 请求拦截器
         let requestInterceptorVal = this._requestOrResponseInterceptor(interfaceDefinedName, paramsObj, pathParams, currentObj, true);
         if (typeof requestInterceptorVal == "boolean") {
@@ -325,9 +325,9 @@ export default class interfaceButtJoint {
             frontORback,
         });
         if (this.$isUniApp) {
-            this._uniappAutoButtJoint(interfaceDefinedName, paramsObj, dataName, currentObj, pathParams, callbackFunc, isAppendData, isUrlEncode, tempUseFetch, frontORback, globalFilterInterCept, isUseToken);
+            this._uniappAutoButtJoint(interfaceDefinedName, paramsObj, dataName, currentObj, pathParams, callbackFunc, isAppendData, isUrlEncode, tempUseFetch, frontORback, globalFilterInterCept, isUseToken, descriptionStr);
         } else {
-            this._autoButtJoint(interfaceDefinedName, paramsObj, dataName, currentObj, pathParams, callbackFunc, isAppendData, isUrlEncode, tempUseFetch, frontORback, globalFilterInterCept, isUseToken);
+            this._autoButtJoint(interfaceDefinedName, paramsObj, dataName, currentObj, pathParams, callbackFunc, isAppendData, isUrlEncode, tempUseFetch, frontORback, globalFilterInterCept, isUseToken, descriptionStr);
         }
         let self = this;
         let params = [interfaceDefinedName, paramsObj, dataName, currentObj, optionsObj];
@@ -702,12 +702,18 @@ export default class interfaceButtJoint {
     }
 
     // 判断接口的描述是否存在
-    _isDescription(interfaceInfo) {
-        return interfaceInfo.description ? " ----------- " + interfaceInfo.description : "";
+    _isDescription(interfaceInfo, descriptionStr) {
+        if (interfaceInfo.description) {
+            return " ----------- " + interfaceInfo.description;
+        } else if (descriptionStr) {
+            return " ----------- (" + descriptionStr + ")";
+        } else {
+            return " ----------- " + interfaceInfo.description + "(" + descriptionStr + ")";
+        }
     }
 
     // 手动对接
-    _buttJoint(interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, isFileUpload, globalFilterInterCept, isUseToken) {
+    _buttJoint(interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, isFileUpload, globalFilterInterCept, isUseToken, descriptionStr) {
         if (!interfaceDefinedName) {
             // 判断是否为空
             rain_logs.ERROR("buttJoint 缺少参数");
@@ -732,22 +738,22 @@ export default class interfaceButtJoint {
             if (self.$useFetch || self._getUserConfigObj(interfaceDefinedName).tempUseFetch || tempUseFetch) {
                 return fetch(configObj.url, configObj)
                     .then((data) => {
-                        rain_logs.WARN(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo));
+                        rain_logs.WARN(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo, descriptionStr));
                         return self._assignment(true, interfaceDefinedName, data, null, null, null, null, null, globalFilterInterCept);
                     })
                     .catch((err) => {
-                        rain_logs.ERROR(interfaceInfo.url, " 请求失败了 : ", err, this._isDescription(interfaceInfo));
+                        rain_logs.ERROR(interfaceInfo.url, " 请求失败了 : ", err, this._isDescription(interfaceInfo, descriptionStr));
                         self._globalRequestErrorFun(err, self);
                         throw err;
                     });
             } else {
                 return axios(configObj)
                     .then((data) => {
-                        rain_logs.WARN(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo));
+                        rain_logs.WARN(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo, descriptionStr));
                         return self._assignment(false, interfaceDefinedName, data, null, null, null, null, null, globalFilterInterCept);
                     })
                     .catch((err) => {
-                        rain_logs.ERROR(interfaceInfo.url, " 请求失败了 : ", err, this._isDescription(interfaceInfo));
+                        rain_logs.ERROR(interfaceInfo.url, " 请求失败了 : ", err, this._isDescription(interfaceInfo, descriptionStr));
                         self._globalRequestErrorFun(err, self);
                         throw err;
                     });
@@ -756,7 +762,7 @@ export default class interfaceButtJoint {
     }
 
     // 自动对接
-    _autoButtJoint(interfaceDefinedName, paramsObj, dataName, currentObj, pathParams, callbackFunc, isAppendData, isUrlEncode, tempUseFetch, frontORback, globalFilterInterCept, isUseToken) {
+    _autoButtJoint(interfaceDefinedName, paramsObj, dataName, currentObj, pathParams, callbackFunc, isAppendData, isUrlEncode, tempUseFetch, frontORback, globalFilterInterCept, isUseToken, descriptionStr) {
         if (!this._oneParams(interfaceDefinedName, dataName, currentObj)) {
             // 判断是否为空
             rain_logs.ERROR("autoButtJoint 缺少参数");
@@ -778,21 +784,21 @@ export default class interfaceButtJoint {
             if (this.$useFetch || this._getUserConfigObj(interfaceDefinedName).tempUseFetch || tempUseFetch) {
                 fetch(configObj.url, configObj)
                     .then((data) => {
-                        rain_logs.WARN(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo));
+                        rain_logs.WARN(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo, descriptionStr));
                         this._assignment(true, interfaceDefinedName, data, dataName, currentObj, callbackFunc, isAppendData, frontORback, globalFilterInterCept);
                     })
                     .catch((err) => {
-                        rain_logs.ERROR(interfaceInfo.url, " 请求失败了 : ", err, this._isDescription(interfaceInfo));
+                        rain_logs.ERROR(interfaceInfo.url, " 请求失败了 : ", err, this._isDescription(interfaceInfo, descriptionStr));
                         this._globalRequestErrorFun(err, this);
                     });
             } else {
                 axios(configObj)
                     .then((data) => {
-                        rain_logs.WARN(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo));
+                        rain_logs.WARN(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo, descriptionStr));
                         this._assignment(false, interfaceDefinedName, data, dataName, currentObj, callbackFunc, isAppendData, frontORback, globalFilterInterCept);
                     })
                     .catch((err) => {
-                        rain_logs.ERROR(interfaceInfo.url, " 请求失败了 : ", err, this._isDescription(interfaceInfo));
+                        rain_logs.ERROR(interfaceInfo.url, " 请求失败了 : ", err, this._isDescription(interfaceInfo, descriptionStr));
                         this._globalRequestErrorFun(err, this);
                     });
             }
@@ -800,7 +806,7 @@ export default class interfaceButtJoint {
     }
 
     // uniapp 手动对接
-    _uniappButtJoint(interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, isFileUpload, globalFilterInterCept, isUseToken) {
+    _uniappButtJoint(interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, isFileUpload, globalFilterInterCept, isUseToken, descriptionStr) {
         if (!interfaceDefinedName) {
             // 判断是否为空
             rain_logs.ERROR("buttJoint 缺少参数");
@@ -832,11 +838,11 @@ export default class interfaceButtJoint {
                 });
             })
                 .then((data) => {
-                    rain_logs.WARN(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo));
+                    rain_logs.WARN(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo, descriptionStr));
                     return self._assignment(false, interfaceDefinedName, data, null, null, null, null, null, globalFilterInterCept);
                 })
                 .catch((err) => {
-                    rain_logs.ERROR(interfaceInfo.url, " 请求失败了 : ", err, this._isDescription(interfaceInfo));
+                    rain_logs.ERROR(interfaceInfo.url, " 请求失败了 : ", err, this._isDescription(interfaceInfo, descriptionStr));
                     self._globalRequestErrorFun(err, self);
                     throw err;
                 });
@@ -844,7 +850,7 @@ export default class interfaceButtJoint {
     }
 
     // uniapp 自动对接
-    _uniappAutoButtJoint(interfaceDefinedName, paramsObj, dataName, currentObj, pathParams, callbackFunc, isAppendData, isUrlEncode, tempUseFetch, frontORback, globalFilterInterCept, isUseToken) {
+    _uniappAutoButtJoint(interfaceDefinedName, paramsObj, dataName, currentObj, pathParams, callbackFunc, isAppendData, isUrlEncode, tempUseFetch, frontORback, globalFilterInterCept, isUseToken, descriptionStr) {
         if (!this._oneParams(interfaceDefinedName, dataName, currentObj)) {
             // 判断是否为空
             rain_logs.ERROR("autoButtJoint 缺少参数");
@@ -873,11 +879,11 @@ export default class interfaceButtJoint {
                 });
             })
                 .then((data) => {
-                    rain_logs.WARN(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo));
+                    rain_logs.WARN(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo, descriptionStr));
                     this._assignment(false, interfaceDefinedName, data, dataName, currentObj, callbackFunc, isAppendData, frontORback, globalFilterInterCept);
                 })
                 .catch((err) => {
-                    rain_logs.ERROR(interfaceInfo.url, " 请求失败了 : ", err, this._isDescription(interfaceInfo));
+                    rain_logs.ERROR(interfaceInfo.url, " 请求失败了 : ", err, this._isDescription(interfaceInfo, descriptionStr));
                     this._globalRequestErrorFun(err, this);
                 });
         }
