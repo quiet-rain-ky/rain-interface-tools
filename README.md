@@ -736,7 +736,7 @@ export default {
                 descriptionStr: "局部注释", // 接口局部调用注释, 注意: 此注释字符串会和接口配置对象中的 description 字段的字符串进行拼接, 当你请求 (成功或失败) 时会打印在控制台, 让你知道是哪个接口在发出请求
                 pathParams: "123", // 直接在路径上拼接字符串, get, post 都可以使用
                 callbackFunc(data, operandObj) {}, // 注意: 如果被全局过滤器或拦截器, 拦截住没有放行时, 此函数不会运行
-                isUrlEncode: false, // 是否对 post 请求的请求主体进行键值编码, 默认值 false, 注意: 只针对 post 请求, get 请求无效, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此参数不可用
+                isUrlEncode: false, // 是否对 post, delete, put 请求类型的参数进行键值编码, 编码后会自动拼接到请求路径的后面 默认值 false, 注意: 只针对 post 请求, get 请求无效, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此参数不可用
                 tempUseFetch: false, // 注意: 当处于 uniapp 项目时此选项不可用, 默认值 false
                 isAppendData: true, // 进行数据追加, 默认值 false
                 frontORback: false, // 默认值: false 向后追加数据, 注意: 需结合 isAppendData 使用
@@ -773,7 +773,7 @@ export default {
             let butRefRefreshObj = this.$rbj.buttJoint("one", { age: 18 }, { // 手动对接方法, 功能: 传入参数, 根据用户配置, 发送请求, 返回一个 Promise 对象, 可以通过此对象接收请求响应后服务器返回的数据, 和自动对接的区别是: 返回的数据需要你自己手动处理
                 descriptionStr: "局部注释", // 接口局部调用注释, 注意: 此注释字符串会和接口配置对象中的 description 字段的字符串进行拼接, 当你请求 (成功或失败) 时会打印在控制台, 让你知道是哪个接口在发出请求
                 pathParams: "123", // 直接在路径上拼接字符串, get, post 都可以使用
-                isUrlEncode: true, // 是否对 post 请求的请求主体进行键值编码, 注意: 只针对 post 请求, get 请求无效, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此参数不可用
+                isUrlEncode: true, // 是否对 post, delete, put 请求类型的参数进行键值编码, 编码后会自动拼接到请求路径的后面 默认值 false, 注意: 只针对 post 请求, get 请求无效, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此参数不可用
                 tempUseFetch: false, // 注意: 当处于 uniapp 项目时此选项不可用
                 isFileUpload: false, // 也可以开启此方式进行手动的文件上传, 默认值: false
                 globalFilterInterCept: { // 全局过滤器, 如果拦截后, 默认执行的回调函数 (注意: 仅对当前接口生效)
@@ -810,8 +810,8 @@ export default {
              * @param interfaceDefinedName | String (请求的接口配置对象名)
              * @param Files (文件临时路径数组 |文件对象数组 | 单个文件对象也可以直接传入), 注意: uniapp 中此参数只能上传单文件, 不支持上传多文件, 且 isFilePathUpload 一定要设置为 true, 注意: 若你开启了 isFilePathUpload 文件上传模式, 此 Files 参数必须为 string 类型, 此 string 类型 即 文件的临时路径 或 blob 路径
              * @param options 参数对象说明
-             *      paramsObj(文件上传时附带的参数)
-             *      reqPropertyName(文件上传时文件的属性名), 默认值: file
+             *      paramsObj (文件上传时附带的参数)
+             *      reqPropertyName (文件上传时文件的属性名), 默认值: file
              *      isFilePathUpload (是否使用 filePath (即 单个临时路径) 进行文件上传, 此选项只针对 uniapp) 注意: uniapp 中必须此将此参数 设置为 true 文件才能上传成功, 注意: 若你开启了 isFilePathUpload 文件上传模式, 此 Files 参数必须为 string 类型, 此 string 类型 即 文件的临时路径 或 blob 路径
              * 注意: 当你处于 fetch 请求模式, 进行文件上传时, 你设置的请求头将会失效, 解释说明: 因为 fetch 请求进行文件上传时如果设置请求头, 则会导致上传文件失败, 也就是说如果你使用 fetch 进行文件上传则不能在请求头上带 token 或其他参数
              */

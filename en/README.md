@@ -635,7 +635,7 @@ export default {
                 descriptionStr: "comment", // Interface local call annotation, Note: This comment string is concatenated with the string of the description field in the interface configuration object and printed in the console when you request (successful or failed), so that you know which interface is making the request
                 pathParams: "123", // directly splicing strings on the path, both get and post can be used
                 callbackFunc(data, operandObj) {}, // Note: If it is intercepted by a global filter or interceptor and is not released, this function will not run
-                isUrlEncode: false, // Whether to key-value encode the request body of the post request, the default value is false, note: only for post requests, get requests are invalid, note: this parameter is not available when in the NVue page or component of the uniapp project
+                isUrlEncode: false, // Whether to encode the parameters of the post, delete, and put request types. After encoding, the parameters will be automatically concatenated to the back of the request path. The default value is false. This parameter is not available when you are on the NVue page or component of the uniapp project
                 tempUseFetch: false, // Note: This option is not available when in uniapp project, the default value is false
                 isAppendData: true, // append data, default value is false
                 frontORback: false, // default value: false to append data backwards, note: it needs to be used in conjunction with isAppendData
@@ -672,7 +672,7 @@ export default {
             let butRefRefreshObj = this.$rbj.buttJoint("one", { age: 18 }, { // Manual docking method, function: pass in parameters, send a request according to user configuration, and return a Promise object, through which you can receive the data returned by the server after the request response, The difference from automatic docking is: the returned data needs to be processed manually by yourself
                 descriptionStr: "comment", // Interface local call annotation, Note: This comment string is concatenated with the string of the description field in the interface configuration object and printed in the console when you request (successful or failed), so that you know which interface is making the request
                 pathParams: "123", // directly splicing strings on the path, both get and post can be used
-                isUrlEncode: true, // Whether to key-value encode the request body of the post request, note: only for post requests, get requests are invalid, note: this parameter is not available when in the NVue page or component of the uniapp project
+                isUrlEncode: true, // Whether to encode the parameters of the post, delete, and put request types. After encoding, the parameters will be automatically concatenated to the back of the request path. The default value is false. This parameter is not available when you are on the NVue page or component of the uniapp project
                 tempUseFetch: false, // note: this option is not available when in uniapp project
                 isFileUpload: false, // You can also enable this method for manual file upload, default value: false
                 globalFilterInterCept: { // Global filter, if intercepted, the callback function executed by default (note: only valid for the current interface)

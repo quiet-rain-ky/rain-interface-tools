@@ -142,15 +142,9 @@ export default class interfaceButtJoint {
                     }
                 } else {
                     if (isUrlEncode) {
-                        if (isFetchRequest) {
-                            // #ifndef APP-NVUE
-                            requestObj.body = qs.stringify(paramsObj);
-                            // #endif
-                        } else {
-                            // #ifndef APP-NVUE
-                            requestObj.data = qs.stringify(paramsObj);
-                            // #endif
-                        }
+                        // #ifndef APP-NVUE
+                        requestObj.url = `?${qs.stringify(paramsObj)}`;
+                        // #endif
                     } else {
                         // 默认 application/json 数据
                         if (isFetchRequest && isFileUpload) {
