@@ -242,13 +242,13 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
         /**
          * 接口局部调用注释, 注意: 此注释字符串会和接口配置对象中的 description 字段的字符串进行拼接, 当你请求 (成功或失败) 时会打印在控制台, 让你知道是哪个接口在发出请求
          */
-        descriptionStr: string;
+        descriptionStr?: string;
         /**
          * 直接在路径上拼接字符串, get, post 都可以使用
          */
         pathParams?: string;
         /**
-         * 是否对 post 请求的请求主体进行键值编码, 注意: 只针对 post 请求, get 请求无效, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此参数不可用
+         * 是否对 post, delete, put 请求类型的参数进行键值编码, 编码后会自动拼接到请求路径的后面 默认值 false, 注意: 只针对 post 请求, get 请求无效, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此参数不可用
          */
         isUrlEncode?: boolean;
         /**
@@ -298,7 +298,7 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
         /**
          * 接口局部调用注释, 注意: 此注释字符串会和接口配置对象中的 description 字段的字符串进行拼接, 当你请求 (成功或失败) 时会打印在控制台, 让你知道是哪个接口在发出请求
          */
-        descriptionStr: string;
+        descriptionStr?: string;
         /**
          * 直接在路径上拼接字符串, get, post 都可以使用
          */
@@ -313,7 +313,7 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
          */
         callbackFunc(data: Object, operandObj: Object): any | Object;
         /**
-         * 是否对 post 请求的请求主体进行键值编码, 默认值 false, 注意: 只针对 post 请求, get 请求无效, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此参数不可用
+         * 是否对 post, delete, put 请求类型的参数进行键值编码, 编码后会自动拼接到请求路径的后面 默认值 false, 注意: 只针对 post 请求, get 请求无效, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此参数不可用
          */
         isUrlEncode?: boolean;
         /**
