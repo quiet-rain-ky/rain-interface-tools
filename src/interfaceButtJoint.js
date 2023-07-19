@@ -143,7 +143,7 @@ export default class interfaceButtJoint {
                 } else {
                     if (isUrlEncode) {
                         // #ifndef APP-NVUE
-                        requestObj.url = `?${qs.stringify(paramsObj)}`;
+                        requestObj.url = requestObj.url + `?${qs.stringify(paramsObj)}`;
                         // #endif
                     } else {
                         // 默认 application/json 数据
