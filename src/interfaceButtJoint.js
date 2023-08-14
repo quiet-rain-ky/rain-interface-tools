@@ -73,12 +73,12 @@ export default class interfaceButtJoint {
     _executiveParamsDataFun(config = {}) {
         let { interfaceDefinedName, paramsObj, currentObj, pathParams, isAppendData, frontORback } = config;
 
-        // 对传入的参数进行自定义过滤
-        let paramsDatas = {
-            paramsObj,
-            pathParams,
-        };
         if (this._getUserConfigObj(interfaceDefinedName).paramsData) {
+            // 对传入的参数进行自定义过滤
+            let paramsDatas = {
+                paramsObj,
+                pathParams,
+            };
             let setParamsData = this._getUserConfigObj(interfaceDefinedName).paramsData(paramsDatas, this, currentObj, isAppendData, frontORback);
             return setParamsData !== undefined && (setParamsData.paramsObj || setParamsData.pathParams) ? setParamsData : paramsDatas;
         }
