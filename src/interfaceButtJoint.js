@@ -78,9 +78,10 @@ export default class interfaceButtJoint {
             paramsObj,
             pathParams,
         };
-        if (this._getUserConfigObj(interfaceDefinedName).paramsData) this._getUserConfigObj(interfaceDefinedName).paramsData(paramsDatas, this, currentObj, isAppendData, frontORback);
-        if (paramsDatas.paramsObj) paramsObj = paramsDatas.paramsObj;
-        if (paramsDatas.pathParams) pathParams = paramsDatas.pathParams;
+        if (this._getUserConfigObj(interfaceDefinedName).paramsData) {
+            let setParamsData = this._getUserConfigObj(interfaceDefinedName).paramsData(paramsDatas, this, currentObj, isAppendData, frontORback);
+            return setParamsData !== undefined && (setParamsData.paramsObj || setParamsData.pathParams) ? setParamsData : paramsDatas;
+        }
     }
 
     // 请求头设置
@@ -229,7 +230,9 @@ export default class interfaceButtJoint {
             if (globalReqFunData.paramsObj) paramsObj = globalReqFunData.paramsObj;
             if (globalReqFunData.pathParams) pathParams = globalReqFunData.pathParams;
         }
-        this._executiveParamsDataFun({ interfaceDefinedName, paramsObj, pathParams });
+        let requestParamsData = this._executiveParamsDataFun({ interfaceDefinedName, paramsObj, pathParams });
+        if (requestParamsData.paramsObj) paramsObj = requestParamsData.paramsObj;
+        if (requestParamsData.pathParams) pathParams = requestParamsData.pathParams;
         let refRefreshFlagObj = null;
         if (this.$isUniApp) {
             refRefreshFlagObj = this._uniappButtJoint(interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, null, globalFilterInterCept, isUseToken, descriptionStr);
@@ -310,7 +313,7 @@ export default class interfaceButtJoint {
             if (globalReqFunData.paramsObj) paramsObj = globalReqFunData.paramsObj;
             if (globalReqFunData.pathParams) pathParams = globalReqFunData.pathParams;
         }
-        this._executiveParamsDataFun({
+        let requestParamsData = this._executiveParamsDataFun({
             interfaceDefinedName,
             paramsObj,
             currentObj,
@@ -318,6 +321,8 @@ export default class interfaceButtJoint {
             isAppendData,
             frontORback,
         });
+        if (requestParamsData.paramsObj) paramsObj = requestParamsData.paramsObj;
+        if (requestParamsData.pathParams) pathParams = requestParamsData.pathParams;
         if (this.$isUniApp) {
             this._uniappAutoButtJoint(interfaceDefinedName, paramsObj, dataName, currentObj, pathParams, callbackFunc, isAppendData, isUrlEncode, tempUseFetch, frontORback, globalFilterInterCept, isUseToken, descriptionStr);
         } else {
