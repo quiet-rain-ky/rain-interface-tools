@@ -231,8 +231,8 @@ export default class interfaceButtJoint {
             if (globalReqFunData.pathParams) pathParams = globalReqFunData.pathParams;
         }
         let requestParamsData = this._executiveParamsDataFun({ interfaceDefinedName, paramsObj, pathParams });
-        if (requestParamsData.paramsObj) paramsObj = requestParamsData.paramsObj;
-        if (requestParamsData.pathParams) pathParams = requestParamsData.pathParams;
+        if (requestParamsData !== undefined && requestParamsData.paramsObj) paramsObj = requestParamsData.paramsObj;
+        if (requestParamsData !== undefined && requestParamsData.pathParams) pathParams = requestParamsData.pathParams;
         let refRefreshFlagObj = null;
         if (this.$isUniApp) {
             refRefreshFlagObj = this._uniappButtJoint(interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, null, globalFilterInterCept, isUseToken, descriptionStr);
@@ -321,8 +321,8 @@ export default class interfaceButtJoint {
             isAppendData,
             frontORback,
         });
-        if (requestParamsData.paramsObj) paramsObj = requestParamsData.paramsObj;
-        if (requestParamsData.pathParams) pathParams = requestParamsData.pathParams;
+        if (requestParamsData !== undefined && requestParamsData.paramsObj) paramsObj = requestParamsData.paramsObj;
+        if (requestParamsData !== undefined && requestParamsData.pathParams) pathParams = requestParamsData.pathParams;
         if (this.$isUniApp) {
             this._uniappAutoButtJoint(interfaceDefinedName, paramsObj, dataName, currentObj, pathParams, callbackFunc, isAppendData, isUrlEncode, tempUseFetch, frontORback, globalFilterInterCept, isUseToken, descriptionStr);
         } else {
