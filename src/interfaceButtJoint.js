@@ -131,7 +131,7 @@ export default class interfaceButtJoint {
             // 判断 参数对象 是否存在, 存在就使用, 不存在则不使用
             if (paramsObj) {
                 // 判断是否 GET 请求
-                if (["GET", "get"].includes(interfaceDefinedObj.method)) {
+                if (["GET", "get", "DELETE", "delete"].includes(interfaceDefinedObj.method)) {
                     if (isFetchRequest) {
                         // #ifndef APP-NVUE
                         requestObj.url = requestObj.url + "?" + qs.stringify(paramsObj);
