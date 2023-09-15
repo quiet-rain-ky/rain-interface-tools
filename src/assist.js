@@ -13,13 +13,17 @@ import rain_logs from "./logs.js";
  *      示例: 验证对象字段 ['phone', 'password', ['phone', 'password'] ...], 验证数组指定索引元素 ['0', '1', ['0', '1'] ...], 或者验证 数组和对象的混合字段 ['phone', ['0', '2', ['phone']], ['password', ['0']]...]
  *      多维数组内, 要想对单个对象属性或数组索引, 进行独立设置, 可以使用 对象的方式, 示例:
  *      [
- *        {
- *          oneselfField: "userInfo", // 要进行单独设置验证方式的字段属性名, 一般只针对, 对象或数组类型的字段, 基本类型不支持, 注意: 不管外部是否开启了反转模式, "userInfo" 这个属性要在外部是处于进行空值验证的状态, 如果 "userInfo" 在外部没有处于空值验证状态, 则这个独立设置对象也是无效的, 因为这个独立控制, 仅针对 子属性和子索引的设置
- *          isReversal: false, // 是否对 oneselfField 指定的 (对象或数组) 进行反转操作, 默认值 false, 注意: 当 verifyArr 未设置, 或 verifyArr为 [] 时, 会自动默认进行所有子属性值或子索引值的验证, 而你设置的isReversal 则会失去效果
- *          isChildren: true, // 对于 oneselfField 指定的字段属性数据, 是否进行子属性值或子索引值验证, 注意: 如果不在当前对象中设置此项(当前对象中的设置优先级是最高的), 则默认以 optionsObj 中 reversalVerify 为准, 若 optionsObj 中没有定义 reversalVerify 或 reversalVerify 中没有设置指定层级是否反转的操作, 则默认值为 true
- *          verifyArr: [], // Array, 多维数组, 和 verifySelect 一样的写法和效果, 区别是仅针对 当前 oneselfField 指定的字段, 所代表的数据对象
- *        }
+ *        "userInfo" | "0", // 只有对 'userInfo' 字段进行了空值验证, 下方对象中的规则才会生效, 注意: 由于下方的对象设置的只是指定 字段或索引 的子级验证规则, 而指定的字段或索引在当前层级中并没有定义, 有可能会导致 'userInfo' 字段没有进行空值验证, 进而导致下方定义的对象规则失效, 如果你对当前层级使用了反转, 而通过反转操作, 正好也对当前层级的 'userInfo' 字段进行了空值验证, 那下方对象中的规则也会正常生效, 你不在下方对象的外部声明 'userInfo' 字段也是可以的
+ *        { // 不管你在外部有没有声明 'userInfo' 字段, 也不管当前层级反转不反转, 只要对当前对象定义的 'userInfo' 字段或属性, 进行了空值验证, 当前对象内定义的规则, 则都会生效
+ *          oneselfField: "userInfo" | "0", // 要进行单独设置验证方式的字段属性名或数组索引值, 一般只针对, 对象或数组类型进行使用, 注意: 不管外部是否开启了反转模式, "userInfo" 这个属性要在外部是处于进行空值验证的状态, 如果 "userInfo" 在外部没有处于空值验证状态, 则这个独立设置对象也是无效的, 因为这个独立控制, 仅针对 子属性和子索引的设置
+ *          isReversal: false, // 是否对 oneselfField 指定的 (对象或数组) 进行反转操作, 默认值 false, 注意: 当前对象中的 verifyArr 未设置, 或 verifyArr为 [] 时, 你设置的 isReversal 会自动失去效果
+ *          isChildren: true, // 对于当前对象中的 oneselfField 属性, 声明的指定的字段属性数据, 是否进行子级空值验证, 注意: 如果不在当前对象中设置此项(当前对象中的设置优先级是最高的), 则默认值为 true
+ *          verifyArr: [], // Array, 多维数组, 和 verifySelect 一样的写法和效果, 区别是仅针对 当前 oneselfField 指定的字段, 所代表的数据对象, 注意: 不声明 或 声明的值为 [] 时, 即验证 表单对象的全部属性或元素, 可以传 null 值
+ *        },
+ *        ['phone', 'password'] // 对象中可以使用数组, 数组中也可以是对象, 都可以相互嵌套
  *      ]
+ *     总结： 数组方式: 会对指定层级进行验证, 就算不是同一个字段索引下, 但只要是指定层级的指定名称的字段属性, 都会进行空值验证
+ *           对象方式: 是对指定字段或索引下的层级设置验证方式
  * @param optionsObj 参数对象属性说明
  *      参数1: reversalVerify: boolean | Array | Object, (可选, 默认值为 false) 说明: 可以将 verifySelect 中的选项 和 要进行验证的 verifyObj 表单对象, 进行反转操作, 在多级对象或多级数组状态下, 可以使用 (对象或数组) 的方式, 来控制多层级的反转操作
  *              示例作用解释说明: 验证的对象中有 phone 和 password 两个字段，当你想要验证 verifySelect = ["phone"], 反转后: verifySelect = ["phone"] 会变成要进行忽略的字段数组，会自动把 除 需要忽略的数组以外的所有字段进行验证
@@ -37,52 +41,67 @@ function emptyVerify(verifyObj, verifySelect, optionsObj = {}) {
     // 为了防止 verifyObj 是一个对象, 但 使用 verifyObj instanceof Object 判断不成功的问题, 故舍弃使用 instanceof 来进行判断
     // instanceof 判断不成功的问题原因可能是因为, 虽然是对象, 但是对象中的原型对象是 null 并不是 object 的缘故
     if (verifyObj) {
+        // 当 verifySelect 为空时， 默认验证 verifyObj 的所有属性
         if (!verifySelect) verifySelect = Object.keys(verifyObj);
 
-        // 递归传递数据操作
+        // verifySelect 规则处理
+        let verifyData = null;
         let childrenArr = [];
         let childrenObj = {};
-        let oneselfFieldObj = {};
         if (Array.isArray(verifySelect)) {
-            for (let i = 0; i < verifySelect.length; i++) {
-                if (Array.isArray(verifySelect[i])) {
-                    childrenArr = childrenArr.concat(verifySelect[i]);
-                    verifySelect.splice(i, 1); // 删除数组元素后, 索引改变, 故需要进行 i-- 操作
-                    i--;
-                } else if (verifySelect[i] && typeof verifySelect[i] == "object") {
-                    childrenObj[verifySelect[i].oneselfField] = verifySelect[i];
-                    verifySelect.splice(i, 1); // 删除数组元素后, 索引改变, 故需要进行 i-- 操作
-                    i--;
-                }
-            }
+            verifyData = verifySelect;
         } else if (verifySelect && typeof verifySelect == "object") {
-            oneselfFieldObj = verifySelect;
+            verifyData = verifySelect.verifyArr;
+        }
+        for (let i = 0; i < verifyData.length; i++) {
+            // 把 verifyData 中的定义数组规则和对象规则, 截取到 childrenArr 和 childrenObj 中, 并把 verifyData 中的数组和对象, 进行删除, 只留下基本类型的验证规则的多个字符串元素
+            if (Array.isArray(verifyData[i])) {
+                childrenArr = childrenArr.concat(verifyData[i]);
+                verifyData.splice(i, 1); // 删除数组元素后, 索引改变, 故需要进行 i-- 操作
+                i--;
+            } else if (verifyData[i] && typeof verifyData[i] == "object") {
+                childrenObj[verifyData[i].oneselfField] = verifyData[i]; // 将对象中的 oneselfField 字段的值, 作为属性名, 来进行存储 对象
+                verifyData.splice(i, 1); // 删除数组元素后, 索引改变, 故需要进行 i-- 操作
+                i--;
+            }
         }
 
         // 数据反转操作
-        if (verifySelect && typeof verifySelect == "object" && oneselfFieldObj.isReversal) {
+        if (verifySelect && typeof verifySelect == "object" && verifySelect.isReversal) {
             let reversalData = [];
-            for (const key in verifyObj) if (!verifySelect.verifyArr.includes(key)) reversalData.push(key);
-            verifySelect = reversalData;
-        } else {
+            for (const key in verifyObj) if (!verifyData.includes(key)) reversalData.push(key);
+            verifyData = reversalData;
+        } else if (verifySelect && Array.isArray(verifySelect)) {
             if ((typeof reversalVerify == "boolean" && reversalVerify) || (reversalVerify && reversalVerify[_tier]) || verifySelect.length == 0) {
                 let reversalData = [];
                 for (const key in verifyObj) if (!verifySelect.includes(key)) reversalData.push(key);
-                verifySelect = reversalData;
+                verifyData = reversalData;
             }
         }
 
         // 数据验证操作
-        for (const key in verifySelect) {
-            let verifyValue = verifySelect[key];
+        for (const key in verifyData) {
+            // 获取 verifyData 中的所有的多个基本字符串的规则元素
+            let verifyValue = verifyData[key];
+            // 定义提示字符, 仅用作提示使用
             let str = Array.isArray(verifyObj) ? "数组索引" : "属性字段";
-            let childrenVerify = childrenArr;
+            // 定义子级传递规则变量, 把上方截取的数组规则, 赋值给 子级传递规则变量
+            let childrenVerify = null;
+            // 判断 childrenObj 对象规则中是否有当前 verifyValue 变量名的规则
             if (childrenObj[verifyValue]) {
+                // 将数组规则和对象规则进行合并
+                childrenObj[verifyValue].verifyArr = childrenArr.concat(childrenObj[verifyValue].verifyArr);
+                // 判断当前 verifyValue 变量名的规则, 是否需要进行反转
                 if (childrenObj[verifyValue].isReversal) {
+                    // 如果需要反转, 则直接传递对象, 对象中的规则定义, 则交给下一次递归函数进行处理
                     childrenVerify = childrenObj[verifyValue];
                 } else {
+                    // 如果不需要反转, 则直接传递规则数组
                     childrenVerify = childrenObj[verifyValue].verifyArr;
                 }
+            } else {
+                // 设置默认 childrenVerify 的值为截取的 childrenArr 数组规则
+                childrenVerify = childrenArr;
             }
 
             // 独立控制是否验证子对象或子数组
@@ -90,8 +109,9 @@ function emptyVerify(verifyObj, verifySelect, optionsObj = {}) {
 
             // 进行 数组, 对象, 和 空值 的判断
             if (verifyObj[verifyValue] && Array.isArray(verifyObj[verifyValue]) && isChildren) {
+                // 判断是否为空数组
                 if (verifyObj[verifyValue].length == 0) {
-                    rain_logs.WARN(`${hintStr}${str} ${verifyValue} 为空数组`);
+                    console.log(`${hintStr}${str} ${verifyValue} 为空数组`);
                     return {
                         isEmpty: true,
                         fieldName: verifyValue,
@@ -108,8 +128,9 @@ function emptyVerify(verifyObj, verifySelect, optionsObj = {}) {
                     if (arrayIsEmpty.isEmpty) return arrayIsEmpty;
                 }
             } else if (verifyObj[verifyValue] && typeof verifyObj[verifyValue] == "object" && isChildren) {
+                // 判断是否为空对象
                 if (Object.keys(verifyObj[verifyValue]).length == 0) {
-                    rain_logs.WARN(`${hintStr}${str} ${verifyValue} 为空对象`);
+                    console.log(`${hintStr}${str} ${verifyValue} 为空对象`);
                     return {
                         isEmpty: true,
                         fieldName: verifyValue,
@@ -126,8 +147,9 @@ function emptyVerify(verifyObj, verifySelect, optionsObj = {}) {
                     if (objectIsEmpty.isEmpty) return objectIsEmpty;
                 }
             } else {
+                // 进行基本类型元素的判断
                 if ((!verifyObj[verifyValue] && verifyObj[verifyValue] !== 0) || (verifyObj[verifyValue] === 0 && isZeroNull)) {
-                    rain_logs.WARN(`${hintStr}${str} ${verifyValue} 的值为空`);
+                    console.log(`${hintStr}${str} ${verifyValue} 的值为空`);
                     return {
                         isEmpty: true,
                         fieldName: verifyValue,
@@ -136,7 +158,7 @@ function emptyVerify(verifyObj, verifySelect, optionsObj = {}) {
             }
         }
     } else {
-        rain_logs.WARN("空值验证失败, 传入的 verifyObj 参数为空");
+        console.log("空值验证失败, 传入的 verifyObj 参数为空");
         return {
             isEmpty: true,
             fieldName: "NULL",
