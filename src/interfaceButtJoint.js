@@ -692,7 +692,12 @@ export default class interfaceButtJoint {
         })
             .then((data) => {
                 rain_logs.WARN(this._getUserConfigObj(interfaceDefinedName).url, " 请求成功了 :  ", data);
-                return this._assignment(false, interfaceDefinedName, data, null, null, null, null, null, globalFilterInterCept);
+                let assignmentVal = this._assignment(false, interfaceDefinedName, data, null, null, null, null, null, globalFilterInterCept);
+                if (assignmentVal !== "ISNULL") {
+                    return assignmentVal;
+                } else {
+                    throw assignmentVal;
+                }
             })
             .catch((err) => {
                 rain_logs.ERROR(`${this._getUserConfigObj(interfaceDefinedName).url} 操作: 文件上传错误`, err);
