@@ -817,7 +817,7 @@ export default {
              */
             this.$rbj.upload("one", new File(), { // 文件上传函数
                 paramsObj: { age: 18 }, // 上传文件时, 携带的参数
-                reqPropertyName: "file", // 文件上传时文件的属性名
+                reqPropertyName: "file", // 文件上传时文件的属性名, 默认值: 'file'
                 isFilePathUpload: true, // 会自动默认做一个 是否 uniapp 项目的判断, 如果是 uniapp 项目则此项配置默认为 true, 否则此项配置默认为 false, 注意: 若你开启了 isFilePathUpload 文件上传模式, 此 Files 参数必须为 string 类型, 此 string 类型 即 文件的临时路径 或 blob 路径
                 globalFilterInterCept: { // 全局过滤器, 如果拦截后, 默认执行的回调函数 (注意: 仅对当前接口生效)
                     /**
@@ -846,7 +846,7 @@ export default {
                  * 是否允许当前请求在请求头加上 token, 默认值: true 允许
                  */
                 isUseToken: true,
-            }).then((resData)=>{}).catch((err)=>{}); // 注意: 如果被全局过滤器或拦截器, 拦截住没有放行时, catch 函数的参数错误会变成一个 'ISNULL' 字符串
+            }).then((resData)=>{}).catch((err)=>{}); // 注意: 如果被全局过滤器或拦截器, 拦截住没有放行时, catch 函数会运行, 并且 err 的参数错误会变成一个 'ISNULL' 字符串
 
             this.$rbj.customRequest(); // 自定义请求, 和 axios() 函数的用法一样
 
