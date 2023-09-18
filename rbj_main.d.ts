@@ -33,7 +33,7 @@ export const logObj: logs;
 /**
  * 流数据转换类, 支持 base64, file, blob, arrayBuffer, canvas 互转
  */
-export const StreamConversion: streamConversion;
+export class StreamConversion extends streamConversion { }
 /**
  * 辅助函数
  */
