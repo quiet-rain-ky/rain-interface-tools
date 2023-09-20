@@ -217,14 +217,17 @@ this.$rbj.buttJoint("one", this.oneParams).then((resData)=>{
                 imgUrl: "",
             }
         },
+        computed: {
+            $rbj: () => rbj,
+        },
         mounted() {
             let self = this;
             
             // 使用自动装配接口数据的请求函数
-            rbj.autoButtJoint("one", this.oneParams, "oneData", this);
+            this.$rbj.autoButtJoint("one", this.oneParams, "oneData", this);
             
             // 也可以手动装配数据
-            rbj.buttJoint("one", this.oneParams).then((resData) => {
+            this.$rbj.buttJoint("one", this.oneParams).then((resData) => {
                 // resData 即 响应的数据
                 self.oneData = resData;
             });
@@ -232,7 +235,7 @@ this.$rbj.buttJoint("one", this.oneParams).then((resData)=>{
             // 上方两种请求方式二选一即可
 
             // 使用文件上传函数
-            rbj.upload("upload", fileObj, { reqPropertyName: "file", isFilePathUpload: true }).then((resData)=>{
+            this.$rbj.upload("upload", fileObj, { reqPropertyName: "file", isFilePathUpload: true }).then((resData)=>{
                 // resData 即 服务器响应的数据
                 self.imgUrl = resData;
             });
