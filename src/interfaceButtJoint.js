@@ -27,7 +27,9 @@ function getGlobalFun() {
     } else if (typeof this !== "undefined") {
         return this;
     } else {
-        throw new Error("无法识别全局对象！");
+        // #ifndef APP-NVUE
+        throw new Error("无法识别全局对象!");
+        // #endif
     }
 }
 
