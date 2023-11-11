@@ -76,7 +76,7 @@ declare interface assist {
         isChildren?: boolean
     }): {
         /**
-         * 是否为空
+         * 是否为空, 为空时 isEmpty 为 true, 非空时 isEmpty 为 false
          */
         isEmpty: boolean,
         /**
