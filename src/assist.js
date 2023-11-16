@@ -184,7 +184,7 @@ function echoFun(echoObj, dataObj, optionsObj = {}) {
     let { assignNull = false } = optionsObj;
     if (echoObj && dataObj) {
         for (const key in echoObj) {
-            if (dataObj[key] || (dataObj[key] != undefined && assignNull)) echoObj[key] = dataObj[key];
+            if (dataObj[key] || (key in dataObj && assignNull)) echoObj[key] = dataObj[key];
         }
     } else {
         rain_logs.ERROR("echoObj 或 dataObj 为空, 回显函数执行失败");
