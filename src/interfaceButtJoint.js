@@ -950,13 +950,9 @@ export default class interfaceButtJoint {
             if (apiData && isAppendData && Array.isArray(currentObj[dataName]) && Array.isArray(apiData)) {
                 // 判断向前追加, 还是向后追加
                 if (frontORback) {
-                    apiData.forEach((item) => {
-                        currentObj[dataName].unshift(item);
-                    });
+                    currentObj[dataName] = apiData.concat(currentObj[dataName]);
                 } else {
-                    apiData.forEach((item) => {
-                        currentObj[dataName].push(item);
-                    });
+                    currentObj[dataName] = currentObj[dataName].concat(apiData);
                 }
             } else if (apiData && isAppendData && typeof currentObj[dataName] == "object" && typeof apiData == "object") {
                 for (const key in apiData) {
@@ -973,7 +969,7 @@ export default class interfaceButtJoint {
                 }
                 currentObj[dataName] = apiData;
             }
-            return apiData;
+            return isAppendData ? currentObj[dataName] : apiData;
         } else {
             let respData = undefined;
             if (this._getUserConfigObj(interfaceDefinedName).interfaceData) respData = this._getUserConfigObj(interfaceDefinedName).interfaceData(data, this);
