@@ -80,5 +80,3 @@ typings/
 .dynamodb/
 
 .idea/
-
-package-lock.json
