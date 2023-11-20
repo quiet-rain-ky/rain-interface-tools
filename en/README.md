@@ -4,9 +4,20 @@
 
 This is a front-end page interface tool that simplifies the steps of background data interface docking and supports the use of H5 and uniapp
 
-## Install
+## install
 
+### Install using the uniapp plugin Marketplace approach
+
+```shell
+# Note: If you are installing into the project as uniapp Plugin Marketplace, you will also need to execute commands in the root directory of the project to install the three related dependency packages
+npm install axios qs rain_logs
+```
+
+### Install it in npm mode
+
+```shell
 npm install rain-interface-tools
+```
 
 ## Use the command tool to generate the Rbj configuration file
 
