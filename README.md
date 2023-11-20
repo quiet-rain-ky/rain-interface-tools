@@ -6,6 +6,15 @@
 
 ## 安装
 
+### uniapp 插件方式安装
+
+```shell
+# 注意事项: 如果是以 uniapp 插件市场的方式安装到项目中, 还需要在项目的根目录执行命令来安装三个相关的依赖包
+npm install axios qs rain_logs
+```
+
+### npm 方式安装
+
 ```shell
 npm install rain-interface-tools
 ```
