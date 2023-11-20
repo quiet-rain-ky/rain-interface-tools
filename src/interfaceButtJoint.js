@@ -1181,7 +1181,7 @@ export default class interfaceButtJoint {
 
     // 初始化函数
     _initFun() {
-        rain_logs.version_logs(packages.version, packages.repository.url, "rgb(255, 154, 38)");
+        rain_logs.version_logs(packages.version, packages.repository.url ?? packages.repository, "rgb(255, 154, 38)");
         this.$falseDataMode ? rain_logs.ALL("当前模式: API 模拟数据模式, 运行环境: " + process.env.NODE_ENV) : rain_logs.ALL("当前模式: API 请求模式, 请求地址: ", this.$reqAddress, ", 运行环境: " + process.env.NODE_ENV);
         if (this.$userConfig === undefined || this.$userConfig == null) rain_logs.WARN("注意: ----||||||||------- 检测不到配置的 userConfig 属性, 所有请求接口不可用 -------||||||||----");
     }
