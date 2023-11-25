@@ -8,8 +8,8 @@
 import rain_logs from "./logs.js";
 import StreamConversion from "./streamConversion.js";
 import assistFun from "./assist.js";
-import axios from "axios";
 // #ifndef APP-NVUE
+import axios from "axios";
 import qs from "qs";
 // #endif
 import packages from "../package.json";
