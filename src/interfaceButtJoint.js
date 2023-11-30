@@ -709,12 +709,14 @@ export default class interfaceButtJoint {
 
     // 判断接口的描述是否存在
     _isDescription(interfaceInfo, descriptionStr) {
-        if (interfaceInfo.description) {
+        if (interfaceInfo.description && descriptionStr) {
+            return " ----------- " + interfaceInfo.description + "(" + descriptionStr + ")";
+        } else if (interfaceInfo.description) {
             return " ----------- " + interfaceInfo.description;
         } else if (descriptionStr) {
             return " ----------- (" + descriptionStr + ")";
         } else {
-            return " ----------- " + interfaceInfo.description + "(" + descriptionStr + ")";
+            return "";
         }
     }
 
