@@ -113,6 +113,10 @@ declare interface configParamsType<GLOBAL_FUN_TYPE> {
      */
     isLogStyle?: boolean;
     /**
+     * 设置全局的请求超时时间, 默认 10000
+     */
+    timeOut?: number;
+    /**
      * 是否开启假数据模式, 默认值: false
      */
     falseDataMode?: boolean;
@@ -244,6 +248,10 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
          */
         descriptionStr?: string;
         /**
+         * 设置当前请求接口的超时时间, 默认以全局的 timeOut 超时时间为主
+         */
+        timeOut?: number;
+        /**
          * 直接在路径上拼接字符串, get, post 都可以使用
          */
         pathParams?: string;
@@ -299,6 +307,10 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
          * 接口局部调用注释, 注意: 此注释字符串会和接口配置对象中的 description 字段的字符串进行拼接, 当你请求 (成功或失败) 时会打印在控制台, 让你知道是哪个接口在发出请求
          */
         descriptionStr?: string;
+        /**
+         * 设置当前请求接口的超时时间, 默认以全局的 timeOut 超时时间为主
+         */
+        timeOut?: number;
         /**
          * 直接在路径上拼接字符串, get, post 都可以使用
          */

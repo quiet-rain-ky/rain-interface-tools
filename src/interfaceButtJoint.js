@@ -46,6 +46,7 @@ export default class interfaceButtJoint {
         this.$globalRequestConfig = config.globalRequestConfig !== undefined ? config.globalRequestConfig : null; // 全局请求配置对象
         this.$setNullString = config.setNullString !== undefined ? config.setNullString : undefined; // 是否开启空字符串
         this.$isEnableCache = config.isEnableCache !== undefined ? config.isEnableCache : false; // 是否对接口开启缓存模式
+        this.$timeOut = config.timeOut !== undefined ? config.timeOut : 10000; // 设置默认的请求超时时间
         this.$interceptor = config.interceptor !== undefined ? config.interceptor : undefined; // 全局拦截器
         this._globalRequestFilterFun = config.globalRequestFilterFun !== undefined ? config.globalRequestFilterFun : () => false; // 全局请求过滤器函数
         this._globalResponseFilterFun = config.globalResponseFilterFun !== undefined ? config.globalResponseFilterFun : () => false; // 全局响应过滤器函数
@@ -88,7 +89,7 @@ export default class interfaceButtJoint {
 
     // 请求头设置
     _requestHeader(config = {}) {
-        let { interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, isFileUpload, isUniappUpload, isUseToken } = config;
+        let { interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, isFileUpload, isUniappUpload, isUseToken, timeOut } = config;
         // 获取用户的接口配置对象
         let interfaceDefinedObj = this._getUserConfigObj(interfaceDefinedName);
 
@@ -119,6 +120,7 @@ export default class interfaceButtJoint {
                 requestObj = {
                     url: reqAddressUrl + interfaceDefinedObj.url,
                     method: interfaceDefinedObj.method,
+                    timeout: this.$timeOut ?? timeOut,
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
                     },
@@ -211,7 +213,7 @@ export default class interfaceButtJoint {
     // 手动对接
     buttJoint(interfaceDefinedName, paramsObj, optionsObj = {}) {
         // 处理参数
-        let { pathParams, isUrlEncode = false, tempUseFetch = false, isFileUpload = false, globalFilterInterCept, isUseToken = true, descriptionStr } = optionsObj;
+        let { pathParams, isUrlEncode = false, tempUseFetch = false, isFileUpload = false, globalFilterInterCept, isUseToken = true, descriptionStr, timeOut } = optionsObj;
         // 请求拦截器
         let requestInterceptorVal = this._requestOrResponseInterceptor(interfaceDefinedName, paramsObj, pathParams, null, true);
         if (typeof requestInterceptorVal == "boolean") {
@@ -237,9 +239,9 @@ export default class interfaceButtJoint {
         if (requestParamsData !== undefined && requestParamsData.pathParams) pathParams = requestParamsData.pathParams;
         let refRefreshFlagObj = null;
         if (this.$isUniApp) {
-            refRefreshFlagObj = this._uniappButtJoint(interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, null, globalFilterInterCept, isUseToken, descriptionStr);
+            refRefreshFlagObj = this._uniappButtJoint(interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, null, globalFilterInterCept, isUseToken, descriptionStr, timeOut);
         } else {
-            refRefreshFlagObj = this._buttJoint(interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, isFileUpload, globalFilterInterCept, isUseToken, descriptionStr);
+            refRefreshFlagObj = this._buttJoint(interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, isFileUpload, globalFilterInterCept, isUseToken, descriptionStr, timeOut);
         }
         // 记录刷新标记
         let self = this;
@@ -294,7 +296,7 @@ export default class interfaceButtJoint {
     // 自动对接 (dataName 和 currentObj 不直接合并为一个, 即传入一个对象的原因: 我们可以在别的地方从 currentObj 对象中操作或获取一些其他的数据)
     autoButtJoint(interfaceDefinedName, paramsObj, dataName, currentObj, optionsObj = {}) {
         // 处理参数
-        let { pathParams, callbackFunc, isAppendData = false, isUrlEncode = false, tempUseFetch = false, frontORback = false, globalFilterInterCept, isUseToken = true, descriptionStr } = optionsObj;
+        let { pathParams, callbackFunc, isAppendData = false, isUrlEncode = false, tempUseFetch = false, frontORback = false, globalFilterInterCept, isUseToken = true, descriptionStr, timeOut } = optionsObj;
         // 请求拦截器
         let requestInterceptorVal = this._requestOrResponseInterceptor(interfaceDefinedName, paramsObj, pathParams, currentObj, true);
         if (typeof requestInterceptorVal == "boolean") {
@@ -326,9 +328,9 @@ export default class interfaceButtJoint {
         if (requestParamsData !== undefined && requestParamsData.paramsObj) paramsObj = requestParamsData.paramsObj;
         if (requestParamsData !== undefined && requestParamsData.pathParams) pathParams = requestParamsData.pathParams;
         if (this.$isUniApp) {
-            this._uniappAutoButtJoint(interfaceDefinedName, paramsObj, dataName, currentObj, pathParams, callbackFunc, isAppendData, isUrlEncode, tempUseFetch, frontORback, globalFilterInterCept, isUseToken, descriptionStr);
+            this._uniappAutoButtJoint(interfaceDefinedName, paramsObj, dataName, currentObj, pathParams, callbackFunc, isAppendData, isUrlEncode, tempUseFetch, frontORback, globalFilterInterCept, isUseToken, descriptionStr, timeOut);
         } else {
-            this._autoButtJoint(interfaceDefinedName, paramsObj, dataName, currentObj, pathParams, callbackFunc, isAppendData, isUrlEncode, tempUseFetch, frontORback, globalFilterInterCept, isUseToken, descriptionStr);
+            this._autoButtJoint(interfaceDefinedName, paramsObj, dataName, currentObj, pathParams, callbackFunc, isAppendData, isUrlEncode, tempUseFetch, frontORback, globalFilterInterCept, isUseToken, descriptionStr, timeOut);
         }
         let self = this;
         let params = [interfaceDefinedName, paramsObj, dataName, currentObj, optionsObj];
@@ -554,7 +556,7 @@ export default class interfaceButtJoint {
     // 文件上传
     upload(interfaceDefinedName, Files, optionsObj = {}) {
         // 处理参数
-        let { paramsObj, pathParams, reqPropertyName, isFilePathUpload = this.$isUniApp, globalFilterInterCept, isUseToken = true } = optionsObj;
+        let { paramsObj, pathParams, reqPropertyName, isFilePathUpload = this.$isUniApp, globalFilterInterCept, isUseToken = true, timeOut } = optionsObj;
         // 请求拦截器
         let requestInterceptorVal = this._requestOrResponseInterceptor(interfaceDefinedName, paramsObj, pathParams, null, true);
         if (typeof requestInterceptorVal === "boolean") {
@@ -576,12 +578,12 @@ export default class interfaceButtJoint {
             if (globalReqFunData.pathParams) pathParams = globalReqFunData.pathParams;
         }
         if (this.$isUniApp) {
-            return this._uniappUpload(interfaceDefinedName, Files, paramsObj, pathParams, reqPropertyName, isFilePathUpload, globalFilterInterCept, isUseToken).catch((err) => {
+            return this._uniappUpload(interfaceDefinedName, Files, paramsObj, pathParams, reqPropertyName, isFilePathUpload, globalFilterInterCept, isUseToken, timeOut).catch((err) => {
                 this._globalRequestErrorFun(err, this);
                 throw err;
             });
         } else {
-            return this._upload(interfaceDefinedName, Files, paramsObj, pathParams, reqPropertyName, null, globalFilterInterCept, isUseToken).catch((err) => {
+            return this._upload(interfaceDefinedName, Files, paramsObj, pathParams, reqPropertyName, null, globalFilterInterCept, isUseToken, timeOut).catch((err) => {
                 this._globalRequestErrorFun(err, this);
                 throw err;
             });
@@ -589,7 +591,7 @@ export default class interfaceButtJoint {
     }
 
     // web浏览器上传文件
-    _upload(interfaceDefinedName, Files, paramsObj, pathParams, reqPropertyName, isFilePathUpload, globalFilterInterCept, isUseToken) {
+    _upload(interfaceDefinedName, Files, paramsObj, pathParams, reqPropertyName, isFilePathUpload, globalFilterInterCept, isUseToken, timeOut) {
         let formData = new FormData();
 
         // 判断是多文件还是单文件上传
@@ -618,11 +620,11 @@ export default class interfaceButtJoint {
                 formData.append(key, paramsObj[key]);
             }
         }
-        return this._buttJoint(interfaceDefinedName, formData, pathParams, null, null, true, globalFilterInterCept, isUseToken);
+        return this._buttJoint(interfaceDefinedName, formData, pathParams, null, null, true, globalFilterInterCept, isUseToken, null, timeOut);
     }
 
     // uniapp 文件上传
-    _uniappUpload(interfaceDefinedName, Files, paramsObj, pathParams, reqPropertyName, isFilePathUpload, globalFilterInterCept, isUseToken) {
+    _uniappUpload(interfaceDefinedName, Files, paramsObj, pathParams, reqPropertyName, isFilePathUpload, globalFilterInterCept, isUseToken, timeOut) {
         // 获取用户请求的服务器地址
         let reqAddressUrl = (this._getUserConfigObj(interfaceDefinedName).reqAddress || this.$reqAddress) + this._getUserConfigObj(interfaceDefinedName).url;
         // 判断是否进行的是多文件上传
@@ -646,6 +648,7 @@ export default class interfaceButtJoint {
                         header: headers,
                         files: Files,
                         formData: paramsObj,
+                        timeout: timeOut,
                         success: (uploadFileRes) => {
                             resolve(uploadFileRes);
                         },
@@ -664,6 +667,7 @@ export default class interfaceButtJoint {
                             filePath: Files,
                             name: reqPropertyName ? reqPropertyName : "file",
                             formData: paramsObj,
+                            timeout: timeOut,
                             success: (uploadFileRes) => {
                                 resolve(uploadFileRes);
                             },
@@ -682,6 +686,7 @@ export default class interfaceButtJoint {
                         file: Files,
                         name: reqPropertyName ? reqPropertyName : "file",
                         formData: paramsObj,
+                        timeout: timeOut,
                         success: (uploadFileRes) => {
                             resolve(uploadFileRes);
                         },
@@ -721,7 +726,7 @@ export default class interfaceButtJoint {
     }
 
     // 手动对接
-    _buttJoint(interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, isFileUpload, globalFilterInterCept, isUseToken, descriptionStr) {
+    _buttJoint(interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, isFileUpload, globalFilterInterCept, isUseToken, descriptionStr, timeOut) {
         if (!interfaceDefinedName) {
             // 判断是否为空
             rain_logs.ERROR("buttJoint 缺少参数");
@@ -741,6 +746,7 @@ export default class interfaceButtJoint {
                 tempUseFetch,
                 isFileUpload,
                 isUseToken,
+                timeOut,
             });
             // 判断是否使用 fetch, 或 临时使用 fetch
             if (self.$useFetch || self._getUserConfigObj(interfaceDefinedName).tempUseFetch || tempUseFetch) {
@@ -770,7 +776,7 @@ export default class interfaceButtJoint {
     }
 
     // 自动对接
-    _autoButtJoint(interfaceDefinedName, paramsObj, dataName, currentObj, pathParams, callbackFunc, isAppendData, isUrlEncode, tempUseFetch, frontORback, globalFilterInterCept, isUseToken, descriptionStr) {
+    _autoButtJoint(interfaceDefinedName, paramsObj, dataName, currentObj, pathParams, callbackFunc, isAppendData, isUrlEncode, tempUseFetch, frontORback, globalFilterInterCept, isUseToken, descriptionStr, timeOut) {
         if (!this._oneParams(interfaceDefinedName, dataName, currentObj)) {
             // 判断是否为空
             rain_logs.ERROR("autoButtJoint 缺少参数");
@@ -787,6 +793,7 @@ export default class interfaceButtJoint {
                 isUrlEncode,
                 tempUseFetch,
                 isUseToken,
+                timeOut,
             });
             // 判断是否使用 fetch, 或 临时使用 fetch
             if (this.$useFetch || this._getUserConfigObj(interfaceDefinedName).tempUseFetch || tempUseFetch) {
@@ -814,7 +821,7 @@ export default class interfaceButtJoint {
     }
 
     // uniapp 手动对接
-    _uniappButtJoint(interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, isFileUpload, globalFilterInterCept, isUseToken, descriptionStr) {
+    _uniappButtJoint(interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, isFileUpload, globalFilterInterCept, isUseToken, descriptionStr, timeOut) {
         if (!interfaceDefinedName) {
             // 判断是否为空
             rain_logs.ERROR("buttJoint 缺少参数");
@@ -832,6 +839,7 @@ export default class interfaceButtJoint {
                 isUrlEncode,
                 tempUseFetch,
                 isUseToken,
+                timeOut,
             });
             let interfaceInfo = self._getUserConfigObj(interfaceDefinedName);
             return new Promise((resolve, reject) => {
@@ -858,7 +866,7 @@ export default class interfaceButtJoint {
     }
 
     // uniapp 自动对接
-    _uniappAutoButtJoint(interfaceDefinedName, paramsObj, dataName, currentObj, pathParams, callbackFunc, isAppendData, isUrlEncode, tempUseFetch, frontORback, globalFilterInterCept, isUseToken, descriptionStr) {
+    _uniappAutoButtJoint(interfaceDefinedName, paramsObj, dataName, currentObj, pathParams, callbackFunc, isAppendData, isUrlEncode, tempUseFetch, frontORback, globalFilterInterCept, isUseToken, descriptionStr, timeOut) {
         if (!this._oneParams(interfaceDefinedName, dataName, currentObj)) {
             // 判断是否为空
             rain_logs.ERROR("autoButtJoint 缺少参数");
@@ -873,6 +881,7 @@ export default class interfaceButtJoint {
                 isUrlEncode,
                 tempUseFetch,
                 isUseToken,
+                timeOut,
             });
             let interfaceInfo = this._getUserConfigObj(interfaceDefinedName);
             new Promise((resolve, reject) => {
