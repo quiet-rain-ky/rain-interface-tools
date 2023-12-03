@@ -648,7 +648,7 @@ export default class interfaceButtJoint {
                         header: headers,
                         files: Files,
                         formData: paramsObj,
-                        timeout: timeOut,
+                        timeout: timeOut ?? this.$timeOut,
                         success: (uploadFileRes) => {
                             resolve(uploadFileRes);
                         },
@@ -667,7 +667,7 @@ export default class interfaceButtJoint {
                             filePath: Files,
                             name: reqPropertyName ? reqPropertyName : "file",
                             formData: paramsObj,
-                            timeout: timeOut,
+                            timeout: timeOut ?? this.$timeOut,
                             success: (uploadFileRes) => {
                                 resolve(uploadFileRes);
                             },
@@ -686,7 +686,7 @@ export default class interfaceButtJoint {
                         file: Files,
                         name: reqPropertyName ? reqPropertyName : "file",
                         formData: paramsObj,
-                        timeout: timeOut,
+                        timeout: timeOut ?? this.$timeOut,
                         success: (uploadFileRes) => {
                             resolve(uploadFileRes);
                         },
