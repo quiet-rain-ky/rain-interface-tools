@@ -835,6 +835,7 @@ export default {
                 paramsObj: { age: 18 }, // 上传文件时, 携带的参数
                 reqPropertyName: "file", // 文件上传时文件的属性名, 默认值: 'file'
                 isFilePathUpload: true, // 会自动默认做一个 是否 uniapp 项目的判断, 如果是 uniapp 项目则此项配置默认为 true, 否则此项配置默认为 false, 注意: 若你开启了 isFilePathUpload 文件上传模式, 此 Files 参数必须为 string 类型, 此 string 类型 即 文件的临时路径 或 blob 路径
+                timeOut: 10000, // 设置当前请求接口的超时时间, 默认以全局的 timeOut 超时时间为主
                 globalFilterInterCept: { // 全局过滤器, 如果拦截后, 默认执行的回调函数 (注意: 仅对当前接口生效)
                     /**
                      * 全局请求过滤器, 拦截后, 默认执行的回调函数 (注意: 仅对当前接口的请求生效)
