@@ -120,7 +120,7 @@ export default class interfaceButtJoint {
                 requestObj = {
                     url: reqAddressUrl + interfaceDefinedObj.url,
                     method: interfaceDefinedObj.method,
-                    timeout: this.$timeOut ?? timeOut,
+                    timeout: timeOut ?? this.$timeOut,
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
                     },
