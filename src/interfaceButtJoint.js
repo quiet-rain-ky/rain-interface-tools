@@ -958,14 +958,14 @@ export default class interfaceButtJoint {
                 if (callData !== undefined) apiData = callData;
             }
             // 在 App 端使用 instanceof 关键字, 会判断失败, 故使用 Array.isArray 来判断数组, 使用 typeof 来判断对象
-            if (apiData && Array.isArray(currentObj[dataName]) && Array.isArray(apiData) && (isAppendData || frontORback)) {
+            if (apiData&&Array.isArray(currentObj[dataName])&&Array.isArray(apiData)&&(isAppendData || frontORback)) {
                 // 判断向前追加, 还是向后追加
                 if (frontORback) {
                     currentObj[dataName] = apiData.concat(currentObj[dataName]);
                 } else {
                     currentObj[dataName] = currentObj[dataName].concat(apiData);
                 }
-            } else if (apiData && typeof currentObj[dataName] == "object" && !Array.isArray(currentObj[dataName]) && typeof apiData == "object" && (isAppendData || frontORback)) {
+            } else if (apiData&&typeof currentObj[dataName] == "object"&&!Array.isArray(currentObj[dataName])&&typeof apiData == "object"&&(isAppendData || frontORback)) {
                 for (const key in apiData) {
                     currentObj[dataName][key] = apiData[key];
                 }
