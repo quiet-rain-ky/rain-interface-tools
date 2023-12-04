@@ -958,19 +958,19 @@ export default class interfaceButtJoint {
                 if (callData !== undefined) apiData = callData;
             }
             // 在 App 端使用 instanceof 关键字, 会判断失败, 故使用 Array.isArray 来判断数组, 使用 typeof 来判断对象
-            if (apiData && isAppendData && Array.isArray(currentObj[dataName]) && Array.isArray(apiData)) {
+            if (apiData && Array.isArray(currentObj[dataName]) && Array.isArray(apiData) && (isAppendData || frontORback)) {
                 // 判断向前追加, 还是向后追加
                 if (frontORback) {
                     currentObj[dataName] = apiData.concat(currentObj[dataName]);
                 } else {
                     currentObj[dataName] = currentObj[dataName].concat(apiData);
                 }
-            } else if (apiData && isAppendData && typeof currentObj[dataName] == "object" && typeof apiData == "object") {
+            } else if (apiData && typeof currentObj[dataName] == "object" && !Array.isArray(currentObj[dataName]) && typeof apiData == "object" && (isAppendData || frontORback)) {
                 for (const key in apiData) {
                     currentObj[dataName][key] = apiData[key];
                 }
             } else {
-                if (isAppendData) {
+                if (isAppendData || frontORback) {
                     if (apiData !== null && apiData !== undefined) {
                         rain_logs.ERROR(`${interfaceDefinedName} 追加失败, 数据对象 与 追加目标对象类型不一致, 已取消此接口的数据追加, 已改为默认的直接赋值模式`);
                         rain_logs.WARN("友情提示: 数据对象 和 要追加的目标对象, 类型必须一致 (都为 Array 或 都为 Object)");
