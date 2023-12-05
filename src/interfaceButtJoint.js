@@ -965,7 +965,7 @@ export default class interfaceButtJoint {
                 } else {
                     currentObj[dataName] = currentObj[dataName].concat(apiData);
                 }
-            } else if (apiData && typeof currentObj[dataName] == "object" && !Array.isArray(currentObj[dataName]) && typeof apiData == "object" && (isAppendData || frontORback)) {
+            } else if (apiData && typeof currentObj[dataName] == "object" && !Array.isArray(currentObj[dataName]) && typeof apiData == "object" && !Array.isArray(apiData) && (isAppendData || frontORback)) {
                 for (const key in apiData) {
                     currentObj[dataName][key] = apiData[key];
                 }
