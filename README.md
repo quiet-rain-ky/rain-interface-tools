@@ -789,7 +789,7 @@ export default {
                 descriptionStr: "局部注释", // 接口局部调用注释, 注意: 此注释字符串会和接口配置对象中的 description 字段的字符串进行拼接, 当你请求 (成功或失败) 时会打印在控制台, 让你知道是哪个接口在发出请求
                 timeOut: 10000, // 设置当前请求接口的超时时间, 默认以全局的 timeOut 超时时间为主
                 pathParams: "123", // 直接在路径上拼接字符串, get, post 都可以使用
-                isUrlEncode: true, // 是否对 post, delete, put 请求类型的参数进行键值编码, 编码后会自动拼接到请求路径的后面 默认值 false, 注意: 只针对 post 请求, get 请求无效, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此参数不可用
+                isUrlEncode: true, // 是否对 post, delete, put 请求类型的参数进行键值编码, 编码后会自动拼接到请求路径的后面 默认值 false, 注意: 只针对 post, delete, put 请求, get 请求无效, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此参数不可用
                 tempUseFetch: false, // 注意: 当处于 uniapp 项目时此选项不可用
                 isFileUpload: false, // 也可以开启此方式进行手动的文件上传, 默认值: false
                 globalFilterInterCept: { // 全局过滤器, 如果拦截后, 默认执行的回调函数 (注意: 仅对当前接口生效)
