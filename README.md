@@ -749,9 +749,9 @@ export default {
             let refRefreshObj = this.$rbj.autoButtJoint("one", { age: 18 }, "listName", this, { // 自动对接方法, 功能: 传入参数, 根据用户配置, 发送请求, 自动将响应的数据装配到指定的对象上, 注意: 如果此函数被全局过滤器拦截后, 则不再执行对指定对象中的属性, 进行数据的装配操作
                 descriptionStr: "局部注释", // 接口局部调用注释, 注意: 此注释字符串会和接口配置对象中的 description 字段的字符串进行拼接, 当你请求 (成功或失败) 时会打印在控制台, 让你知道是哪个接口在发出请求
                 timeOut: 10000, // 设置当前请求接口的超时时间, 默认以全局的 timeOut 超时时间为主
-                pathParams: "123", // 直接在路径上拼接字符串, get, post 都可以使用
+                pathParams: "123", // 直接在路径上拼接字符串, get, post, delete, put 都可以使用
                 callbackFunc(data, operandObj) {}, // 注意: 如果被全局过滤器或拦截器, 拦截住没有放行时, 此函数不会运行
-                isUrlEncode: false, // 是否对 post, delete, put 请求类型的参数进行键值编码, 编码后会自动拼接到请求路径的后面 默认值 false, 注意: 只针对 post 请求, get 请求无效, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此参数不可用
+                isUrlEncode: false, // 是否对 post, delete, put 请求类型的参数进行键值编码, 编码后会自动拼接到请求路径的后面 默认值 false, 注意: 只针对 post, delete, put 请求, get 请求无效, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此参数不可用
                 tempUseFetch: false, // 注意: 当处于 uniapp 项目时此选项不可用, 默认值 false
                 isAppendData: true, // 进行数据追加, 默认值 false
                 frontORback: false, // 默认值: false 向后追加数据, 注意: 需结合 isAppendData 使用
