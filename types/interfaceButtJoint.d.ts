@@ -51,7 +51,7 @@ declare interface interceptorRegular {
  */
 declare interface interceptorArrType<GLOBAL_FUN_TYPE> {
     /**
-     * @description 正则表达式, string 类型, 只对用户接口配置对象中的请求路径进行正则验证拦截, 不包括 https 协议 和 域名主机地址
+     * @description 正则表达式, string 类型, 只对用户接口配置对象中的 url 请求路径进行正则验证拦截, 不包括 (https 协议, 域名主机地址, 路径参数), 但如果用户的接口配置对象是处于 "模块配置对象" 中的, 则规则拦截器在进行正则验证时 则会以(模块路径 + 接口路径) 的形式进行, 正则验证拦截
      */
     regular: string | interceptorRegular | Array<interceptorRegular> | Array<string>,
     /**
