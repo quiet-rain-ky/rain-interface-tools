@@ -1075,7 +1075,7 @@ export default class interfaceButtJoint {
     // 动态追加设置指定接口的请求头属性 (要在具体的接口请求之前运行)
     dynamicAddSetInterfaceHeader(interfaceDefinedName, attributeName, attributeVal) {
         if (interfaceDefinedName && attributeName && attributeVal) {
-            if (this.$dynamicHeaderObj[interfaceDefinedName]) this.$dynamicHeaderObj[interfaceDefinedName] = {};
+            if (!this.$dynamicHeaderObj[interfaceDefinedName]) this.$dynamicHeaderObj[interfaceDefinedName] = {};
             this.$dynamicHeaderObj[interfaceDefinedName][attributeName] = attributeVal;
         } else {
             rain_logs.WARN("动态追加设置指定接口的请求头失败");
