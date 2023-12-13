@@ -937,21 +937,22 @@ export default {
          */
         this.$rbj.removeToken();
 
+        // ------------------------ 下方的动态追加请求头会直接存储在内存中 ------------------------
         /**
          * 动态获取全局请求头对象
          */
         this.$rbj.getDynamicGlobalHeader();
 
         /**
-         * @description 动态追加设置全局请求头的属性 (注意: 追加后当前项目的所有接口请求都会自动生效)
+         * @description 动态追加设置全局请求头的属性 (注意: 追加的请求头会直接存储在内存中, 追加后当前项目的所有接口请求都会自动生效)
          * @param {string} attributeName 属性名
-         * @param {string} attributeVal 属性值
+         * @param {any} attributeVal 属性值
          */
         this.$rbj.dynamicAddSetGlobalHeader(attributeName, attributeVal);
 
         /**
          * @param {string} attributeName 属性名
-         * @description 删除全局请求头的指定属性
+         * @description 动态删除全局请求头的指定属性
          */
         this.$rbj.dynamicDeleteGlobalHeader(attributeName);
 
@@ -961,15 +962,15 @@ export default {
         this.$rbj.dynamicClearAllGlobalHeader();
 
         /**
-         * 动态获取指定接口的请求头对象 (注意: 不包括全局请求头)
+         * 动态获取指定接口的请求头对象 (注意: 不包括全局请求头 和 持久化存储的请求头)
          */
-        this.$rbj.getDynamicInterfaceHeader();
+        this.$rbj.getDynamicInterfaceHeader(interfaceDefinedName);
 
         /**
          * @param {string} interfaceDefinedName 接口配置名
          * @param {string} attributeName 属性名
-         * @param {string} attributeVal 属性值
-         * @description 动态追加设置指定接口的请求头属性 (要在具体的接口请求之前运行, 追加后只针对指定的接口生效, 且追加后, 下次再在其他任何地方请求这个指定的接口时, 此次动态追加的请求头属性不会自动消失, 还会自动生效)
+         * @param {any} attributeVal 属性值
+         * @description 动态追加设置指定接口的请求头属性 (要在具体的接口请求之前运行, 追加后只针对指定的接口生效, 且追加后, 会存储在内存中, 下次再在其他任何地方请求这个指定的接口时, 此次动态追加的请求头属性不会自动消失, 还会自动生效)
          */
         this.$rbj.dynamicAddSetInterfaceHeader(interfaceDefinedName, attributeName, attributeVal);
 
@@ -985,6 +986,50 @@ export default {
          * @description 动态删除指定接口的所有请求头属性(要在具体的接口请求之前运行), 注意: 不包括全局请求头设置的属性
          */
         this.$rbj.dynamicClearAllInterfaceHeader(interfaceDefinedName);
+
+        // ------------------------ 下方的持久化设置请求头会存储到 localStorage 中 ------------------------
+        /**
+         * 动态持久化追加全局请求头属性
+         * @param {string} attributeName 请求头属性名
+         * @param  attributeVal 请求头属性值
+         */
+        this.$rbj.dynamicStorageAddSetGlobalHeader(attributeName: string, attributeVal: any);
+
+        /**
+         * 动态删除持久化全局请求头属性
+         * @param {string} attributeName 请求头属性名
+         */
+        this.$rbj.dynamicStorageDeleteGlobalHeader(attributeName: string);
+
+        /**
+         * 动态持久化追加指定接口的请求头属性
+         * @param {string} interfaceDefinedName 接口配置名
+         * @param {string} attributeName 请求头属性名
+         * @param {any} attributeVal 请求头属性值
+         */
+        this.$rbj.dynamicStorageAddSetInterfaceHeader(interfaceDefinedName: string, attributeName: string, attributeVal: any);
+
+        /**
+         * 动态删除指定接口的持久化请求头属性
+         * @param {string} interfaceDefinedName 指定接口的配置名
+         * @param {string} attributeName 请求头属性名
+         */
+        this.$rbj.dynamicStorageDeleteSetGlobalHeader(interfaceDefinedName: string, attributeName: string);
+
+        /**
+         * 获取全局持久化的请求头属性数据
+         * @param {string} attributeName 请求头属性名
+         * @returns 返回全局持久化请求头的属性名
+         */
+        this.$rbj.getDynamicGlobalStorageDataInfo(attributeName);
+
+        /**
+         * 获取指定接口的持久化请求头属性数据
+         * @param {string} interfaceDefinedName 接口配置名
+         * @param {string} attributeName 请求头属性名
+         * @returns 返回指定接口的持久化请求头属性值
+         */
+        this.$rbj.getDynamicInterfaceStorageDataInfo(interfaceDefinedName, attributeName);
 
         /**
          * @description 空数据过滤补全字符串的方法

@@ -70,6 +70,8 @@ export default class interfaceButtJoint {
             flag: {}, // 标记对象
             groupFlag: {}, // 组标记对象
         };
+        this.globalStorageHeaderNameArr = []; // 全局持久化请求头
+        this.interfaceStorageHeaderNameObj = {}; // 局部持久化请求头
     }
 
     // 执行接口的请求参数过滤函数
@@ -172,6 +174,19 @@ export default class interfaceButtJoint {
 
         // 放入 token
         if (this.getToken() && isUseToken) requestObj.headers[this.$tokenName] = this.getToken();
+        // 放入全局持久化请求头
+        if (this.globalStorageHeaderNameArr.length > 0) {
+            this.globalStorageHeaderNameArr.forEach((item) => {
+                requestObj.headers[item] = this.getDynamicGlobalStorageDataInfo(item);
+            });
+        }
+        // 放入指定接口的持久化请求头
+        if (this.interfaceStorageHeaderNameArr.length > 0) {
+            let interfaceDataInfoArr = this.interfaceStorageHeaderNameArr[interfaceDefinedName];
+            interfaceDataInfoArr.forEach((item) => {
+                requestObj.headers[item] = this.getDynamicInterfaceStorageDataInfo(interfaceDefinedName, item);
+            });
+        }
         // 按照请求头配置的优先级, 融合三种配置对象, 依次是 默认配置对象 -> 全局配置对象 -> 用户对单一接口的单独配置对象
         // 先融合请求头
         requestObj.headers = Object.assign(requestObj.headers, globalRequestConfig.headers, this.$dynamicGlobalHeaderObj, userRequestObj.headers, userDynamicHeader);
@@ -1047,8 +1062,8 @@ export default class interfaceButtJoint {
         if (this.$globalRequestConfig.headers) this.$globalRequestConfig.headers = {};
     }
 
-    // 动态获取指定接口的请求头对象 (注意: 不包括全局请求头)
-    getDynamicInterfaceHeader() {
+    // 动态获取指定接口的请求头对象 (注意: 不包括全局请求头 和 持久化存储的请求头)
+    getDynamicInterfaceHeader(interfaceDefinedName) {
         let userConfigObj = this._getUserConfigObj(interfaceDefinedName);
         if (userConfigObj.requestConfig && userConfigObj.requestConfig.headers) {
             return Object.assign(userConfigObj.requestConfig.headers, this.$dynamicHeaderObj);
@@ -1060,29 +1075,30 @@ export default class interfaceButtJoint {
     // 动态追加设置指定接口的请求头属性 (要在具体的接口请求之前运行)
     dynamicAddSetInterfaceHeader(interfaceDefinedName, attributeName, attributeVal) {
         if (interfaceDefinedName && attributeName && attributeVal) {
+            if (this.$dynamicHeaderObj[interfaceDefinedName]) this.$dynamicHeaderObj[interfaceDefinedName] = {};
             this.$dynamicHeaderObj[interfaceDefinedName][attributeName] = attributeVal;
         } else {
             rain_logs.WARN("动态追加设置指定接口的请求头失败");
         }
     }
 
-    // 动态删除指定接口的请求头属性(要在具体的接口请求之前运行)
+    // 动态删除指定接口的请求头属性(要在具体的接口请求之前运行), 注意: 不包括全局请求头
     dynamicDeleteInterfaceHeader(interfaceDefinedName, attributeName) {
         if (interfaceDefinedName && attributeName) {
-            if (this.$dynamicHeaderObj[interfaceDefinedName]) delete this.$dynamicHeaderObj[interfaceDefinedName][attributeName];
+            if (this.$dynamicHeaderObj[interfaceDefinedName] && this.$dynamicHeaderObj[interfaceDefinedName][attributeName]) delete this.$dynamicHeaderObj[interfaceDefinedName][attributeName];
             let userConfigObj = this._getUserConfigObj(interfaceDefinedName);
-            if (userConfigObj.requestConfig && userConfigObj.requestConfig.headers && userConfigObj.requestConfig.headers[attributeName]) delete this._getUserConfigObj(interfaceDefinedName).requestConfig.headers[attributeName];
+            if (userConfigObj.requestConfig && userConfigObj.requestConfig.headers && userConfigObj.requestConfig.headers[attributeName]) delete userConfigObj.requestConfig.headers[attributeName];
         } else {
-            rain_logs.WARN("动态设置指定接口的请求头失败");
+            rain_logs.WARN("动态设置指定接口的请求头失败, 缺少参数");
         }
     }
 
     // 动态删除指定接口的所有请求头属性(要在具体的接口请求之前运行), 注意: 不包括全局请求头设置的属性
     dynamicClearAllInterfaceHeader(interfaceDefinedName) {
         if (interfaceDefinedName) {
-            if (this.$dynamicHeaderObj[interfaceDefinedName]) this.$dynamicHeaderObj = {};
+            if (this.$dynamicHeaderObj[interfaceDefinedName]) this.$dynamicHeaderObj[interfaceDefinedName] = {};
             let userConfigObj = this._getUserConfigObj(interfaceDefinedName);
-            if (userConfigObj.requestConfig && userConfigObj.requestConfig.headers) this._getUserConfigObj(interfaceDefinedName).requestConfig.headers = {};
+            if (userConfigObj.requestConfig && userConfigObj.requestConfig.headers) userConfigObj.requestConfig.headers = {};
         } else {
             rain_logs.WARN("动态设置指定接口的请求头失败, 接口配置名为空");
         }
@@ -1114,14 +1130,90 @@ export default class interfaceButtJoint {
         }
     }
 
+    // 动态持久化追加全局请求头属性
+    dynamicStorageAddSetGlobalHeader(attributeName, attributeVal) {
+        if (this.$isUniApp) {
+            uni.setStorageSync(attributeName, attributeVal);
+            this.globalStorageHeaderNameArr.push(attributeName);
+        } else if (this.rbjGlobalThis.localStorage) {
+            this.rbjGlobalThis.localStorage.setItem(attributeName, attributeVal);
+            this.globalStorageHeaderNameArr.push(attributeName);
+        } else {
+            rain_logs.WARN("当前设备不支持 localStorage, 可以自定义设置 token 函数");
+        }
+    }
+
+    // 动态删除持久化全局请求头属性
+    dynamicStorageDeleteGlobalHeader(attributeName) {
+        if (this.$isUniApp) {
+            uni.removeStorageSync(attributeName);
+            this.globalStorageHeaderNameArr.splice(this.globalStorageHeaderNameArr.indexOf(attributeName), 1);
+        } else if (this.rbjGlobalThis.localStorage) {
+            this.rbjGlobalThis.localStorage.removeItem(attributeName);
+            this.globalStorageHeaderNameArr.splice(this.globalStorageHeaderNameArr.indexOf(attributeName), 1);
+        } else {
+            rain_logs.WARN("当前设备不支持 localStorage, 可以自定义设置 token 函数");
+        }
+    }
+
+    // 动态持久化追加指定接口的请求头属性
+    dynamicStorageAddSetInterfaceHeader(interfaceDefinedName, attributeName, attributeVal) {
+        if (this.$isUniApp) {
+            uni.setStorageSync(`${interfaceDefinedName}${attributeName}`, attributeVal);
+            if (!this.interfaceStorageHeaderNameObj[interfaceDefinedName]) this.interfaceStorageHeaderNameObj[interfaceDefinedName] = [];
+            this.interfaceStorageHeaderNameObj[interfaceDefinedName].push(attributeName);
+        } else if (this.rbjGlobalThis.localStorage) {
+            this.rbjGlobalThis.localStorage.setItem(`${interfaceDefinedName}${attributeName}`, attributeVal);
+            if (!this.interfaceStorageHeaderNameObj[interfaceDefinedName]) this.interfaceStorageHeaderNameObj[interfaceDefinedName] = [];
+            this.interfaceStorageHeaderNameObj[interfaceDefinedName].push(attributeName);
+        } else {
+            rain_logs.WARN("当前设备不支持 localStorage, 可以自定义设置 token 函数");
+        }
+    }
+
+    // 动态删除指定接口的持久化请求头属性
+    dynamicStorageDeleteSetGlobalHeader(interfaceDefinedName, attributeName) {
+        if (this.$isUniApp) {
+            uni.removeStorageSync(attributeName);
+            this.interfaceStorageHeaderNameObj[interfaceDefinedName].splice(this.interfaceStorageHeaderNameObj[interfaceDefinedName].indexOf(attributeName), 1);
+        } else if (this.rbjGlobalThis.localStorage) {
+            this.rbjGlobalThis.localStorage.removeItem(attributeName);
+            this.interfaceStorageHeaderNameObj[interfaceDefinedName].splice(this.interfaceStorageHeaderNameObj[interfaceDefinedName].indexOf(attributeName), 1);
+        } else {
+            rain_logs.WARN("当前设备不支持 localStorage, 可以自定义设置 token 函数");
+        }
+    }
+
+    // 获取全局持久化的请求头属性数据
+    getDynamicGlobalStorageDataInfo(attributeName) {
+        if (this.$isUniApp) {
+            return uni.getStorageSync(attributeName);
+        } else if (this.rbjGlobalThis.localStorage) {
+            return this.rbjGlobalThis.localStorage.getItem(attributeName);
+        } else {
+            rain_logs.WARN("当前设备不支持 localStorage, 可以自定义设置 token 函数");
+        }
+    }
+
+    // 获取指定接口的持久化请求头属性数据
+    getDynamicInterfaceStorageDataInfo(interfaceDefinedName, attributeName) {
+        if (this.$isUniApp) {
+            return uni.getStorageSync(`${interfaceDefinedName}${attributeName}`);
+        } else if (this.rbjGlobalThis.localStorage) {
+            return this.rbjGlobalThis.localStorage.getItem(`${interfaceDefinedName}${attributeName}`);
+        } else {
+            rain_logs.WARN("当前设备不支持 localStorage, 可以自定义设置 token 函数");
+        }
+    }
+
     // 移除 token
     removeToken() {
         if (this._customGetTokenFun) {
-            return this._customRemoveTokenFun(this);
+            this._customRemoveTokenFun(this);
         } else if (this.$isUniApp) {
             uni.removeStorageSync("token");
         } else if (this.rbjGlobalThis.localStorage) {
-            return this.rbjGlobalThis.localStorage.removeItem("token");
+            this.rbjGlobalThis.localStorage.removeItem("token");
         } else {
             rain_logs.WARN("当前设备不支持 localStorage, 可以自定义设置 token 函数");
         }

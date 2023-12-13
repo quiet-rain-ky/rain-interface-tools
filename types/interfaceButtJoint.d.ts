@@ -512,9 +512,9 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
     dynamicClearAllGlobalHeader(): void;
 
     /**
-     * 动态获取指定接口的请求头对象 (注意: 不包括全局请求头)
+     * 动态获取指定接口的请求头对象 (注意: 不包括全局请求头 和 持久化存储的请求头)
      */
-    getDynamicInterfaceHeader(): Object;
+    getDynamicInterfaceHeader(interfaceDefinedName: string): Object;
 
     /**
      * @param interfaceDefinedName 接口配置名
@@ -547,6 +547,49 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
      * @description 获取 token
      */
     getToken(): void;
+
+    /**
+     * 动态持久化追加全局请求头属性
+     * @param attributeName 请求头属性名
+     * @param attributeVal 请求头属性值
+     */
+    dynamicStorageAddSetGlobalHeader(attributeName: string, attributeVal: any): void;
+
+    /**
+     * 动态删除持久化全局请求头属性
+     * @param attributeName 请求头属性名
+     */
+    dynamicStorageDeleteGlobalHeader(attributeName: string): void;
+
+    /**
+     * 动态持久化追加指定接口的请求头属性
+     * @param interfaceDefinedName 接口配置名
+     * @param attributeName 请求头属性名
+     * @param attributeVal 请求头属性值
+     */
+    dynamicStorageAddSetInterfaceHeader(interfaceDefinedName: string, attributeName: string, attributeVal: any): void;
+
+    /**
+     * 动态删除指定接口的持久化请求头属性
+     * @param interfaceDefinedName 指定接口的配置名
+     * @param attributeName 请求头属性名
+     */
+    dynamicStorageDeleteSetGlobalHeader(interfaceDefinedName: string, attributeName: string): void;
+
+    /**
+     * 获取全局持久化的请求头属性数据
+     * @param attributeName 请求头属性名
+     * @returns 返回全局持久化请求头的属性名
+     */
+    getDynamicGlobalStorageDataInfo(attributeName): any;
+
+    /**
+     * 获取指定接口的持久化请求头属性数据
+     * @param interfaceDefinedName 接口配置名
+     * @param attributeName 请求头属性名
+     * @returns 返回指定接口的持久化请求头属性值
+     */
+    getDynamicInterfaceStorageDataInfo(interfaceDefinedName, attributeName): any;
 
     /**
      * @description 移除 token
