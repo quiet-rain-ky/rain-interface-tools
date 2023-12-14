@@ -265,8 +265,8 @@ export default class interfaceButtJoint {
             params,
             execute: [],
         };
-        // 深拷贝一个新的返回对象
-        let refVal = Object.assign({}, refRefreshFlagObj);
+        // 定义一个空对象
+        let refVal = {};
         // 重写拷贝后返回对象的 then 方法, 用以记录传入的 then 方法函数
         refVal.then = (func) => {
             // 调用 (原返回对象) 的 then 方法
@@ -291,7 +291,11 @@ export default class interfaceButtJoint {
             });
             return refVal;
         };
-
+        // 定义运行结束函数
+        refVal.finally = (func) => {
+            refRefreshFlagObj.finally(func);
+        };
+        // 定义刷新标记组
         refVal.refRefreshGroup = (groupName, uniqueTagName) => {
             if (self.$freshInterfaceData.groupFlag[groupName]) {
                 self.$freshInterfaceData.groupFlag[groupName][uniqueTagName] = paramsObjFlag;
@@ -301,6 +305,7 @@ export default class interfaceButtJoint {
             }
             return refVal;
         };
+        // 定义刷新标记
         refVal.refRefreshFlag = (freshTagName) => {
             self.$freshInterfaceData.flag[freshTagName] = paramsObjFlag;
             return refVal;

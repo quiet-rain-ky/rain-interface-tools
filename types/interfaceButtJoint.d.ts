@@ -13,24 +13,43 @@ declare interface globalFunType<GLOBAL_FUN_TYPE = {}> {
 /**
  * 自动对接引用标记对象
  */
-declare interface autoQuoteMark {
+declare interface autoQuoteMark<QUOTE> {
     /**
      * @description 给当前接口定义, 分组类型的 flag 刷新标记
      * @param groupName 给当前接口定义 group 组标记
      * @param uniqueTagName 给当前接口在刷新组内定一个，不重复的唯一标识
      */
-    refRefreshGroup(groupName: string, uniqueTagName: string): autoQuoteMark;
+    refRefreshGroup(groupName: string, uniqueTagName: string): QUOTE | autoQuoteMark<QUOTE>;
     /** 
      * @description 给当前接口定义 flag 刷新标记
      * @param freshTagName 给当前接口在刷新组内定一个，不重复的唯一标识
      */
-    refRefreshFlag(freshTagName: string): autoQuoteMark;
+    refRefreshFlag(freshTagName: string): QUOTE | autoQuoteMark<QUOTE>;
 }
 
 /**
  * 手动对接引用标记对象
  */
-declare interface QuoteMark extends Promise<any>, autoQuoteMark { }
+declare interface QuoteMark extends autoQuoteMark<QuoteMark> {
+    /**
+     * 异步函数执行成功
+     * @param successFun 回调函数
+     * @returns 
+     */
+    then: (successFun: (resData: any) => any) => QuoteMark;
+    /**
+     * 异步函数执行失败
+     * @param errFun 回调函数
+     * @returns 
+     */
+    catch: (errFun: (errData: any) => any) => QuoteMark;
+    /**
+     * 异步函数执行完成
+     * @param completeFun 回调函数
+     * @returns 
+     */
+    finally: (completeFun: () => void) => QuoteMark;
+}
 
 /**
  * 正则参数对象类型
@@ -368,7 +387,7 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
          * 是否允许当前请求在请求头加上 token, 默认值: true 允许
          */
         isUseToken: boolean;
-    }): autoQuoteMark;
+    }): autoQuoteMark<null>;
 
     /**
      * @description 自动刷新标记接口调用
