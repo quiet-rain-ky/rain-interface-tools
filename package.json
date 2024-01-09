@@ -5,7 +5,7 @@
     "useTabs": false
   },
   "name": "rain-interface-tools",
-  "version": "1.9.6",
+  "version": "1.9.7",
   "description": "接口对接工具",
   "type": "module",
   "main": "rbj_main.js",
