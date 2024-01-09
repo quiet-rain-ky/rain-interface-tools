@@ -1137,6 +1137,7 @@ export default class interfaceButtJoint {
 
     // 动态持久化追加全局请求头属性
     dynamicStorageAddSetGlobalHeader(attributeName, attributeVal, _isAddToDynamicGlobalStorage = true) {
+        if (typeof attributeVal == "object") attributeVal = JSON.stringify(attributeVal);
         if (this.$isUniApp) {
             uni.setStorageSync(attributeName, attributeVal);
             if (_isAddToDynamicGlobalStorage) this.globalStorageHeaderNameArr.push(attributeName);
@@ -1164,6 +1165,7 @@ export default class interfaceButtJoint {
 
     // 动态持久化追加指定接口的请求头属性
     dynamicStorageAddSetInterfaceHeader(interfaceDefinedName, attributeName, attributeVal) {
+        if (typeof attributeVal == "object") attributeVal = JSON.stringify(attributeVal);
         if (this.$isUniApp) {
             uni.setStorageSync(`${interfaceDefinedName}${attributeName}`, attributeVal);
             if (!this.interfaceStorageHeaderNameObj[interfaceDefinedName]) this.interfaceStorageHeaderNameObj[interfaceDefinedName] = [];
