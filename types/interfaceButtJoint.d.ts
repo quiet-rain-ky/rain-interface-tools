@@ -600,7 +600,7 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
      * @param attributeName 请求头属性名
      * @returns 返回全局持久化请求头的属性名
      */
-    getDynamicGlobalStorageDataInfo(attributeName): any;
+    getDynamicGlobalStorageDataInfo(attributeName: string): any;
 
     /**
      * 获取指定接口的持久化请求头属性数据
@@ -608,7 +608,7 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
      * @param attributeName 请求头属性名
      * @returns 返回指定接口的持久化请求头属性值
      */
-    getDynamicInterfaceStorageDataInfo(interfaceDefinedName, attributeName): any;
+    getDynamicInterfaceStorageDataInfo(interfaceDefinedName: string, attributeName: string): any;
 
     /**
      * @description 移除 token
