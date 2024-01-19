@@ -819,7 +819,7 @@ export default {
                  * 是否允许当前请求在请求头加上 token, 默认值: true 允许
                  */
                 isUseToken: true,
-            }).then((data)=>{}).catch((err)=>{}); // 注意: 如果被全局过滤器或拦截器, 拦截住没有放行时, catch 函数会运行, 并且 err 的参数错误会变成一个 'ISNULL' 字符串
+            }).then((data)=>{}).catch((err)=>{}); // 注意: 如果被全局过滤器或拦截器, 拦截住没有放行时, then 函数会照常运行, 但参数会变成一个 'ISNULL' 字符串
 
             /**
              * @description 文件上传
