@@ -762,22 +762,40 @@ export default class interfaceButtJoint {
                 return fetch(configObj.url, configObj)
                     .then((data) => {
                         rain_logs.WARN(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo, descriptionStr));
-                        return self._assignment(true, interfaceDefinedName, data, null, null, null, null, null, globalFilterInterCept);
+                        let buttJointRespData = self._assignment(true, interfaceDefinedName, data, null, null, null, null, null, globalFilterInterCept);
+                        if (buttJointRespData !== "ISNULL") {
+                            return buttJointRespData;
+                        } else {
+                            throw "ISNULL";
+                        }
                     })
                     .catch((err) => {
-                        rain_logs.ERROR(interfaceInfo.url, " 请求失败了 : ", err, this._isDescription(interfaceInfo, descriptionStr));
-                        self._globalRequestErrorFun(err, self);
+                        if (err === "ISNULL") {
+                            rain_logs.ERROR(interfaceInfo.url, " 被拦截了 : ", err, this._isDescription(interfaceInfo, descriptionStr));
+                        } else {
+                            rain_logs.ERROR(interfaceInfo.url, " 请求失败了 : ", err, this._isDescription(interfaceInfo, descriptionStr));
+                            self._globalRequestErrorFun(err, self);
+                        }
                         throw err;
                     });
             } else {
                 return axios(configObj)
                     .then((data) => {
                         rain_logs.WARN(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo, descriptionStr));
-                        return self._assignment(false, interfaceDefinedName, data, null, null, null, null, null, globalFilterInterCept);
+                        let buttJointRespData = self._assignment(false, interfaceDefinedName, data, null, null, null, null, null, globalFilterInterCept);
+                        if (buttJointRespData !== "ISNULL") {
+                            return buttJointRespData;
+                        } else {
+                            throw "ISNULL";
+                        }
                     })
                     .catch((err) => {
-                        rain_logs.ERROR(interfaceInfo.url, " 请求失败了 : ", err, this._isDescription(interfaceInfo, descriptionStr));
-                        self._globalRequestErrorFun(err, self);
+                        if (err === "ISNULL") {
+                            rain_logs.ERROR(interfaceInfo.url, " 被拦截了 : ", err, this._isDescription(interfaceInfo, descriptionStr));
+                        } else {
+                            rain_logs.ERROR(interfaceInfo.url, " 请求失败了 : ", err, this._isDescription(interfaceInfo, descriptionStr));
+                            self._globalRequestErrorFun(err, self);
+                        }
                         throw err;
                     });
             }
