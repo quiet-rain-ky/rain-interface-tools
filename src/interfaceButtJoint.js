@@ -32,6 +32,7 @@ function getGlobalFun() {
         // #endif
     }
 }
+
 class ResponseORrefRefresh {
     paramsObjFlag; // 刷新标记参数
     refRefreshFlagObj; // 一般 Promise 响应对象
@@ -66,6 +67,7 @@ class ResponseORrefRefresh {
         return this;
     }
 }
+
 // 系统接口对接工具类
 export default class interfaceButtJoint {
     // 初始化配置
