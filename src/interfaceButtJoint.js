@@ -54,16 +54,16 @@ class ResponseORrefRefresh {
     // 定义刷新标记组
     refRefreshGroup(groupName, uniqueTagName) {
         if (this.interfaceButtJointObj.$freshInterfaceData.groupFlag[groupName]) {
-            this.interfaceButtJointObj.$freshInterfaceData.groupFlag[groupName][uniqueTagName] = this.interfaceButtJointObj.paramsObjFlag;
+            this.interfaceButtJointObj.$freshInterfaceData.groupFlag[groupName][uniqueTagName] = this.paramsObjFlag;
         } else {
             this.interfaceButtJointObj.$freshInterfaceData.groupFlag[groupName] = {};
-            this.interfaceButtJointObj.$freshInterfaceData.groupFlag[groupName][uniqueTagName] = this.interfaceButtJointObj.paramsObjFlag;
+            this.interfaceButtJointObj.$freshInterfaceData.groupFlag[groupName][uniqueTagName] = this.paramsObjFlag;
         }
         return this;
     }
     // 定义刷新标记
     refRefreshFlag(freshTagName) {
-        this.interfaceButtJointObj.$freshInterfaceData.flag[freshTagName] = this.interfaceButtJointObj.paramsObjFlag;
+        this.interfaceButtJointObj.$freshInterfaceData.flag[freshTagName] = this.paramsObjFlag;
         return this;
     }
 }
