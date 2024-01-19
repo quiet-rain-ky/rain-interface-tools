@@ -30,26 +30,7 @@ declare interface autoQuoteMark<QUOTE> {
 /**
  * 手动对接引用标记对象
  */
-declare interface QuoteMark extends autoQuoteMark<QuoteMark> {
-    /**
-     * 异步函数执行成功
-     * @param successFun 回调函数
-     * @returns 
-     */
-    then: (successFun: (resData: any) => any) => QuoteMark;
-    /**
-     * 异步函数执行失败
-     * @param errFun 回调函数
-     * @returns 
-     */
-    catch: (errFun: (errData: any) => any) => QuoteMark;
-    /**
-     * 异步函数执行完成
-     * @param completeFun 回调函数
-     * @returns 
-     */
-    finally: (completeFun: () => void) => QuoteMark;
-}
+declare interface QuoteMark extends Promise<any>, autoQuoteMark<QuoteMark> { }
 
 /**
  * 正则参数对象类型
