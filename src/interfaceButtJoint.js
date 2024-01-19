@@ -32,7 +32,40 @@ function getGlobalFun() {
         // #endif
     }
 }
-
+class ResponseORrefRefresh {
+    paramsObjFlag; // 刷新标记参数
+    refRefreshFlagObj; // 一般 Promise 响应对象
+    interfaceButtJointObj;
+    constructor(paramsObjFlag, refRefreshFlagObj, interfaceButtJointObj) {
+        this.paramsObjFlag = paramsObjFlag;
+        this.refRefreshFlagObj = refRefreshFlagObj;
+        this.interfaceButtJointObj = interfaceButtJointObj;
+    }
+    then(func) {
+        return this.refRefreshFlagObj.then(func);
+    }
+    catch(func) {
+        return this.refRefreshFlagObj.catch(func);
+    }
+    finally(func) {
+        return this.refRefreshFlagObj.finally(func);
+    }
+    // 定义刷新标记组
+    refRefreshGroup(groupName, uniqueTagName) {
+        if (this.interfaceButtJointObj.$freshInterfaceData.groupFlag[groupName]) {
+            this.interfaceButtJointObj.$freshInterfaceData.groupFlag[groupName][uniqueTagName] = this.interfaceButtJointObj.paramsObjFlag;
+        } else {
+            this.interfaceButtJointObj.$freshInterfaceData.groupFlag[groupName] = {};
+            this.interfaceButtJointObj.$freshInterfaceData.groupFlag[groupName][uniqueTagName] = this.interfaceButtJointObj.paramsObjFlag;
+        }
+        return this;
+    }
+    // 定义刷新标记
+    refRefreshFlag(freshTagName) {
+        this.interfaceButtJointObj.$freshInterfaceData.flag[freshTagName] = this.interfaceButtJointObj.paramsObjFlag;
+        return this;
+    }
+}
 // 系统接口对接工具类
 export default class interfaceButtJoint {
     // 初始化配置
@@ -259,58 +292,12 @@ export default class interfaceButtJoint {
             refRefreshFlagObj = this._buttJoint(interfaceDefinedName, paramsObj, pathParams, isUrlEncode, tempUseFetch, isFileUpload, globalFilterInterCept, isUseToken, descriptionStr, timeOut);
         }
         // 记录刷新标记
-        let self = this;
         let params = [interfaceDefinedName, paramsObj, optionsObj];
         let paramsObjFlag = {
             params,
             execute: [],
         };
-        // 定义一个空对象
-        let refVal = {};
-        // 重写拷贝后返回对象的 then 方法, 用以记录传入的 then 方法函数
-        refVal.then = (func) => {
-            // 调用 (原返回对象) 的 then 方法
-            refRefreshFlagObj.then((data) => {
-                // 判断 data 是否为 ISNULL, 因为 this._assignment() 函数, 如果全局拦截了一定会返回一个 ISNULL
-                if (data !== "ISNULL") func(data);
-            });
-            paramsObjFlag.execute.push({
-                then: func,
-            });
-            return refVal;
-        };
-        // 此函数和上方重写的 then 是一样的逻辑
-        refVal.catch = (func) => {
-            // 如果全局拦截了, 即使 refRefreshFlagObj 所代表的 Promise 没有报错即抛出异常, 用户调用的 catch 函数也会运行
-            refRefreshFlagObj.then((data) => {
-                if (data === "ISNULL") func(data);
-            });
-            refRefreshFlagObj.catch(func);
-            paramsObjFlag.execute.push({
-                catch: func,
-            });
-            return refVal;
-        };
-        // 定义运行结束函数
-        refVal.finally = (func) => {
-            refRefreshFlagObj.finally(func);
-        };
-        // 定义刷新标记组
-        refVal.refRefreshGroup = (groupName, uniqueTagName) => {
-            if (self.$freshInterfaceData.groupFlag[groupName]) {
-                self.$freshInterfaceData.groupFlag[groupName][uniqueTagName] = paramsObjFlag;
-            } else {
-                self.$freshInterfaceData.groupFlag[groupName] = {};
-                self.$freshInterfaceData.groupFlag[groupName][uniqueTagName] = paramsObjFlag;
-            }
-            return refVal;
-        };
-        // 定义刷新标记
-        refVal.refRefreshFlag = (freshTagName) => {
-            self.$freshInterfaceData.flag[freshTagName] = paramsObjFlag;
-            return refVal;
-        };
-        return refVal;
+        return new ResponseORrefRefresh(paramsObjFlag, refRefreshFlagObj, this);
     }
 
     // 自动对接 (dataName 和 currentObj 不直接合并为一个, 即传入一个对象的原因: 我们可以在别的地方从 currentObj 对象中操作或获取一些其他的数据)
