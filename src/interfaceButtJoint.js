@@ -1,5 +1,5 @@
 /**
- * @author   作者: Rain
+ * @author 作者: Rain
  * @date 创建于 2021年 11月02日  00:50:41  星期二
  * @file_path  文件磁盘路径: D:\Files\repositorys\rain-interface-tools\src\interfaceButtJoint.js
  * @file_path  文件项目路径: src\interfaceButtJoint.js
