@@ -191,6 +191,7 @@ function echoFun(echoObj, dataObj, optionsObj = {}) {
     }
 }
 
+
 export default {
     emptyVerify,
     echoFun,
