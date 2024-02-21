@@ -111,7 +111,7 @@ function emptyVerify(verifyObj, verifySelect, optionsObj = {}) {
             if (verifyObj[verifyValue] && Array.isArray(verifyObj[verifyValue]) && isChildren) {
                 // 判断是否为空数组
                 if (verifyObj[verifyValue].length == 0) {
-                    console.log(`${hintStr}${str} ${verifyValue} 为空数组`);
+                    rain_logs.INFO(`${hintStr}${str} ${verifyValue} 为空数组`);
                     return {
                         isEmpty: true,
                         fieldName: verifyValue,
@@ -130,7 +130,7 @@ function emptyVerify(verifyObj, verifySelect, optionsObj = {}) {
             } else if (verifyObj[verifyValue] && typeof verifyObj[verifyValue] == "object" && isChildren) {
                 // 判断是否为空对象
                 if (Object.keys(verifyObj[verifyValue]).length == 0) {
-                    console.log(`${hintStr}${str} ${verifyValue} 为空对象`);
+                    rain_logs.INFO(`${hintStr}${str} ${verifyValue} 为空对象`);
                     return {
                         isEmpty: true,
                         fieldName: verifyValue,
@@ -149,7 +149,7 @@ function emptyVerify(verifyObj, verifySelect, optionsObj = {}) {
             } else {
                 // 进行基本类型元素的判断
                 if ((!verifyObj[verifyValue] && verifyObj[verifyValue] !== 0) || (verifyObj[verifyValue] === 0 && isZeroNull)) {
-                    console.log(`${hintStr}${str} ${verifyValue} 的值为空`);
+                    rain_logs.INFO(`${hintStr}${str} ${verifyValue} 的值为空`);
                     return {
                         isEmpty: true,
                         fieldName: verifyValue,
@@ -158,7 +158,7 @@ function emptyVerify(verifyObj, verifySelect, optionsObj = {}) {
             }
         }
     } else {
-        console.log("空值验证失败, 传入的 verifyObj 参数为空");
+        rain_logs.INFO("空值验证失败, 传入的 verifyObj 参数为空");
         return {
             isEmpty: true,
             fieldName: "NULL",
