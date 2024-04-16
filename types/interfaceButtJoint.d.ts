@@ -632,7 +632,7 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
     /**
      * @description 将 rbj 对象通过插件的方式安装到 Vue 上
      */
-    install(Vue: Object, ...params: any): void;
+    install(Vue: Object, ...val: any): void;
 
     /**
      * @description 将 rbj 对象手动安装到 任何指定的对象上, 例如: 可以安装到, 全局的 window 对象上, 来全局使用 window 对象, 注意: 手动安装不支持 全局组件功能
