@@ -69,9 +69,3 @@ declare module "vue" {
         $rbj: RbjVueType;
     }
 }
-
-// 扩展全局类型
-declare global {
-    // 全局定义 rbj 类型
-    const $rbj: RbjVueType;
-}
