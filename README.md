@@ -148,9 +148,9 @@ createApp.use(Rbj).mount("#app"); // 把 rain-interface-tools 插件, 安装到 
 </template>
 
 <script setup>
-// 注意: 在 setup 中, 只能通过 inject 的方式, 来获取 rbj 对象
-import { inject } from 'vue';
-let rbj = inject("rbj");
+// 注意: 在 setup 中, 只能通过直接导入 rbj 的方式, 来获取 rbj 对象
+import rbj from "../../rbjConfigs/index.js"; // 导入上方指定路径的 rbj 核心对象, 注意: 核心对象不包括 rbj日志对象, 所以要想使用 rbj 日志对象, 我们需要单独导入日志对象
+import { logObj, StreamConversion, assistFun } from "rain-interface-tools"; // (1) logObj : 日志对象, (2) StreamConversion : 流转换对象, (3) assistFun 辅助函数对象
 let twoObj = {
     oneData: {},
 };

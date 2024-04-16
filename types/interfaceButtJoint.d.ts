@@ -20,7 +20,7 @@ declare interface autoQuoteMark {
      * @param uniqueTagName 给当前接口在刷新组内定一个，不重复的唯一标识
      */
     refRefreshGroup(groupName: string, uniqueTagName: string): autoQuoteMark;
-    /** 
+    /**
      * @description 给当前接口定义 flag 刷新标记
      * @param freshTagName 给当前接口在刷新组内定一个，不重复的唯一标识
      */
@@ -37,7 +37,7 @@ declare interface QuoteMark extends Promise<any> {
      * @param uniqueTagName 给当前接口在刷新组内定一个，不重复的唯一标识
      */
     refRefreshGroup(groupName: string, uniqueTagName: string): QuoteMark;
-    /** 
+    /**
      * @description 给当前接口定义 flag 刷新标记
      * @param freshTagName 给当前接口在刷新组内定一个，不重复的唯一标识
      */
@@ -65,11 +65,11 @@ declare interface interceptorArrType<GLOBAL_FUN_TYPE> {
     /**
      * @description 正则表达式, string 类型, 只对用户接口配置对象中的 url 请求路径进行正则验证拦截, 不包括 (https 协议, 域名主机地址, 路径参数), 但如果用户的接口配置对象是处于 "模块配置对象" 中的, 则规则拦截器在进行正则验证时 则会以(模块路径 + 接口路径) 的形式进行, 正则验证拦截
      */
-    regular: string | interceptorRegular | Array<interceptorRegular> | Array<string>,
+    regular: string | interceptorRegular | Array<interceptorRegular> | Array<string>;
     /**
      * @description 正则反转拦截, 会拦截验证失败的, 放行验证成功的, 默认: false 不进行反转操作
      */
-    reversalVerify: boolean,
+    reversalVerify: boolean;
 
     /**
      * @description 请求拦截器
@@ -189,7 +189,7 @@ declare interface configParamsType<GLOBAL_FUN_TYPE> {
     /**
      * 自定义 token 在请求头上的名字，默认值："Authorization"
      */
-    tokenName?: string,
+    tokenName?: string;
     /**
      * 自定义设置 token 方式的函数
      * 参数1: 要进行设置的 token 字符串
@@ -254,56 +254,60 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
      * @param optionsObj 可选属性对象
      * @return 返回手动对接引用标记对象
      */
-    buttJoint(interfaceDefinedName: String, paramsObj: Object | null, optionsObj?: {
-        /**
-         * 接口局部调用注释, 注意: 此注释字符串会和接口配置对象中的 description 字段的字符串进行拼接, 当你请求 (成功或失败) 时会打印在控制台, 让你知道是哪个接口在发出请求
-         */
-        descriptionStr?: string;
-        /**
-         * 设置当前请求接口的超时时间, 默认以全局的 timeOut 超时时间为主
-         */
-        timeOut?: number;
-        /**
-         * 直接在路径上拼接字符串, get, post 都可以使用
-         */
-        pathParams?: string;
-        /**
-         * 是否对 post, delete, put 请求类型的参数进行键值编码, 编码后会自动拼接到请求路径的后面 默认值 false, 注意: 只针对 post 请求, get 请求无效, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此参数不可用
-         */
-        isUrlEncode?: boolean;
-        /**
-         * 注意: 当处于 uniapp 项目时此选项不可用
-         */
-        tempUseFetch?: boolean;
-        /**
-         * 全局过滤拦截回调函数对象 (注意: 仅对当前接口生效)
-         */
-        globalFilterInterCept?: {
+    buttJoint(
+        interfaceDefinedName: String,
+        paramsObj: Object | null,
+        optionsObj?: {
             /**
-             * @description 说明: 全局请求过滤器, 拦截后, 默认执行的回调函数 (注意: 仅对当前接口的请求生效)
-             * @param reqParams 当前请求的参数
-             * @param pathParams 路径参数
-             * @param rbjObj 当前 rbj 对象的实例
-             * @param currentUserConfigObjData 当前用户的配置数据对象
-             * @param operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
-             * @return 此函数不需要返回值
+             * 接口局部调用注释, 注意: 此注释字符串会和接口配置对象中的 description 字段的字符串进行拼接, 当你请求 (成功或失败) 时会打印在控制台, 让你知道是哪个接口在发出请求
              */
-            requestCallback(reqParams: Object, pathParams: string, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object): void;
+            descriptionStr?: string;
             /**
-             * @description 说明: 全局响应过滤器, 拦截后, 默认执行的回调函数 (注意: 仅对当前接口的响应生效)
-             * @param respData 当前请求的响应数据
-             * @param rbjObj 当前 rbj 对象的实例
-             * @param currentUserConfigObjData 当前用户的配置数据对象
-             * @param operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
-             * @return 此函数不需要返回值
+             * 设置当前请求接口的超时时间, 默认以全局的 timeOut 超时时间为主
              */
-            responseCallback(respData: Object | Array<any>, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object): void;
-        },
-        /**
-         * 是否允许当前请求在请求头加上 token, 默认值: true 允许
-         */
-        isUseToken: boolean;
-    }): QuoteMark;
+            timeOut?: number;
+            /**
+             * 直接在路径上拼接字符串, get, post 都可以使用
+             */
+            pathParams?: string;
+            /**
+             * 是否对 post, delete, put 请求类型的参数进行键值编码, 编码后会自动拼接到请求路径的后面 默认值 false, 注意: 只针对 post 请求, get 请求无效, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此参数不可用
+             */
+            isUrlEncode?: boolean;
+            /**
+             * 注意: 当处于 uniapp 项目时此选项不可用
+             */
+            tempUseFetch?: boolean;
+            /**
+             * 全局过滤拦截回调函数对象 (注意: 仅对当前接口生效)
+             */
+            globalFilterInterCept?: {
+                /**
+                 * @description 说明: 全局请求过滤器, 拦截后, 默认执行的回调函数 (注意: 仅对当前接口的请求生效)
+                 * @param reqParams 当前请求的参数
+                 * @param pathParams 路径参数
+                 * @param rbjObj 当前 rbj 对象的实例
+                 * @param currentUserConfigObjData 当前用户的配置数据对象
+                 * @param operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
+                 * @return 此函数不需要返回值
+                 */
+                requestCallback(reqParams: Object, pathParams: string, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object): void;
+                /**
+                 * @description 说明: 全局响应过滤器, 拦截后, 默认执行的回调函数 (注意: 仅对当前接口的响应生效)
+                 * @param respData 当前请求的响应数据
+                 * @param rbjObj 当前 rbj 对象的实例
+                 * @param currentUserConfigObjData 当前用户的配置数据对象
+                 * @param operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
+                 * @return 此函数不需要返回值
+                 */
+                responseCallback(respData: Object | Array<any>, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object): void;
+            };
+            /**
+             * 是否允许当前请求在请求头加上 token, 默认值: true 允许
+             */
+            isUseToken: boolean;
+        }
+    ): QuoteMark;
 
     /**
      * @description 自动对接
@@ -314,73 +318,79 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
      * @param optionsObj 可选属性对象
      * @return 返回自动对接引用标记对象
      */
-    autoButtJoint(interfaceDefinedName: String, paramsObj: Object | null, dataName: String, currentObj: Object, optionsObj?: {
-        /**
-         * 接口局部调用注释, 注意: 此注释字符串会和接口配置对象中的 description 字段的字符串进行拼接, 当你请求 (成功或失败) 时会打印在控制台, 让你知道是哪个接口在发出请求
-         */
-        descriptionStr?: string;
-        /**
-         * 设置当前请求接口的超时时间, 默认以全局的 timeOut 超时时间为主
-         */
-        timeOut?: number;
-        /**
-         * 直接在路径上拼接字符串, get, post 都可以使用
-         */
-        pathParams?: string,
-        /**
-         * @description 注意: 如果被全局过滤器或拦截器, 拦截住没有放行时, 此函数不会运行
-         * @param data 响应的数据对象
-         * @param operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
-         * <p>
-         * 此回调函数 和 用户的请求配置中的 interfaceData() 函数是一样的作用, 区别是 这个回调函数使用的是 interfaceData() 函数已经过滤返回的数据, 然后可以对其再次进行过滤
-         * </p>
-         */
-        callbackFunc(data: Object, operandObj: Object): any | Object;
-        /**
-         * 是否对 post, delete, put 请求类型的参数进行键值编码, 编码后会自动拼接到请求路径的后面 默认值 false, 注意: 只针对 post 请求, get 请求无效, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此参数不可用
-         */
-        isUrlEncode?: boolean;
-        /**
-         * 注意: 当处于 uniapp 项目时此选项不可用, 默认值 false
-         */
-        tempUseFetch?: boolean;
-        /**
-         * 进行数据追加, 默认值 false
-         */
-        isAppendData?: boolean;
-        /**
-         * 向前追加数据, 还是向后追加数据, 默认值: false 向后追加数据, 注意: 需结合 isAppendData 使用
-         */
-        frontORback?: boolean;
-        /**
-         * 全局过滤拦截回调函数对象 (注意: 仅对当前接口生效)
-         */
-        globalFilterInterCept?: {
+    autoButtJoint(
+        interfaceDefinedName: String,
+        paramsObj: Object | null,
+        dataName: String,
+        currentObj: Object,
+        optionsObj?: {
             /**
-             * @description 说明: 全局请求过滤器, 拦截后, 默认执行的回调函数 (注意: 仅对当前接口的请求生效)
-             * @param reqParams 当前请求的参数
-             * @param pathParams 路径参数
-             * @param rbjObj 当前 rbj 对象的实例
-             * @param currentUserConfigObjData 当前用户的配置数据对象
-             * @param operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
-             * @return 此函数不需要返回值
+             * 接口局部调用注释, 注意: 此注释字符串会和接口配置对象中的 description 字段的字符串进行拼接, 当你请求 (成功或失败) 时会打印在控制台, 让你知道是哪个接口在发出请求
              */
-            requestCallback(reqParams: Object, pathParams: string, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object): void;
+            descriptionStr?: string;
             /**
-             * @description 说明: 全局响应过滤器, 拦截后, 默认执行的回调函数 (注意: 仅对当前接口的响应生效)
-             * @param respData 当前请求的响应数据
-             * @param rbjObj 当前 rbj 对象的实例
-             * @param currentUserConfigObjData 当前用户的配置数据对象
-             * @param operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
-             * @return 此函数不需要返回值
+             * 设置当前请求接口的超时时间, 默认以全局的 timeOut 超时时间为主
              */
-            responseCallback(respData: Object | Array<any>, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object): void;
-        },
-        /**
-         * 是否允许当前请求在请求头加上 token, 默认值: true 允许
-         */
-        isUseToken: boolean;
-    }): autoQuoteMark;
+            timeOut?: number;
+            /**
+             * 直接在路径上拼接字符串, get, post 都可以使用
+             */
+            pathParams?: string;
+            /**
+             * @description 注意: 如果被全局过滤器或拦截器, 拦截住没有放行时, 此函数不会运行
+             * @param data 响应的数据对象
+             * @param operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
+             * <p>
+             * 此回调函数 和 用户的请求配置中的 interfaceData() 函数是一样的作用, 区别是 这个回调函数使用的是 interfaceData() 函数已经过滤返回的数据, 然后可以对其再次进行过滤
+             * </p>
+             */
+            callbackFunc(data: Object, operandObj: Object): any | Object;
+            /**
+             * 是否对 post, delete, put 请求类型的参数进行键值编码, 编码后会自动拼接到请求路径的后面 默认值 false, 注意: 只针对 post 请求, get 请求无效, 注意: 当处于 uniapp 项目的 NVue 页面或组件时, 此参数不可用
+             */
+            isUrlEncode?: boolean;
+            /**
+             * 注意: 当处于 uniapp 项目时此选项不可用, 默认值 false
+             */
+            tempUseFetch?: boolean;
+            /**
+             * 进行数据追加, 默认值 false
+             */
+            isAppendData?: boolean;
+            /**
+             * 向前追加数据, 还是向后追加数据, 默认值: false 向后追加数据, 注意: 需结合 isAppendData 使用
+             */
+            frontORback?: boolean;
+            /**
+             * 全局过滤拦截回调函数对象 (注意: 仅对当前接口生效)
+             */
+            globalFilterInterCept?: {
+                /**
+                 * @description 说明: 全局请求过滤器, 拦截后, 默认执行的回调函数 (注意: 仅对当前接口的请求生效)
+                 * @param reqParams 当前请求的参数
+                 * @param pathParams 路径参数
+                 * @param rbjObj 当前 rbj 对象的实例
+                 * @param currentUserConfigObjData 当前用户的配置数据对象
+                 * @param operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
+                 * @return 此函数不需要返回值
+                 */
+                requestCallback(reqParams: Object, pathParams: string, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object): void;
+                /**
+                 * @description 说明: 全局响应过滤器, 拦截后, 默认执行的回调函数 (注意: 仅对当前接口的响应生效)
+                 * @param respData 当前请求的响应数据
+                 * @param rbjObj 当前 rbj 对象的实例
+                 * @param currentUserConfigObjData 当前用户的配置数据对象
+                 * @param operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
+                 * @return 此函数不需要返回值
+                 */
+                responseCallback(respData: Object | Array<any>, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object): void;
+            };
+            /**
+             * 是否允许当前请求在请求头加上 token, 默认值: true 允许
+             */
+            isUseToken: boolean;
+        }
+    ): autoQuoteMark;
 
     /**
      * @description 自动刷新标记接口调用
@@ -445,53 +455,57 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
      * 注意: 当你处于 fetch 请求模式, 进行文件上传时, 你设置的请求头将会失效, 解释说明: 因为 fetch 请求进行文件上传时如果设置请求头, 则会导致上传文件失败, 也就是说如果你使用 fetch 进行文件上传则不能在请求头上带 token 或其他参数
      * </p>
      */
-    upload(interfaceDefinedName: String, Files: File | Array<File> | string | Object, optionsObj?: {
-        /**
-         * 文件上传时附带的参数
-         */
-        paramsObj?: Object;
-        /**
-         * 文件上传时文件的属性名, 默认值: "file"
-         */
-        reqPropertyName?: string;
-        /**
-         * 设置当前请求接口的超时时间, 默认以全局的 timeOut 超时时间为主
-         */
-        timeOut?: number;
-        /**
-         * (是否使用 filePath (即 单个临时路径) 进行文件上传, 此选项只针对 uniapp) 注意: uniapp 中必须此将此参数 设置为 true 文件才能上传成功
-         * 注意: 若你开启了 isFilePathUpload 文件上传模式, 此 Files 参数必须为 string 类型, 此 string 类型 即 文件的临时路径 或 blob 路径
-         */
-        isFilePathUpload?: boolean;
-        /**
-         * 全局过滤拦截回调函数对象 (注意: 仅对当前接口生效)
-         */
-        globalFilterInterCept?: {
+    upload(
+        interfaceDefinedName: String,
+        Files: File | Array<File> | string | Object,
+        optionsObj?: {
             /**
-             * @description 说明: 全局请求过滤器, 拦截后, 默认执行的回调函数 (注意: 仅对当前接口的请求生效)
-             * @param reqParams 当前请求的参数
-             * @param pathParams 路径参数
-             * @param rbjObj 当前 rbj 对象的实例
-             * @param currentUserConfigObjData 当前用户的配置数据对象
-             * @param operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
-             * @return 此函数不需要返回值
+             * 文件上传时附带的参数
              */
-            requestCallback(reqParams: Object, pathParams: string, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object): void;
+            paramsObj?: Object;
             /**
-             * @description 说明: 全局响应过滤器, 拦截后, 默认执行的回调函数 (注意: 仅对当前接口的响应生效)
-             * @param respData 当前请求的响应数据
-             * @param rbjObj 当前 rbj 对象的实例
-             * @param currentUserConfigObjData 当前用户的配置数据对象
-             * @param operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
-             * @return 此函数不需要返回值
+             * 文件上传时文件的属性名, 默认值: "file"
              */
-            responseCallback(respData: Object | Array<any>, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object): void;
-        },
-        /**
-         * 是否允许当前请求在请求头加上 token, 默认值: true 允许
-         */
-        isUseToken: boolean;
-    }): Promise<any>;
+            reqPropertyName?: string;
+            /**
+             * 设置当前请求接口的超时时间, 默认以全局的 timeOut 超时时间为主
+             */
+            timeOut?: number;
+            /**
+             * (是否使用 filePath (即 单个临时路径) 进行文件上传, 此选项只针对 uniapp) 注意: uniapp 中必须此将此参数 设置为 true 文件才能上传成功
+             * 注意: 若你开启了 isFilePathUpload 文件上传模式, 此 Files 参数必须为 string 类型, 此 string 类型 即 文件的临时路径 或 blob 路径
+             */
+            isFilePathUpload?: boolean;
+            /**
+             * 全局过滤拦截回调函数对象 (注意: 仅对当前接口生效)
+             */
+            globalFilterInterCept?: {
+                /**
+                 * @description 说明: 全局请求过滤器, 拦截后, 默认执行的回调函数 (注意: 仅对当前接口的请求生效)
+                 * @param reqParams 当前请求的参数
+                 * @param pathParams 路径参数
+                 * @param rbjObj 当前 rbj 对象的实例
+                 * @param currentUserConfigObjData 当前用户的配置数据对象
+                 * @param operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
+                 * @return 此函数不需要返回值
+                 */
+                requestCallback(reqParams: Object, pathParams: string, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object): void;
+                /**
+                 * @description 说明: 全局响应过滤器, 拦截后, 默认执行的回调函数 (注意: 仅对当前接口的响应生效)
+                 * @param respData 当前请求的响应数据
+                 * @param rbjObj 当前 rbj 对象的实例
+                 * @param currentUserConfigObjData 当前用户的配置数据对象
+                 * @param operandObj 自动化对接时要进行装配数据的操作对象, 非自动对接时此值为 null
+                 * @return 此函数不需要返回值
+                 */
+                responseCallback(respData: Object | Array<any>, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object): void;
+            };
+            /**
+             * 是否允许当前请求在请求头加上 token, 默认值: true 允许
+             */
+            isUseToken: boolean;
+        }
+    ): Promise<any>;
 
     /**
      * @description 获取缓存的数据
@@ -614,6 +628,11 @@ export declare class interfaceButtJoint<GLOBAL_FUN_TYPE> {
      * @param func 自定义的全局函数
      */
     setGlobalFun(funName: string, func: Function): void;
+
+    /**
+     * @description 将 rbj 对象通过插件的方式安装到 Vue 上
+     */
+    install(Vue: Object, ...params: any): void;
 
     /**
      * @description 将 rbj 对象手动安装到 任何指定的对象上, 例如: 可以安装到, 全局的 window 对象上, 来全局使用 window 对象, 注意: 手动安装不支持 全局组件功能
