@@ -87,7 +87,6 @@ export default class interfaceButtJoint {
         this._globalResponseFilterFun = config.globalResponseFilterFun !== undefined ? config.globalResponseFilterFun : () => false; // 全局响应过滤器函数
         this._globalRequestErrorFun = config.globalRequestErrorFun !== undefined ? config.globalRequestErrorFun : () => false; // 全局请求异常回调函数
         this.globalFun = config.globalFun !== undefined ? config.globalFun : {}; // 全局函数对象
-        this.globalFun.$rbj = this; // 设置全局函数内, 默认可以直接使用当前 interfaceButtJoint 对象
         this.rbjGlobalThis = getGlobalFun(); // 在不同环境中, 获取并设置统一的 全局对象
         if (this.rbjGlobalThis && !this.rbjGlobalThis.uni && this.rbjGlobalThis.wx) this.rbjGlobalThis.uni = this.rbjGlobalThis.wx; // 如果处于 微信环境, 让 uni 等于 wx
         this.$isUniApp = typeof uni !== "undefined" ? true : false; // 上方已经 uni 已经等于 wx, 所以不管是 uni 环境还是 wx 环境, $isUniApp 都等于 true
