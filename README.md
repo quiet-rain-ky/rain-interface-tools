@@ -648,7 +648,6 @@ Vue.use(
             one: 1, // 可以定义常用的全局变量
 
             fun_one() {
-                console.log("这是全局初始化的第一个全局自定义函数", this.$rbj); // 当前 全局函数内, 也可以通过 this 来调用 $rbj 对象
                 this.fun_two(); // 注意: 全局函数内, 可以直接使用 this 来调用其他全局函数
             },
             fun_two() {
