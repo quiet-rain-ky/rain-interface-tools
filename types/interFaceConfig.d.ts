@@ -2,7 +2,7 @@ import { interfaceButtJoint } from "./interfaceButtJoint";
 /**
  * 非模块化接口配置
  */
-declare interface interFaceConfig<GLOBAL_FUN_TYPE = {}> {
+declare interface interFaceConfig<GLOBAL_FUN_TYPE> {
     [index: string]: string | {
         /**
          * (可选) 接口描述说明, 一般用作提示使用

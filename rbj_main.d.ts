@@ -17,7 +17,7 @@ export class Rbj<GLOBAL_FUN_TYPE> extends interfaceButtJoint<GLOBAL_FUN_TYPE> {}
  * @description 融合多个 (普通接口对象) 或 (模块接口对象), 也可以直接对单个模块接口对象进行处理
  * @param requestObj 可以是数组或对象
  */
-export function importsConfigObj(requestObj: Array<{ default: interFaceConfig } | interFaceConfig | { default: interFaceModuleConfig } | interFaceModuleConfig> | interFaceConfig | interFaceModuleConfig): interFaceConfig;
+export function importsConfigObj<GLOBAL_FUN_TYPE>(requestObj: Array<{ default: interFaceConfig<GLOBAL_FUN_TYPE> } | interFaceConfig<GLOBAL_FUN_TYPE> | { default: interFaceModuleConfig<GLOBAL_FUN_TYPE> } | interFaceModuleConfig<GLOBAL_FUN_TYPE>> | interFaceConfig<GLOBAL_FUN_TYPE> | interFaceModuleConfig<GLOBAL_FUN_TYPE>): interFaceConfig<GLOBAL_FUN_TYPE>;
 /**
  * 导出已继承核心类的 uniapp Vue2 对象
  */
