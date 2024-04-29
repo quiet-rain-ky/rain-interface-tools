@@ -22,7 +22,7 @@ export function importsConfigObj<GLOBAL_FUN_TYPE>(requestObj: Array<{ default: i
  * @description 扩展 importsConfigObj 函数的功能, 融合 import.meta.glob() 或 require.context() 扫描的多个文件中的接口列表对象
  * @param requestObj 传入 import.meta.glob() 或 require.context() 扫描函数
  */
-export function importsConfigObj<GLOBAL_FUN_TYPE, SCAN_FUN_TYPE>(requestObj: SCAN_FUN_TYPE): interFaceConfig<GLOBAL_FUN_TYPE>;
+export function importsConfigObjScanAsync<GLOBAL_FUN_TYPE, SCAN_FUN_TYPE>(requestObj: SCAN_FUN_TYPE, isGlobScan: boolean): interFaceConfig<GLOBAL_FUN_TYPE>;
 /**
  * 导出已继承核心类的 uniapp Vue2 对象
  */

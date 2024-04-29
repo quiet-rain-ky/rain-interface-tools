@@ -41,4 +41,14 @@ function importsConfigObj(requestObj) {
     return requests;
 }
 
-export { Rbj, UniRbjTwo, UniRbjThere, importsConfigObj, logObj, StreamConversion, assistFun };
+async function importsConfigObjScanAsync(requestObj, isGlobScan) {
+    if (isGlobScan) {
+        let requestInterfaceObj = [];
+        for (const importKey in requestObj) requestInterfaceObj.push(await requestObj[importKey]());
+        return importsConfigObj(requestInterfaceObj);
+    } else {
+        return importsConfigObj(requestObj);
+    }
+}
+
+export { Rbj, UniRbjTwo, UniRbjThere, importsConfigObj, importsConfigObjScanAsync, logObj, StreamConversion, assistFun };
