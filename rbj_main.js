@@ -41,6 +41,11 @@ function importsConfigObj(requestObj) {
     return requests;
 }
 
+/**
+ * @description 扩展 importsConfigObj 函数的功能, 融合 import.meta.glob() 或 require.context() 扫描的多个文件中的接口列表对象
+ * @param requestObj 传入 import.meta.glob() 或 require.context() 扫描函数
+ * @param isGlobScan 是否 import.meta.glob() 类型的扫描
+ */
 async function importsConfigObjScanAsync(requestObj, isGlobScan) {
     if (isGlobScan) {
         let requestInterfaceObj = [];
