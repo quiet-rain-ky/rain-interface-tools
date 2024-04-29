@@ -5,7 +5,7 @@
         "useTabs": false
     },
     "name": "rain-interface-tools",
-    "version": "3.0.1",
+    "version": "3.0.2",
     "description": "接口对接工具",
     "type": "module",
     "main": "rbj_main.js",
@@ -32,11 +32,11 @@
     "types": "rbj_main.d.ts",
     "license": "ISC",
     "engines": {
-        "node": ">=v17.1.0"
+        "node": ">=v14.17.0"
     },
     "dependencies": {
-        "axios": "^1.6.2",
-        "qs": "^6.11.2",
-        "rain_logs": "^1.1.6"
+        "axios": "^1.6.8",
+        "qs": "^6.12.1",
+        "rain_logs": "^1.1.7"
     }
 }
