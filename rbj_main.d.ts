@@ -22,6 +22,7 @@ export function importsConfigObj<GLOBAL_FUN_TYPE>(requestObj: Array<{ default: i
  * @description 扩展 importsConfigObj 函数的功能, 融合 import.meta.glob() 或 require.context() 扫描的多个文件中的接口列表对象
  * @param requestObj 传入 import.meta.glob() 或 require.context() 扫描函数
  * @param isGlobScan 是否 import.meta.glob() 类型的扫描
+ * @summary 注意：扫描的文件，必须都是使用 export default 进行了默认导出的文件，非默认导出的文件会导致融合失败
  */
 export function importsConfigObjScanAsync<GLOBAL_FUN_TYPE, SCAN_FUN_TYPE>(requestObj: SCAN_FUN_TYPE, isGlobScan?: boolean): interFaceConfig<GLOBAL_FUN_TYPE>;
 /**
