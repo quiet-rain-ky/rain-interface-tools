@@ -56,7 +56,7 @@ declare interface interFaceConfig<GLOBAL_FUN_TYPE> {
          * 注意: 本函数只具有, 修改请求参数的功能, 不具备拦截并中断请求的功能
          * </p>
          */
-        paramsData?(data: { paramsObj: object, pathParams: string }, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, operandObj: object, isAppendData: boolean, frontORback: boolean): {
+        paramsData?(data: { paramsObj: any, pathParams: string }, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, operandObj: object, isAppendData: boolean, frontORback: boolean): {
             /**
              * 此返回值对 paramsObj 参数对象进行重新设置
              */
@@ -78,7 +78,7 @@ declare interface interFaceConfig<GLOBAL_FUN_TYPE> {
          * 注意: 如果返回的是 null, Rbj插件对象则会当作此函数已返回数据, 即 返回 null 是有效的
          * </p>
          */
-        interfaceData?(data: object, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, operandObj: object): Object | void; // void 代表这个函数可以不 return 返回数据
+        interfaceData?(data: any, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, operandObj: object): Object | void; // void 代表这个函数可以不 return 返回数据
     }
 }
 

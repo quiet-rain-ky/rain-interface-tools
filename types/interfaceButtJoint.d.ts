@@ -71,7 +71,7 @@ declare interface interceptorArrType<GLOBAL_FUN_TYPE> {
      * @param operandObj 自动化对接时要操作的对象, 非自动对接时此值为 null
      * @returns boolean 当你返回 boolean, 会进行拦截或放行
      */
-    requestRegular(reqParams: Object, pathParams: string, regularData: Object, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object): any;
+    requestRegular(reqParams: any, pathParams: string, regularData: any, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: any, operandObj: any): any;
 
     /**
      * @description 响应拦截器
@@ -82,7 +82,7 @@ declare interface interceptorArrType<GLOBAL_FUN_TYPE> {
      * @param operandObj 自动化对接时要操作的对象, 非自动对接时此值为 null
      * @returns 当你返回 boolean, 会进行拦截或放行, 返回非 boolean, 会进行数据过滤操作
      */
-    responseRegular(respData: Object | Array<any>, regularData: Object, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object): any;
+    responseRegular(respData: any, regularData: any, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: any, operandObj: any): any;
 }
 
 /**
@@ -124,7 +124,7 @@ declare interface configParamsType<GLOBAL_FUN_TYPE> {
     falseDataMode?: boolean;
     /**
      * 全局请求配置函数
-     * @param rbjObj | 即 Rbj 对象
+     * @param rbjObj 即 Rbj 对象
      */
     globalRequestConfig?: (rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>) => {
         /**
@@ -155,7 +155,7 @@ declare interface configParamsType<GLOBAL_FUN_TYPE> {
      * @param operandObj 自动化对接时要操作的对象, 非自动对接时此值为 null
      * @returns boolean 当你返回 boolean, 会进行拦截或放行
      */
-    globalRequestFilterFun?: (reqParams: Object, pathParams: string, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object) => any;
+    globalRequestFilterFun?: (reqParams: any, pathParams: string, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: any, operandObj: any) => any;
     /**
      * 全局, 响应过滤器函数
      * @param respData 当前请求的响应数据
@@ -164,7 +164,7 @@ declare interface configParamsType<GLOBAL_FUN_TYPE> {
      * @param operandObj 自动化对接时要操作的对象, 非自动对接时此值为 null
      * @returns 当你返回 boolean, 会进行拦截或放行, 返回非 boolean, 会进行数据过滤操作
      */
-    globalResponseFilterFun?: (respData: Object | Array<any>, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: Object, operandObj: Object) => any;
+    globalResponseFilterFun?: (respData: any, rbjObj: interfaceButtJoint<GLOBAL_FUN_TYPE>, currentUserConfigObjData: any, operandObj: any) => any;
     /**
      * 全局请求错误回调函数, 当 自动对接, 手动对接, 上传文件, 等请求函数运行时, 如果发生请求错误此函数回调就会运行 (拦截器 和 全局响应过滤器的 拦截不会导致此函数的运行), 注意: 此函数不影响 手动对接 和 上传文件的 catch 函数的运行
      * @param err 错误信息对象
