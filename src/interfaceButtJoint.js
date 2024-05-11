@@ -938,7 +938,7 @@ export default class interfaceButtJoint {
         if (this.$isEnableCache) {
             this._globalData[interfaceDefinedName] = data;
         }
-        if (this._getUserConfigObj(interfaceDefinedName).falseDataMode !== undefined ? this._getUserConfigObj(interfaceDefinedName).falseDataMode : this.$falseDataMode) {
+        if (this._getUserConfigObj(interfaceDefinedName).falseDataMode !== undefined ? !this._getUserConfigObj(interfaceDefinedName).falseDataMode : !this.$falseDataMode) {
             // 执行响应拦截器
             let responseInterceptorVal = this._requestOrResponseInterceptor(interfaceDefinedName, data, currentObj, false);
             if (typeof responseInterceptorVal == "boolean") {
