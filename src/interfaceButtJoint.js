@@ -880,7 +880,7 @@ export default class interfaceButtJoint {
                 });
             })
                 .then((data) => {
-                    rain_logs.WARN(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo, descriptionStr));
+                    rain_logs.INFO(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo, descriptionStr));
                     return self._assignment(false, interfaceDefinedName, data, null, null, null, null, null, globalFilterInterCept);
                 })
                 .catch((err) => {
@@ -922,7 +922,7 @@ export default class interfaceButtJoint {
                 });
             })
                 .then((data) => {
-                    rain_logs.WARN(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo, descriptionStr));
+                    rain_logs.INFO(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo, descriptionStr));
                     this._assignment(false, interfaceDefinedName, data, dataName, currentObj, callbackFunc, isAppendData, frontORback, globalFilterInterCept);
                 })
                 .catch((err) => {
