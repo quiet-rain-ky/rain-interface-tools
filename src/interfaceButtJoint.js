@@ -938,23 +938,25 @@ export default class interfaceButtJoint {
         if (this.$isEnableCache) {
             this._globalData[interfaceDefinedName] = data;
         }
-        // 执行响应拦截器
-        let responseInterceptorVal = this._requestOrResponseInterceptor(interfaceDefinedName, data, currentObj, false);
-        if (typeof responseInterceptorVal == "boolean") {
-            if (responseInterceptorVal) return "ISNULL";
-        } else if (responseInterceptorVal !== undefined) {
-            data = responseInterceptorVal;
-        }
-        // 全局响应过滤器处理
-        let globalRespFunData = this._globalResponseFilterFun(data, this, this._getUserConfigObj(interfaceDefinedName), currentObj);
-        if (globalRespFunData !== undefined && typeof globalRespFunData == "boolean") {
-            if (globalRespFunData) {
-                rain_logs.WARN(`${interfaceDefinedName} 的响应操作被全局响应过滤器拦截了`);
-                if (globalFilterInterCept && globalFilterInterCept.responseCallback) globalFilterInterCept.responseCallback(data, this, this._getUserConfigObj(interfaceDefinedName), currentObj);
-                return "ISNULL";
+        if (this._getUserConfigObj(interfaceDefinedName).falseDataMode !== undefined ? !this._getUserConfigObj(interfaceDefinedName).falseDataMode : !this.$falseDataMode) {
+            // 执行响应拦截器
+            let responseInterceptorVal = this._requestOrResponseInterceptor(interfaceDefinedName, data, currentObj, false);
+            if (typeof responseInterceptorVal == "boolean") {
+                if (responseInterceptorVal) return "ISNULL";
+            } else if (responseInterceptorVal !== undefined) {
+                data = responseInterceptorVal;
             }
-        } else if (globalRespFunData !== undefined) {
-            data = globalRespFunData;
+            // 全局响应过滤器处理
+            let globalRespFunData = this._globalResponseFilterFun(data, this, this._getUserConfigObj(interfaceDefinedName), currentObj);
+            if (globalRespFunData !== undefined && typeof globalRespFunData == "boolean") {
+                if (globalRespFunData) {
+                    rain_logs.WARN(`${interfaceDefinedName} 的响应操作被全局响应过滤器拦截了`);
+                    if (globalFilterInterCept && globalFilterInterCept.responseCallback) globalFilterInterCept.responseCallback(data, this, this._getUserConfigObj(interfaceDefinedName), currentObj);
+                    return "ISNULL";
+                }
+            } else if (globalRespFunData !== undefined) {
+                data = globalRespFunData;
+            }
         }
         // 组件数据变量赋值    调用用户配置的回调函数
         if (dataName || currentObj) {
