@@ -119,7 +119,7 @@ declare interface configParamsType<GLOBAL_FUN_TYPE> {
      */
     timeOut?: number;
     /**
-     * 是否开启假数据模式, 默认值: false，注意：假数据模式下，模拟的数据不会经过，全局响应过滤器 和 全局拦截器中的响应函数
+     * 是否开启假数据模式, 默认值: false，注意：假数据模式下, 接口配置中 interfaceData() 函数模拟返回的数据不会经过, 全局响应过滤器 和 全局拦截器中的响应函数
      */
     falseDataMode?: boolean;
     /**

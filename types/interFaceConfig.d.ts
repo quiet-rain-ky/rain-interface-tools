@@ -20,6 +20,7 @@ declare interface interFaceConfig<GLOBAL_FUN_TYPE> {
          * 当前接口是否开启模拟数据模式, 开启后 接口不再发送请求, 我们可以在接口配置的 interfaceData() 函数中, 自定义一些模拟数据返回, 并在组件中使用, 默认值: false
          * 注意: 当前接口的 falseDataMode 配置属性, 比全局 falseDataMode 配置属性的优先级高, 当然前提是你在当前接口设置了 falseDataMode 属性的情况下, 如果没有在当前接口设置 falseDataMode 则默认以全局的 falseDataMode 配置属性为主
          * 注意: 假数据模式下, 接口的数据变成了自定义的模拟数据, autoButtJoint() 和 buttJoint() 函数在接收请求数据时, 接收的数据也会变成我们自定义的模拟数据
+         * 注意：假数据模式下，interfaceData() 函数模拟返回的数据, 不会经过全局响应过滤器 和 全局拦截器中的响应函数
          */
         falseDataMode?: boolean;
         /**
