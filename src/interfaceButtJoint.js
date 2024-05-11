@@ -706,7 +706,7 @@ export default class interfaceButtJoint {
             }
         })
             .then((data) => {
-                rain_logs.INFO(this._getUserConfigObj(interfaceDefinedName).url, " 请求成功了 :  ", data);
+                rain_logs.WARN(this._getUserConfigObj(interfaceDefinedName).url, " 请求成功了 :  ", data);
                 let assignmentVal = this._assignment(false, interfaceDefinedName, data, null, null, null, null, null, globalFilterInterCept);
                 if (assignmentVal !== "ISNULL") {
                     return assignmentVal;
