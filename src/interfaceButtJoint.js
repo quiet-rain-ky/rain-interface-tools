@@ -760,7 +760,7 @@ export default class interfaceButtJoint {
             if (self.$useFetch || self._getUserConfigObj(interfaceDefinedName).tempUseFetch || tempUseFetch) {
                 return fetch(configObj.url, configObj)
                     .then((data) => {
-                        rain_logs.WARN(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo, descriptionStr));
+                        rain_logs.INFO(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo, descriptionStr));
                         let buttJointRespData = self._assignment(true, interfaceDefinedName, data, null, null, null, null, null, globalFilterInterCept);
                         if (buttJointRespData !== "ISNULL") {
                             return buttJointRespData;
@@ -780,7 +780,7 @@ export default class interfaceButtJoint {
             } else {
                 return axios(configObj)
                     .then((data) => {
-                        rain_logs.WARN(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo, descriptionStr));
+                        rain_logs.INFO(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo, descriptionStr));
                         let buttJointRespData = self._assignment(false, interfaceDefinedName, data, null, null, null, null, null, globalFilterInterCept);
                         if (buttJointRespData !== "ISNULL") {
                             return buttJointRespData;
@@ -825,7 +825,7 @@ export default class interfaceButtJoint {
             if (this.$useFetch || this._getUserConfigObj(interfaceDefinedName).tempUseFetch || tempUseFetch) {
                 fetch(configObj.url, configObj)
                     .then((data) => {
-                        rain_logs.WARN(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo, descriptionStr));
+                        rain_logs.INFO(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo, descriptionStr));
                         this._assignment(true, interfaceDefinedName, data, dataName, currentObj, callbackFunc, isAppendData, frontORback, globalFilterInterCept);
                     })
                     .catch((err) => {
@@ -835,7 +835,7 @@ export default class interfaceButtJoint {
             } else {
                 axios(configObj)
                     .then((data) => {
-                        rain_logs.WARN(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo, descriptionStr));
+                        rain_logs.INFO(interfaceInfo.url, " 请求成功了 :  ", data, this._isDescription(interfaceInfo, descriptionStr));
                         this._assignment(false, interfaceDefinedName, data, dataName, currentObj, callbackFunc, isAppendData, frontORback, globalFilterInterCept);
                     })
                     .catch((err) => {
