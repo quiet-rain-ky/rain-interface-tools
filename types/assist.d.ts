@@ -95,7 +95,7 @@ declare interface assist {
      *          - assignNull 说明: 即 dataObj 中有如果有空变量, 是否进行赋值操作, 默认值 false, 注意: 空变量的赋值也是针对两个对象中, 都必须都存在相同的属性名时, 才会进行赋值, 只要有一方没有则不会进行赋值操作
      * @return void 没有返回值
      */
-    echoFun: (echoObj: Object, dataObj: Object, optionsObj: {
+    echoFun: (echoObj: Object, dataObj: Object, optionsObj?: {
         /**
          * 说明: 即 dataObj 中有如果有空变量, 是否进行赋值操作, 默认值 false, 注意: 空变量的赋值也是针对两个对象中, 都必须都存在相同的属性名时, 才会进行赋值, 只要有一方没有则不会进行赋值操作
          */
