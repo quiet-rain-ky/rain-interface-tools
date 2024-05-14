@@ -55,7 +55,7 @@ declare interface assist {
      * @return 类型: Object, 有空值时返回 {isEmpty: true, fieldName: ""}, 没有空值返回 {isEmpty: false, fieldName: "NOT_NULL"}
      *          isEmpty // 字段为空时是 true, 不为空时是 false, fieldName // 字段为空时的字段名, 当所有字段都不为空时他会有一个默认值  "NOT_NULL", 如果传入的数据就是空的 也会有一个 "NULL" 默认值
      */
-    emptyVerify(verifyObj: Object, verifySelect: recursiveTypeDefinition, optionsObj?: {
+    emptyVerify(verifyObj: any, verifySelect?: recursiveTypeDefinition, optionsObj?: {
         /**
          * @description 可以将 verifySelect 中的选项 和 要进行验证的 verifyObj 表单对象, 进行反转操作, 在多级对象或多级数组状态下, 可以使用 (对象或数组) 的方式, 来控制多层级的反转操作
          * <p>
