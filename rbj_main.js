@@ -49,7 +49,14 @@ function importsConfigObj(requestObj) {
 async function importsConfigObjScanAsync(requestObj, isGlobScan) {
     if (isGlobScan) {
         let requestInterfaceObj = [];
-        for (const importKey in requestObj) requestInterfaceObj.push(await requestObj[importKey]());
+        for (const importKey in requestObj) {
+            let extractModuleData = await requestObj[importKey]();
+            if (extractModuleData.default) {
+                requestInterfaceObj.push(extractModuleData);
+            } else {
+                requestInterfaceObj.push(extractModuleData[Object.keys(extractModuleData)[0]]);
+            }
+        }
         return importsConfigObj(requestInterfaceObj);
     } else {
         return importsConfigObj(requestObj);
