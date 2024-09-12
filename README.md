@@ -139,7 +139,7 @@ createApp.use(Rbj).mount("#app"); // 把 rain-interface-tools 插件, 安装到 
 
 #### App.vue
 
-```jsx
+```vue
 <template>
     <div>
         <text>{{oneData}}</text>
@@ -205,7 +205,7 @@ this.$rbj.buttJoint("one", this.oneParams).then((resData)=>{
 
 #### uniapp Nvue 使用说明
 
-```jsx
+```vue
 <template>
     <div>
         <text>{{oneData}}</text>
