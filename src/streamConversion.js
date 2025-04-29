@@ -158,49 +158,90 @@ export default class StreamConversion {
             rain_logs.ERROR("对象创建失败, 没有传入 fileName");
             return;
         }
-        let self = this;
-        if (streamData instanceof File) {
-            this.fileObj = streamData;
-            this.blobObj = StreamConversion.fileToBlob(streamData);
-            self.DataURLString = StreamConversion.blobORfileTodataURL(streamData);
-            self.ArrayBufferObj = StreamConversion.blobORfileToAffter(streamData);
-        } else if (streamData instanceof Blob) {
-            this.fileObj = StreamConversion.blobToFile(streamData, fileName);
-            this.blobObj = streamData;
-            self.DataURLString = StreamConversion.blobORfileTodataURL(streamData);
-            self.ArrayBufferObj = StreamConversion.blobORfileToAffter(streamData);
-        } else if (streamData instanceof ArrayBuffer) {
-            this.fileObj = StreamConversion.arrayBufferToFile(streamData, fileName);
-            this.blobObj = StreamConversion.arrayBufferToBlob(streamData);
-            this.DataURLString = StreamConversion.arrayBufferToDataURL(streamData);
-            this.ArrayBufferObj = streamData;
-        } else if (streamData instanceof String || typeof streamData === "string") {
-            this.fileObj = StreamConversion.dataURLtoFile(streamData, fileName);
-            this.blobObj = StreamConversion.dataURLtoBlob(streamData);
-            this.DataURLString = streamData;
-            this.ArrayBufferObj = StreamConversion.dataURLToArrayBuffer(streamData);
-        } else {
-            rain_logs.WARN("不支持此流媒体转换", streamData);
-        }
+        this.streamData = streamData;
     }
 
     // 获取 File 对象
-    getFile() {
-        return this.fileObj;
+    getFile(streamData = this.streamData) {
+        if (this.fileObj != null && this.fileObj != undefined) {
+            return this.fileObj;
+        } else {
+            if (streamData instanceof File) {
+                this.fileObj = streamData;
+            } else if (streamData instanceof Blob) {
+                this.fileObj = StreamConversion.blobToFile(streamData, fileName);
+            } else if (streamData instanceof ArrayBuffer) {
+                this.fileObj = StreamConversion.arrayBufferToFile(streamData, fileName);
+            } else if (streamData instanceof String || typeof streamData === "string") {
+                this.fileObj = StreamConversion.dataURLtoFile(streamData, fileName);
+            } else {
+                rain_logs.WARN("不支持此流媒体转换", streamData);
+                return null;
+            }
+            return this.fileObj;
+        }
     }
 
     // 获取 Blob 对象
-    getBlob() {
-        return this.blobObj;
+    getBlob(streamData = this.streamData) {
+        if (this.blobObj != null && this.blobObj != undefined) {
+            return this.blobObj;
+        } else {
+            if (streamData instanceof File) {
+                this.blobObj = StreamConversion.fileToBlob(streamData);
+            } else if (streamData instanceof Blob) {
+                this.blobObj = streamData;
+            } else if (streamData instanceof ArrayBuffer) {
+                this.blobObj = StreamConversion.arrayBufferToBlob(streamData);
+            } else if (streamData instanceof String || typeof streamData === "string") {
+                this.blobObj = StreamConversion.dataURLtoBlob(streamData);
+            } else {
+                rain_logs.WARN("不支持此流媒体转换", streamData);
+                return null;
+            }
+            return this.blobObj;
+        }
     }
 
     // 获取 ArrayBuffer 对象
-    getArrayBuffer() {
-        return this.ArrayBufferObj;
+    getArrayBuffer(streamData = this.streamData) {
+        if (this.ArrayBufferObj != null && this.ArrayBufferObj != undefined) {
+            return this.ArrayBufferObj;
+        } else {
+            if (streamData instanceof File) {
+                this.ArrayBufferObj = StreamConversion.blobORfileToAffter(streamData);
+            } else if (streamData instanceof Blob) {
+                this.ArrayBufferObj = StreamConversion.blobORfileToAffter(streamData);
+            } else if (streamData instanceof ArrayBuffer) {
+                this.ArrayBufferObj = streamData;
+            } else if (streamData instanceof String || typeof streamData === "string") {
+                this.ArrayBufferObj = StreamConversion.dataURLToArrayBuffer(streamData);
+            } else {
+                rain_logs.WARN("不支持此流媒体转换", streamData);
+                return null;
+            }
+            return this.ArrayBufferObj;
+        }
     }
 
     // base64 字符串
-    getDataURL() {
-        return this.DataURLString;
+    getDataURL(streamData = this.streamData) {
+        if (this.DataURLString != null && this.DataURLString != undefined) {
+            return this.DataURLString;
+        } else {
+            if (streamData instanceof File) {
+                this.DataURLString = StreamConversion.blobORfileTodataURL(streamData);
+            } else if (streamData instanceof Blob) {
+                this.DataURLString = StreamConversion.blobORfileTodataURL(streamData);
+            } else if (streamData instanceof ArrayBuffer) {
+                this.DataURLString = StreamConversion.arrayBufferToDataURL(streamData);
+            } else if (streamData instanceof String || typeof streamData === "string") {
+                this.DataURLString = streamData;
+            } else {
+                rain_logs.WARN("不支持此流媒体转换", streamData);
+                return null;
+            }
+            return this.DataURLString;
+        }
     }
 }
